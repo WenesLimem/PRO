@@ -15,7 +15,10 @@ Corentin Zeller (chef de projet corentin.zeller@heig-vd.ch) </br>
 
 
 
+## Tools & Links : 
 
-
+ - Project Management : Monday.com [link]
+ - Charts & Diagrams  : LucidChart.com [link]
+ - Interface & UI     : Figma.com [link]
 
 
