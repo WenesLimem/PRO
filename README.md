@@ -18,7 +18,7 @@ Corentin Zeller (chef de projet corentin.zeller@heig-vd.ch) </br>
 ## Tools & Links : 
 
  - Project Management : Monday.com [link]
- - Charts & Diagrams  : LucidChart.com [link]
+ - Charts & Diagrams  : LucidChart.com [link]  https://lucid.app/lucidchart/invitations/accept/492f8309-5489-4a34-a2bd-6df0d30ca325
  - Interface & UI     : Figma.com [link]
 
 
