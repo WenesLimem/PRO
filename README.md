@@ -17,8 +17,8 @@ Corentin Zeller (chef de projet corentin.zeller@heig-vd.ch) </br>
 
 ## Tools & Links : 
 
- - Project Management : Monday.com ![](https://goldenfish-team.monday.com/boards/1131125508 "PRO PROJECT BOARD")
- - Charts & Diagrams  : LucidChart.com [link] ![](https://lucid.app/lucidchart/invitations/accept/492f8309-5489-4a34-a2bd-6df0d30ca325)
- - Interface & UI     : Figma.com [link] ![](https://www.figma.com/file/MO6bg34RGfaSVGcBIAXyvm/EkoRestaurant)
+ - Project Management : Monday.com https://goldenfish-team.monday.com/boards/1131125508 "PRO PROJECT BOARD"
+ - Charts & Diagrams  : LucidChart.com [link] https://lucid.app/lucidchart/invitations/accept/492f8309-5489-4a34-a2bd-6df0d30ca325
+ - Interface & UI     : Figma.com [link] https://www.figma.com/file/MO6bg34RGfaSVGcBIAXyvm/EkoRestaurant
 
 
