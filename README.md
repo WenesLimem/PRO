@@ -21,11 +21,11 @@ Notre super équipe 👨‍💻
 
 La structure des classes de données (proposition):
 
-![](Data class uml.png)
+![](./img/uml_data.png)
 
 Afin de généraliser l'utilisation des données dans les pages l'idée serait de faire un service de type CRUD (Create, Read, Update, Delete) de facon générique sur nos données.
 
-![](services.png)
+![](./img/uml_service_crud.png)
 
 Ceci permet d'heriter du crudService pour chaque entité que l'on souhaite utiliser dans l'application. Si l'on veut modifier ces fonctions cela restera donc possible.
 
