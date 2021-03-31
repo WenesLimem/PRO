@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EkoRestaurant.Services;
 
 namespace EkoRestaurant
 {
@@ -40,7 +41,15 @@ namespace EkoRestaurant
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            
             services.AddSingleton<WeatherForecastService>();
+
+
+            services.AddTransient<DailyMenusService>();
+            services.AddTransient<IngredientCategoriesService>();
+            services.AddTransient<IngredientsService>();
+            services.AddTransient<RecipeCategoriesService>();
+            services.AddTransient<RecipesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

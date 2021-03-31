@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EkoRestaurant.Data
+namespace EkoRestaurant.Data.Abstractions
 {
     /// <summary>
     /// define base entity to stock in the database
