@@ -1,0 +1,93 @@
+﻿@page "/Ingredients"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@using Microsoft.Extensions.DependencyInjection
+@inject IngredientsService IngService
+@inject ISnackbar Snackbar
+<h3>Ingredients</h3>
+<div style="max-width: 400px;">
+    <MudGrid Class="align-items-center">
+        <MudItem xs="12"  >
+            <EditForm Model="@ing" OnValidSubmit="Submit">
+                <DataAnnotationsValidator/>
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Label="Nom" HelperText="Max. 8 characters"
+                                      @bind-Value="ing.Name" For="@(() => ing.Name)"/>
+                        <MudTextField Label="Prix" Class="mt-3"
+                                      @bind-Value="ing.UnitPrice" For="@(() => ing.UnitPrice)"/>
+                        <MudTextField Label="Quantite" HelperText="" Class="mt-3"
+                                      @bind-Value="ing.UnitInStock" For="@(() => ing.UnitInStock)"/>
+                   
+                        <MudItem>
+                            <p><em>Date d'expiration</em></p></MudItem>
+                        <InputDate Label="Date expiration" DisplayName="Date d'expiration" @bind-Value="ing.ExpirationDate"/>
+
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Secondary"  Class="ml-auto">Add</MudButton>
+                    </MudCardActions>
+               
+                </MudCard>
+
+            </EditForm>
+        </MudItem>
+         <MudItem xs="12">
+            @if (_ingredients == null)
+            {
+                <p><em>No content yet</em></p>
+            }
+            else
+            {
+                <MudTable Items="_ingredients.Take(_ingredients.Capacity)" Hover="true" Striped="true">
+                    <HeaderContent>
+                        <MudTh>Nom</MudTh>
+                        <MudTh>Date d'expiration</MudTh>
+                        <MudTh>Qunatite au stock</MudTh>
+                        <MudTh>Prix</MudTh>
+               
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Nom">@context.Name</MudTd>
+                        <MudTd DataLabel="Date d'expiration">@context.ExpirationDate</MudTd>
+                        <MudTd DataLabel="Quantite au stock">@context.UnitInStock</MudTd>
+                        <MudTd DataLabel="Prix">@context.UnitPrice</MudTd>
+                    </RowTemplate>
+                </MudTable>
+
+                {
+                    GetAllIngredients();
+                }
+            }
+        </MudItem>
+  </MudGrid>
+</div>
+@code {
+    private Ingredient ing = new Ingredient();
+    private List<Ingredient> _ingredients = new List<Ingredient>();
+
+    
+    
+    private void GetAllIngredients() 
+    {
+        _ingredients.AddRange(IngService.GetAllIngredients());
+        
+    }
+
+    private void AddIngredient(Ingredient ingredient)
+    {
+        IngService.Create(ingredient);
+    }
+
+    private void Submit()
+    {
+        AddIngredient(ing);
+        IngService.SaveChanges();
+        Snackbar.Add("Ingredient ajoute", severity: Severity.Success);
+        
+    }
+
+
+
+
+}

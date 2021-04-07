@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EkoRestaurant.Data;
 using EkoRestaurant.Services.Abstractions;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EkoRestaurant.Services
 {
@@ -11,6 +12,19 @@ namespace EkoRestaurant.Services
     {
         public IngredientsService(ApplicationDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public  List<Ingredient> GetAllIngredients()
+        {
+            var _ings = _dbContext.Ingredients.ToArray();
+            
+            return _ings.ToList();    
+        }
+
+        public void AddIngredient(Ingredient ing)
+        {
+            _dbContext.Ingredients.Add(ing);
+            return;
         }
     }
 }
