@@ -1,0 +1,73 @@
+﻿@page "/ingredients"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@inject IngredientsService IngredientsService
+@inject IngredientCategoriesService IngredientCategoriesService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<div class="page-title">Ingredients</div>
+
+<div style="display: flex; flex-direction: row">
+    <div class="flex-column">
+        <div class="data-grid-categories-title"><MudIcon Icon="@Icons.Material.Filled.StarRate"></MudIcon>Catégories</div>
+
+        @if (IngredientCategories.Count > 0)
+        {
+            @foreach (IngredientCategory category in IngredientCategories)
+            {
+                <MudButton OnClick="() => SelectCategoryInSideBar(category)">
+                    <IngredientCategorySideBar Category="@category"/>
+                </MudButton>
+            }
+        }
+        <MudFab Class="ma-2" Color="Color.Primary" Icon="@Icons.Material.Filled.ShoppingCart" IconSize="Size.Small" Label="Nouvelle catégorie" OnClick="@OpenIngredientCategoryDialog" Size="Size.Small"/>
+    </div>
+    <div>
+        <GridIngredient @ref="IngredientGridReference" ParentCategory="@SelectedCategory"></GridIngredient>
+    </div>
+
+</div>
+
+
+@code {
+    public Ingredient IngredientToAdd { get; set; } = new();
+    public IngredientCategory CategoryToAdd { get; set; } = new();
+
+    public List<IngredientCategory> IngredientCategories = new();
+
+    public IngredientCategory SelectedCategory { get; set; }
+
+    public GridIngredient IngredientGridReference;
+    private IngredientCategory _selectedCategory; // backing field
+
+    protected override async Task OnInitializedAsync()
+    {
+        IngredientCategories = IngredientCategoriesService.Filter().ToList();
+    }
+
+    public void SelectCategoryInSideBar(IngredientCategory category)
+    {
+        SelectedCategory = category;
+        //IngredientGridReference.RefreshMe();
+    }
+
+    public async Task OpenIngredientCategoryDialog()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("Category", CategoryToAdd);
+
+        var dialog = DialogService.Show<DialogEditCreateIngredientCategory>("Simple Dialog", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var categoryCreated = (IngredientCategory) result.Data;
+        }
+    }
+
+    public void OpenAddIngredientDialog()
+    {
+    // TODO: implement me
+    }
+
+}

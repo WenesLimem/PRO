@@ -19,9 +19,10 @@ namespace EkoRestaurant.Services.Abstractions
             _dbContext = dbContext;
         }
 
-        public void Create(TEntity entity)
+        public TEntity Create(TEntity entity)
         {
-            _dbContext.Set<TEntity>().Add(entity);
+            var addedEntityEntry = _dbContext.Set<TEntity>().Add(entity);
+            return addedEntityEntry.Entity;
         }
 
         public void Delete(TEntity entity)
@@ -38,10 +39,11 @@ namespace EkoRestaurant.Services.Abstractions
             }
         }
 
-        public void Edit(TEntity entity)
+        public TEntity Edit(TEntity entity)
         {
             var editedEntity = _dbContext.Set<TEntity>().FirstOrDefault(e => e.Id == entity.Id);
             editedEntity = entity;
+            return editedEntity;
         }
 
         public TEntity GetById(int id)

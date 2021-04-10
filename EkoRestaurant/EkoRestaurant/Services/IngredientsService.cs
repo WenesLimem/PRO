@@ -14,17 +14,5 @@ namespace EkoRestaurant.Services
         {
         }
 
-        public  List<Ingredient> GetAllIngredients()
-        {
-            var _ings = _dbContext.Ingredients.ToArray();
-            
-            return _ings.ToList();    
-        }
-
-        public void AddIngredient(Ingredient ing)
-        {
-            _dbContext.Ingredients.Add(ing);
-            return;
-        }
     }
 }

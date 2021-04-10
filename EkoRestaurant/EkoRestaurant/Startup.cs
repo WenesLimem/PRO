@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorTable;
 using EkoRestaurant.Services;
 using MudBlazor.Services;
 
@@ -46,6 +47,8 @@ namespace EkoRestaurant
             services.AddSingleton<WeatherForecastService>();
 
             services.AddMudServices();
+            services.AddBlazorTable();
+
             services.AddTransient<DailyMenusService>();
             services.AddTransient<IngredientCategoriesService>();
             services.AddTransient<IngredientsService>();

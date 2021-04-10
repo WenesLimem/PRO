@@ -9,10 +9,10 @@ namespace EkoRestaurant.Services.Abstractions
 {
     interface IDataService<TEntity> where TEntity : BaseEntity
     {
-        void Create(TEntity entity);
+        TEntity Create(TEntity entity);
         void Delete(TEntity entity);
         void Delete(int id);
-        void Edit(TEntity entity);
+        TEntity Edit(TEntity entity);
 
         TEntity GetById(int id);
         IEnumerable<TEntity> Filter();

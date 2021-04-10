@@ -4,6 +4,29 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.page-title {
+    font-family: Quicksand;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 96px;
+    line-height: 120px;
+    letter-spacing: -1.5px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.data-grid-categories-title {
+    font-family: Quicksand;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+
+    display: flex;
+    letter-spacing: 0.15px;
+
+    color: #F3AA18;
+}
+
 a, .btn-link {
     color: #0366d6;
 }
@@ -42,9 +65,10 @@ a, .btn-link {
     z-index: 1000;
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+

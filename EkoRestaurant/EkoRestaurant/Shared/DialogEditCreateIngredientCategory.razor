@@ -1,0 +1,59 @@
+﻿@using EkoRestaurant.Data
+@using EkoRestaurant.Services
+@inject IngredientCategoriesService IngredientCategoriesService
+@inject IngredientsService IngredientsService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudTextField @bind-Value="Category.Name" Immediate="true" Label="Credit card nr" />
+            <MudSelect Immediate="true" T="Ingredient" Label="Ingredients" MultiSelection="true" @bind-SelectedValues="SelectedIngredients">
+                @foreach (var ig in AvailableIngredients)
+                {
+                    <MudSelectItem T="Ingredient" Value="@ig">@ig.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public IngredientCategory Category { get; set; }
+
+
+    public List<Ingredient> AvailableIngredients { get; set; } = new List<Ingredient>();
+    public HashSet<Ingredient> SelectedIngredients { get; set; } = new HashSet<Ingredient>(); // a hashset is required for multiselection
+
+
+    void Submit()
+    {
+        // TODO: save in db
+        MudDialog.Close(DialogResult.Ok(Category));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+    protected override Task OnInitializedAsync()
+    {
+        if (Category == null)
+        {
+            Category = new IngredientCategory();
+        }
+
+        AvailableIngredients = IngredientsService.Filter().ToList();
+        foreach (Ingredient ingredient in Category.Ingredients)
+        {
+            SelectedIngredients.Add(ingredient);
+        }
+
+        return base.OnInitializedAsync();
+    }
+
+}
