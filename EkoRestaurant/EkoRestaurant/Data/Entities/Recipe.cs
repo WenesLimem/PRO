@@ -11,7 +11,7 @@ namespace EkoRestaurant.Data
         public String Name { get; set; }
         public String Description { get; set; }
 
-        public float PreparationTimeMinutes { get; set; }
-        public float Price { get; set; }
+        public double PreparationTimeMinutes { get; set; }
+        public double Price { get; set; }
     }
 }

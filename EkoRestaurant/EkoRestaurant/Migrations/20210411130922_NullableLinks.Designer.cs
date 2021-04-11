@@ -4,14 +4,16 @@ using EkoRestaurant.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EkoRestaurant.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210411130922_NullableLinks")]
+    partial class NullableLinks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,8 +73,8 @@ namespace EkoRestaurant.Migrations
                     b.Property<int>("UnitInStock")
                         .HasColumnType("int");
 
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("float");
+                    b.Property<float>("UnitPrice")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -109,11 +111,11 @@ namespace EkoRestaurant.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("PreparationTimeMinutes")
-                        .HasColumnType("float");
+                    b.Property<float>("PreparationTimeMinutes")
+                        .HasColumnType("real");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

@@ -1,0 +1,55 @@
+﻿@using EkoRestaurant.Data
+@using EkoRestaurant.Services
+
+@inject IngredientCategoriesService IngredientCategoriesService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudSelect T="IngredientCategory" @bind-Value="@CurrentIngredient.Category" Label="Catégorie" ToStringFunc="@(e => e == null ? null : $"{e.Name}")">
+                @foreach (var cat in @CategoriesAvailable)
+                {
+                    <MudSelectItem Value="@cat" />
+                }
+            </MudSelect>
+            <MudTextField @bind-Value="CurrentIngredient.Name" Label="Nom" Variant="Variant.Text"></MudTextField>
+            <MudDatePicker Label="Date d'expiration" @bind-Date="CurrentIngredient.ExpirationDate" />
+            <MudTextField @bind-Value="@CurrentIngredient.UnitPrice" T="double" Label="Prix unitaire"/>
+            <MudTextField @bind-Value="@CurrentIngredient.Producer" Label="Producteur"/>
+            <MudTextField @bind-Value="@CurrentIngredient.UnitInStock" T="int" Label="Nbr d'unités en stock"/>
+            <MudTextField @bind-Value="@CurrentIngredient.UnitAtStart" T="int" Label="Nbr d'unités commandées initialement"/>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public Ingredient CurrentIngredient { get; set; }
+
+    public List<IngredientCategory> CategoriesAvailable { get; set; } = new();
+
+
+    protected override Task OnInitializedAsync()
+    {
+        CategoriesAvailable = IngredientCategoriesService.Filter().ToList();
+        if (CurrentIngredient == null)
+        {
+            CurrentIngredient = new Ingredient();
+        }
+
+        return base.OnInitializedAsync();
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+    void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(CurrentIngredient));
+    }
+}

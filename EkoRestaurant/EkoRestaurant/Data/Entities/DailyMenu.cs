@@ -8,8 +8,8 @@ namespace EkoRestaurant.Data
 {
     public class DailyMenu : BaseEntity
     {
-        public Recipe Starter { get; set; }
-        public Recipe MainDish { get; set; }
-        public Recipe Dessert { get; set; }
+        public Recipe? Starter { get; set; }
+        public Recipe? MainDish { get; set; }
+        public Recipe? Dessert { get; set; }
     }
 }

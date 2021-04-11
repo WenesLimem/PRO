@@ -10,15 +10,15 @@ namespace EkoRestaurant.Data
     {
         public String Name { get; set; }
 
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
 
-        public float UnitPrice { get; set; }
+        public double UnitPrice { get; set; }
 
         public String Producer { get; set; }
 
         public int UnitInStock { get; set; }
         public int UnitAtStart { get; set; }
 
-        public IngredientCategory Category { get; set; }
+        public IngredientCategory? Category { get; set; }
     }
 }

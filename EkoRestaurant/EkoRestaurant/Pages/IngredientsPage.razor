@@ -16,15 +16,16 @@
         {
             @foreach (IngredientCategory category in IngredientCategories)
             {
-                <MudButton OnClick="() => SelectCategoryInSideBar(category)">
+                <button @onclick="() => SelectCategoryInSideBar(category)">
                     <IngredientCategorySideBar Category="@category"/>
-                </MudButton>
+                </button>
             }
         }
         <MudFab Class="ma-2" Color="Color.Primary" Icon="@Icons.Material.Filled.ShoppingCart" IconSize="Size.Small" Label="Nouvelle catégorie" OnClick="@OpenIngredientCategoryDialog" Size="Size.Small"/>
     </div>
     <div>
-        <GridIngredient @ref="IngredientGridReference" ParentCategory="@SelectedCategory"></GridIngredient>
+        <MudFab Icon="@Icons.Material.Filled.Navigation" Label="Navigation" OnClick="@OpenAddIngredientDialog"/>
+        <GridIngredient ParentCategory="@SelectedCategory"></GridIngredient>
     </div>
 
 </div>
@@ -38,8 +39,6 @@
 
     public IngredientCategory SelectedCategory { get; set; }
 
-    public GridIngredient IngredientGridReference;
-    private IngredientCategory _selectedCategory; // backing field
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,7 +48,6 @@
     public void SelectCategoryInSideBar(IngredientCategory category)
     {
         SelectedCategory = category;
-        //IngredientGridReference.RefreshMe();
     }
 
     public async Task OpenIngredientCategoryDialog()
@@ -61,13 +59,22 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var categoryCreated = (IngredientCategory) result.Data;
+            var res = (IngredientCategory) result.Data;
+            IngredientCategoriesService.Create(res);
+            IngredientCategoriesService.SaveChanges();
         }
     }
 
-    public void OpenAddIngredientDialog()
+    public async Task OpenAddIngredientDialog()
     {
-    // TODO: implement me
+        var dialog = DialogService.Show<DialogEditCreateIngredient>("Simple Dialog");
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (Ingredient) result.Data;
+            IngredientsService.Create(res);
+            IngredientsService.SaveChanges();
+        }
     }
 
 }
