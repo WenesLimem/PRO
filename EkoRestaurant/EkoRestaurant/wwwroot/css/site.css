@@ -24,6 +24,14 @@ html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
     color: #F3AA18;
 }
 
+.data-grid-categories-chip {
+    display: flex;
+    cursor: pointer;
+    margin-top: 4px;
+    border-radius: 0px 99px 99px 0px;
+    padding: 8px 0px
+}
+
 .data-grid-categories-name {
     font-family: Roboto;
     font-style: normal;
@@ -55,12 +63,14 @@ html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 .btn-mud-white-bg-rounded {
     background-color: white !important;
     border-radius: 32px !important;
+    height: 44px !important;
 }
 
 .btn-mud-gradiant-bg-rounded {
     color: white !important;
     background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%) !important;
     border-radius: 32px !important;
+    height: 44px !important;
 }
 
 

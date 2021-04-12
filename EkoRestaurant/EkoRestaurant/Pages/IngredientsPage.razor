@@ -14,7 +14,12 @@
         <div class="page-title dark-color">Ingredients</div>
     </MudItem>
     <MudItem xs="12">
-        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Color="Color.Transparent" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg"/>Ajouter</MudButton>
+
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg" />Ajouter</MudButton>
+        @if (SelectedCategory != null)
+        {
+            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
+        }
     </MudItem>
     <MudItem xs="4">
         <div class="data-grid-categories-title">
@@ -37,7 +42,8 @@
 
     </MudItem>
     <MudItem xs="8">
-        <MudTable T="Ingredient" Items="@Ingredients" MultiSelection="true" @bind-SelectedItems="_selectedItems" Hover="true" OnRowClick="@ClickedRow">
+        @* TODO: sortable columns *@
+        <MudTable T="Ingredient" Items="@Ingredients" Hover="true" OnRowClick="@ClickedRow">
             <HeaderContent>
                 <MudTh>Id</MudTh>
                 <MudTh>Nom</MudTh>
@@ -67,8 +73,6 @@
     public IngredientCategory SelectedCategory { get; set; }
 
     public List<Ingredient> Ingredients { get; set; } = new();
-    private HashSet<Ingredient> _selectedItems = new();
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,7 +82,7 @@
 
     public async Task SelectCategoryInSideBar(IngredientCategory category)
     {
-        SelectedCategory = category;
+        SelectedCategory = SelectedCategory == category ? null : category;
         await GetIngredientsData();
     }
 
@@ -87,7 +91,7 @@
         var parameters = new DialogParameters();
         parameters.Add("Category", CategoryToAdd);
 
-        var dialog = DialogService.Show<DialogEditCreateIngredientCategory>("Simple Dialog", parameters);
+        var dialog = DialogService.Show<DialogEditCreateIngredientCategory>("Nouvelle catégorie", parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -101,7 +105,7 @@
 
     public async Task OpenAddIngredientDialog()
     {
-        var dialog = DialogService.Show<DialogEditCreateIngredient>("Simple Dialog");
+        var dialog = DialogService.Show<DialogEditCreateIngredient>("Nouvel ingrédient");
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -112,6 +116,12 @@
             SelectedCategory = new();
             SelectedCategory = currentCat;
         }
+    }
+
+    public async Task OpenAddDeleteCategoryDialog()
+    {
+        // TODO: implement me
+        // faire un dialog générique de confirmation de suppression
     }
 
     public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
