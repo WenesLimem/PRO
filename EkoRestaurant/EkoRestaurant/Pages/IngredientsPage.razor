@@ -114,9 +114,9 @@
         }
     }
 
-    public void ClickedRow(TableRowClickEventArgs<Ingredient> eve)
+    public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
     {
-        System.Console.WriteLine(eve.Item.Name);
+        System.Console.WriteLine(clickEvent.Item.Name);
         // TODO: navigation to detail page
     }
 
