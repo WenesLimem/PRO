@@ -45,11 +45,11 @@
         <MudTable T="Ingredient" Items="@Ingredients" Hover="true" OnRowClick="@ClickedRow">
             <HeaderContent>
                 <MudTh>Id</MudTh>
-                <MudTh>Nom</MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.Name)">Nom</MudTableSortLabel></MudTh>
                 <MudTh>Producteur</MudTh>
-                <MudTh>Date d'expiration</MudTh>
-                <MudTh>Qte en stock</MudTh>
-                <MudTh>Prix</MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.ExpirationDate)">Date d'expiration</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.UnitInStock)">Qte en stock</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.UnitPrice)">Prix</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Id">@context.Id</MudTd>
@@ -110,6 +110,10 @@
             var res = (Ingredient) result.Data;
             IngredientsService.Create(res);
             IngredientsService.SaveChanges();
+            if (res.Category == SelectedCategory || SelectedCategory == null)
+            {
+                Ingredients.Add(res);
+            }
             var currentCat = SelectedCategory;
             SelectedCategory = new();
             SelectedCategory = currentCat;
