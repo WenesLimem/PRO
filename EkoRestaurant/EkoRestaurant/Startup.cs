@@ -46,9 +46,11 @@ namespace EkoRestaurant
             
             services.AddSingleton<WeatherForecastService>();
 
+            // librairies services
             services.AddMudServices();
             services.AddBlazorTable();
 
+            // data services
             services.AddTransient<DailyMenusService>();
             services.AddTransient<IngredientCategoriesService>();
             services.AddTransient<IngredientsService>();

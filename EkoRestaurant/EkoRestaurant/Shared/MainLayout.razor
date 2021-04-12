@@ -1,6 +1,9 @@
 ﻿@inherits LayoutComponentBase
 
+
 <div class="page">
+<MudThemeProvider Theme="ekoMudTheme"/>
+
     <div class="sidebar">
         <NavMenu />
     </div>
@@ -8,7 +11,6 @@
     <div class="main">
         <div class="top-row px-4 auth">
             <LoginDisplay />
-            <MudThemeProvider/>
             <MudDialogProvider/>
             <MudSnackbarProvider/>
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
@@ -19,3 +21,15 @@
         </div>
     </div>
 </div>
+
+@code
+{
+    MudTheme ekoMudTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = "#F3AA18"
+        }
+    };
+    
+}

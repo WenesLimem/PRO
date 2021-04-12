@@ -1,90 +1,87 @@
 ﻿@page "/ingredients"
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
 @inject IngredientsService IngredientsService
 @inject IngredientCategoriesService IngredientCategoriesService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 
-<div class="page-title">Ingredients</div>
 
-<div style="display: flex; flex-direction: row">
-    <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.Medium">
-        <MudGrid>
-            <div class="flex-column">
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Ingredients</div>
+    </MudItem>
+    <MudItem xs="12">
 
-                <div class="data-grid-categories-title" align="left">
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg" />Ajouter</MudButton>
+        @if (SelectedCategory != null)
+        {
+            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
+        }
+    </MudItem>
+    <MudItem xs="4">
+        <div class="data-grid-categories-title">
+            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right: 12px"></MudIcon>Catégories
+        </div>
+        <div class="flex-column">
 
+            @if (IngredientCategories.Count > 0)
+            {
+                @foreach (IngredientCategory category in IngredientCategories)
+                {
+                    <div @onclick="() => SelectCategoryInSideBar(category)">
+                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)"/>
+                    </div>
+                }
+            }
+            <div class="small-separator"/>
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
+        </div>
 
-                    <MudItem xs="12" sm="12">
-                        <MudPaper Elevation="2" Style="height: inherit; width: inherit;" Class="mx-5 pa-4">
-                        
-                            <MudText Typo="Typo.h4">Catégories</MudText>
-                      
-                    
-
-                
-
-            
-
-                            @if (IngredientCategories.Count > 0)
-                            {
-                
-                                <MudSimpleTable Striped="true">
-
-                                    <tbody>
-                                    @foreach (IngredientCategory category in IngredientCategories)
-                                    {
-                                        <tr>
-                                            <MudText Typo="Typo.subtitle1">
-                                                <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="() => SelectCategoryInSideBar(category)">
-                                                    <IngredientCategorySideBar Category="@category"/>
-                                                </MudButton>
-                                            </MudText>
-                                        </tr>
-                                    }
-                                    </tbody>
-                                </MudSimpleTable>
-                
-
-                            }
-                        </MudPaper>
-                    </MudItem>
-                </div>
-                <MudFab Class="ma-3" Color="Color.Primary" Icon="@Icons.Material.Filled.ShoppingCart" IconSize="Size.Small" Label="Nouvelle catégorie" OnClick="@OpenIngredientCategoryDialog" Size="Size.Small"/>
-            </div>
-            
-            <div>
-                <MudItem xs="12" sm="12" >
-                <MudPaper Elevation="2" Style="height: inherit; width: inherit;" Square="true" Class="mx-5 pa-4">
-                    <MudFab Icon="@Icons.Material.Filled.ShoppingBasket" Label="Nouvel Ingrédient" Color="Color.Primary" OnClick="@OpenAddIngredientDialog"/>
-                    <GridIngredient ParentCategory="@SelectedCategory"></GridIngredient>
-                </MudPaper>
-                </MudItem>
-            </div>
-        </MudGrid>
-    </MudContainer>
-
-</div>
-
+    </MudItem>
+    <MudItem xs="8">
+        @* TODO: sortable columns *@
+        <MudTable T="Ingredient" Items="@Ingredients" Hover="true" OnRowClick="@ClickedRow">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.Name)">Nom</MudTableSortLabel></MudTh>
+                <MudTh>Producteur</MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.ExpirationDate)">Date d'expiration</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.UnitInStock)">Qte en stock</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.UnitPrice)">Prix</MudTableSortLabel></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Nom">@context.Name</MudTd>
+                <MudTd DataLabel="Producteur">@context.Producer</MudTd>
+                <MudTd DataLabel="Date d'expiration">@context.ExpirationDate.Nice()</MudTd>
+                <MudTd DataLabel="Qte en stock">@context.UnitInStock</MudTd>
+                <MudTd DataLabel="Prix">@context.UnitPrice</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+</MudGrid>
 
 @code {
-    public Ingredient IngredientToAdd { get; set; } = new();
     public IngredientCategory CategoryToAdd { get; set; } = new();
 
     public List<IngredientCategory> IngredientCategories = new();
 
     public IngredientCategory SelectedCategory { get; set; }
 
+    public List<Ingredient> Ingredients { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
         IngredientCategories = IngredientCategoriesService.Filter().ToList();
+        await GetIngredientsData();
     }
 
-    public void SelectCategoryInSideBar(IngredientCategory category)
+    public async Task SelectCategoryInSideBar(IngredientCategory category)
     {
-        SelectedCategory = category;
+        SelectedCategory = SelectedCategory == category ? null : category;
+        await GetIngredientsData();
     }
 
     public async Task OpenIngredientCategoryDialog()
@@ -99,22 +96,66 @@
             var res = (IngredientCategory) result.Data;
             IngredientCategoriesService.Create(res);
             IngredientCategoriesService.SaveChanges();
-            
-            Snackbar.Add("Catégorie ajouté", severity: Severity.Success);
+            IngredientCategories.Add(res);
+            StateHasChanged();
         }
     }
 
     public async Task OpenAddIngredientDialog()
     {
-        var dialog = DialogService.Show<DialogEditCreateIngredient>("Ajouter ingérdient");
+        var dialog = DialogService.Show<DialogEditCreateIngredient>("Ajouter ingrédient");
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
             var res = (Ingredient) result.Data;
             IngredientsService.Create(res);
             IngredientsService.SaveChanges();
-            Snackbar.Add("Ingérdient ajouté", severity: Severity.Success);
+            if (res.Category == SelectedCategory || SelectedCategory == null)
+            {
+                Ingredients.Add(res);
+            }
+            var currentCat = SelectedCategory;
+            SelectedCategory = new();
+            SelectedCategory = currentCat;
         }
+    }
+
+    public async Task OpenAddDeleteCategoryDialog()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("TextToDisplay", "Veuillez confirmer la suppression de la catégorie " + SelectedCategory.Name + ", cela necessite de ne plus avoir d'ingrédient dans cette catégorie.");
+        parameters.Add("ButtonOkText", "Supprimer");
+        var dialog = DialogService.Show<DialogConfirm>("Supprimer la catégorie", parameters);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data.Equals(true))
+        {
+            if (SelectedCategory.Ingredients.Count > 0)
+            {
+                // snackbar error
+                return;
+            }
+            IngredientCategories.Remove(SelectedCategory);
+            IngredientCategoriesService.Delete(SelectedCategory.Id);
+            IngredientCategoriesService.SaveChanges();
+            SelectedCategory = null;
+            await GetIngredientsData();
+            StateHasChanged();
+        }
+
+    // TODO: implement me
+        // faire un dialog générique de confirmation de suppression
+    }
+
+    public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
+    {
+        System.Console.WriteLine(clickEvent.Item.Name);
+        // TODO: navigation to detail page
+    }
+    
+    private async Task GetIngredientsData()
+    {
+        Ingredients = SelectedCategory == null ? IngredientsService.Filter().ToList() : SelectedCategory.Ingredients;
     }
 
 }

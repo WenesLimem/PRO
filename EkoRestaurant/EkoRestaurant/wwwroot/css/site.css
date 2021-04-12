@@ -1,8 +1,6 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
+html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
 .page-title {
     font-family: Quicksand;
@@ -11,7 +9,6 @@ html, body {
     font-size: 96px;
     line-height: 120px;
     letter-spacing: -1.5px;
-    color: rgba(0, 0, 0, 0.87);
 }
 
 .data-grid-categories-title {
@@ -27,9 +24,63 @@ html, body {
     color: #F3AA18;
 }
 
-a, .btn-link {
-    color: #0366d6;
+.data-grid-categories-chip {
+    display: flex;
+    cursor: pointer;
+    margin-top: 4px;
+    border-radius: 0px 99px 99px 0px;
+    padding: 8px 0px
 }
+
+.data-grid-categories-name {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+}
+
+.dark-color { color: rgba(0, 0, 0, 0.87) !important; }
+
+.h6-quicksand {
+    font-family: Quicksand !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 20px !important;
+    line-height: 28px !important;
+    text-transform: initial !important;
+}
+
+.small-separator {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #E3E5E6;
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.btn-mud-white-bg-rounded {
+    background-color: white !important;
+    border-radius: 32px !important;
+    height: 44px !important;
+}
+
+.btn-mud-gradiant-bg-rounded {
+    color: white !important;
+    background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%) !important;
+    border-radius: 32px !important;
+    height: 44px !important;
+}
+
+
+.clickable { cursor: pointer }
+
+
+
+/* en dessous: ce qui etait de base */
+
+a, .btn-link { color: #0366d6; }
 
 .btn-primary {
     color: #fff;
@@ -37,21 +88,13 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
-.content {
-    padding-top: 1.1rem;
-}
+.content { padding-top: 1.1rem; }
 
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
+.valid.modified:not([type=checkbox]) { outline: 1px solid #26b050; }
 
-.invalid {
-    outline: 1px solid red;
-}
+.invalid { outline: 1px solid red; }
 
-.validation-message {
-    color: red;
-}
+.validation-message { color: red; }
 
 #blazor-error-ui {
     background: lightyellow;
@@ -71,4 +114,3 @@ a, .btn-link {
     right: 0.75rem;
     top: 0.5rem;
 }
-
