@@ -1,7 +1,6 @@
 ﻿@page "/ingredients"
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
-@using System.Globalization
 @using EkoRestaurant.Extensions
 @inject IngredientsService IngredientsService
 @inject IngredientCategoriesService IngredientCategoriesService
@@ -65,7 +64,6 @@
 </MudGrid>
 
 @code {
-    public Ingredient IngredientToAdd { get; set; } = new();
     public IngredientCategory CategoryToAdd { get; set; } = new();
 
     public List<IngredientCategory> IngredientCategories = new();
@@ -105,7 +103,7 @@
 
     public async Task OpenAddIngredientDialog()
     {
-        var dialog = DialogService.Show<DialogEditCreateIngredient>("Nouvel ingrédient");
+        var dialog = DialogService.Show<DialogEditCreateIngredient>("Ajouter ingrédient");
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -129,17 +127,10 @@
         System.Console.WriteLine(clickEvent.Item.Name);
         // TODO: navigation to detail page
     }
-
+    
     private async Task GetIngredientsData()
     {
-        if (SelectedCategory == null)
-        {
-            Ingredients = IngredientsService.Filter().ToList();
-        }
-        else
-        {
-            Ingredients = SelectedCategory.Ingredients;
-        }
+        Ingredients = SelectedCategory == null ? IngredientsService.Filter().ToList() : SelectedCategory.Ingredients;
     }
 
 }
