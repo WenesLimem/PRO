@@ -1,35 +1,62 @@
 ﻿@page "/ingredients"
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
+@using System.Globalization
+@using EkoRestaurant.Extensions
 @inject IngredientsService IngredientsService
 @inject IngredientCategoriesService IngredientCategoriesService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 
-<div class="page-title">Ingredients</div>
 
-<div style="display: flex; flex-direction: row">
-    <div class="flex-column">
-        <div class="data-grid-categories-title"><MudIcon Icon="@Icons.Material.Filled.StarRate"></MudIcon>Catégories</div>
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Ingredients</div>
+    </MudItem>
+    <MudItem xs="12">
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Color="Color.Transparent" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg"/>Ajouter</MudButton>
+    </MudItem>
+    <MudItem xs="4">
+        <div class="data-grid-categories-title">
+            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right: 12px"></MudIcon>Catégories
+        </div>
+        <div class="flex-column">
 
-        @if (IngredientCategories.Count > 0)
-        {
-            @foreach (IngredientCategory category in IngredientCategories)
+            @if (IngredientCategories.Count > 0)
             {
-                <button @onclick="() => SelectCategoryInSideBar(category)">
-                    <IngredientCategorySideBar Category="@category"/>
-                </button>
+                @foreach (IngredientCategory category in IngredientCategories)
+                {
+                    <div @onclick="() => SelectCategoryInSideBar(category)">
+                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)"/>
+                    </div>
+                }
             }
-        }
-        <MudFab Class="ma-2" Color="Color.Primary" Icon="@Icons.Material.Filled.ShoppingCart" IconSize="Size.Small" Label="Nouvelle catégorie" OnClick="@OpenIngredientCategoryDialog" Size="Size.Small"/>
-    </div>
-    <div>
-        <MudFab Icon="@Icons.Material.Filled.Navigation" Label="Navigation" OnClick="@OpenAddIngredientDialog"/>
-        <GridIngredient ParentCategory="@SelectedCategory"></GridIngredient>
-    </div>
+            <div class="small-separator"/>
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
+        </div>
 
-</div>
-
+    </MudItem>
+    <MudItem xs="8">
+        <MudTable T="Ingredient" Items="@Ingredients" MultiSelection="true" @bind-SelectedItems="_selectedItems" Hover="true" OnRowClick="@ClickedRow">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>Nom</MudTh>
+                <MudTh>Producteur</MudTh>
+                <MudTh>Date d'expiration</MudTh>
+                <MudTh>Qte en stock</MudTh>
+                <MudTh>Prix</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Nom">@context.Name</MudTd>
+                <MudTd DataLabel="Producteur">@context.Producer</MudTd>
+                <MudTd DataLabel="Date d'expiration">@context.ExpirationDate.Nice()</MudTd>
+                <MudTd DataLabel="Qte en stock">@context.UnitInStock</MudTd>
+                <MudTd DataLabel="Prix">@context.UnitPrice</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+</MudGrid>
 
 @code {
     public Ingredient IngredientToAdd { get; set; } = new();
@@ -39,15 +66,20 @@
 
     public IngredientCategory SelectedCategory { get; set; }
 
+    public List<Ingredient> Ingredients { get; set; } = new();
+    private HashSet<Ingredient> _selectedItems = new();
+
 
     protected override async Task OnInitializedAsync()
     {
         IngredientCategories = IngredientCategoriesService.Filter().ToList();
+        await GetIngredientsData();
     }
 
-    public void SelectCategoryInSideBar(IngredientCategory category)
+    public async Task SelectCategoryInSideBar(IngredientCategory category)
     {
         SelectedCategory = category;
+        await GetIngredientsData();
     }
 
     public async Task OpenIngredientCategoryDialog()
@@ -62,6 +94,8 @@
             var res = (IngredientCategory) result.Data;
             IngredientCategoriesService.Create(res);
             IngredientCategoriesService.SaveChanges();
+            IngredientCategories.Add(res);
+            StateHasChanged();
         }
     }
 
@@ -74,6 +108,27 @@
             var res = (Ingredient) result.Data;
             IngredientsService.Create(res);
             IngredientsService.SaveChanges();
+            var currentCat = SelectedCategory;
+            SelectedCategory = new();
+            SelectedCategory = currentCat;
+        }
+    }
+
+    public void ClickedRow(TableRowClickEventArgs<Ingredient> eve)
+    {
+        System.Console.WriteLine(eve.Item.Name);
+        // TODO: navigation to detail page
+    }
+
+    private async Task GetIngredientsData()
+    {
+        if (SelectedCategory == null)
+        {
+            Ingredients = IngredientsService.Filter().ToList();
+        }
+        else
+        {
+            Ingredients = SelectedCategory.Ingredients;
         }
     }
 

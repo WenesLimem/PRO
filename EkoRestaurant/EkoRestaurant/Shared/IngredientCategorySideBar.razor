@@ -1,10 +1,43 @@
 ﻿@using EkoRestaurant.Data
 
-<div>@Category.Name</div>
+<div style="display: flex; cursor: pointer; margin-top: 4px; background-color: @bgColor; border-radius: 0px 99px 99px 0px">
+    @if (Selected)
+    {
+        <MudIcon Icon="@Icons.Material.Filled.Label" Size="Size.Small" Style="margin-right: 12px"></MudIcon>
+    }
+    else
+    {
+        <MudIcon Icon="@Icons.Material.Filled.LabelOutline" Size="Size.Small" Style="margin-right: 12px"></MudIcon>
+    }
+    <div class="data-grid-categories-name dark-color">@Category.Name</div>
+    <div style="width: 40px; margin-left: auto">@Category.Ingredients.Count</div>
+</div>
+
 
 @code {
 
     [Parameter]
     public IngredientCategory Category { get; set; }
 
+    [Parameter]
+    public bool Selected
+    {
+        get => _selected;
+        set
+        {
+            _selected = value;
+            if (Selected)
+            {
+                bgColor = "#DCF7E3";
+            }
+            else
+            {
+                bgColor = "";
+
+            }
+        }
+    }
+
+    private string bgColor { get; set; } = "";
+    private bool _selected;
 }
