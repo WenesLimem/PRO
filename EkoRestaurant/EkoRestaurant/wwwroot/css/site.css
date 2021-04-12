@@ -1,5 +1,6 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+
 html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
 .page-title {
@@ -72,7 +73,6 @@ html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
     border-radius: 32px !important;
     height: 44px !important;
 }
-
 
 .clickable { cursor: pointer }
 

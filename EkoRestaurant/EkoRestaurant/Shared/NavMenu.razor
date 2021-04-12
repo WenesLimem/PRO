@@ -1,27 +1,27 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">EkoRestaurant</a>
+    <a class="navbar-brand" href=""> <img src="Images/logo.svg" style="height: 30px; width: 30px ; margin-right: 10px"/>EkoRestaurant</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"> </span>
     </button>
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+    <ul class="sidebar" >
+        <li >
+            <NavLink class="nav-link" href="">
+                <img style="margin-right:10px ;padding-left: 10px" src="Images/caisse.svg"/>Caisse
             </NavLink>
         </li>
-
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
+        
+        <li >
             <NavLink class="nav-link" href="ingredients">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Ingredients
+                <img style="margin-right: 10px; padding-left: 10px" src="Images/ingredient.svg"/>Economat
             </NavLink>
+        </li>
+        <li>
+            <NavLink class="nav-link" href="ingredients">
+                <img style="margin-right: 10px; padding-left: 10px" src="Images/stocks.svg"/>Stocks
+                </NavLink>
         </li>
     </ul>
 </div>
