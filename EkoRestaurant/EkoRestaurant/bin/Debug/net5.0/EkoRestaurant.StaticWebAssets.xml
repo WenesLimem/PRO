@@ -1,5 +1,0 @@
-﻿<StaticWebAssets Version="1.0">
-  <ContentRoot BasePath="_content/MudBlazor" Path="C:\Users\outca\.nuget\packages\mudblazor\5.0.7\build\..\staticwebassets\" />
-  <ContentRoot BasePath="/" Path="D:\PRO\EkoRestaurant\EkoRestaurant\obj\Debug\net5.0\scopedcss\bundle\" />
-  <ContentRoot BasePath="/Identity" Path="C:\Users\outca\.nuget\packages\microsoft.aspnetcore.identity.ui\5.0.4\staticwebassets\V4\" />
-</StaticWebAssets>
