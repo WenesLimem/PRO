@@ -97,6 +97,7 @@
             IngredientCategoriesService.Create(res);
             IngredientCategoriesService.SaveChanges();
             IngredientCategories.Add(res);
+            CategoryToAdd = new();
             StateHasChanged();
         }
     }
