@@ -108,6 +108,7 @@ using MudBlazor;
         collapseNavMenu = !collapseNavMenu;
     }
 
+
 #line default
 #line hidden
 #nullable disable

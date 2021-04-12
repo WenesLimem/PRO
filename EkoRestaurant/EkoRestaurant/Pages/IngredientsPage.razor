@@ -9,24 +9,61 @@
 <div class="page-title">Ingredients</div>
 
 <div style="display: flex; flex-direction: row">
-    <div class="flex-column">
-        <div class="data-grid-categories-title"><MudIcon Icon="@Icons.Material.Filled.StarRate"></MudIcon>Catégories</div>
+    <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.Medium">
+        <MudGrid>
+            <div class="flex-column">
 
-        @if (IngredientCategories.Count > 0)
-        {
-            @foreach (IngredientCategory category in IngredientCategories)
-            {
-                <button @onclick="() => SelectCategoryInSideBar(category)">
-                    <IngredientCategorySideBar Category="@category"/>
-                </button>
-            }
-        }
-        <MudFab Class="ma-2" Color="Color.Primary" Icon="@Icons.Material.Filled.ShoppingCart" IconSize="Size.Small" Label="Nouvelle catégorie" OnClick="@OpenIngredientCategoryDialog" Size="Size.Small"/>
-    </div>
-    <div>
-        <MudFab Icon="@Icons.Material.Filled.Navigation" Label="Navigation" OnClick="@OpenAddIngredientDialog"/>
-        <GridIngredient ParentCategory="@SelectedCategory"></GridIngredient>
-    </div>
+                <div class="data-grid-categories-title" align="left">
+
+
+                    <MudItem xs="12" sm="12">
+                        <MudPaper Elevation="2" Style="height: inherit; width: inherit;" Class="mx-5 pa-4">
+                        
+                            <MudText Typo="Typo.h4">Catégories</MudText>
+                      
+                    
+
+                
+
+            
+
+                            @if (IngredientCategories.Count > 0)
+                            {
+                
+                                <MudSimpleTable Striped="true">
+
+                                    <tbody>
+                                    @foreach (IngredientCategory category in IngredientCategories)
+                                    {
+                                        <tr>
+                                            <MudText Typo="Typo.subtitle1">
+                                                <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="() => SelectCategoryInSideBar(category)">
+                                                    <IngredientCategorySideBar Category="@category"/>
+                                                </MudButton>
+                                            </MudText>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </MudSimpleTable>
+                
+
+                            }
+                        </MudPaper>
+                    </MudItem>
+                </div>
+                <MudFab Class="ma-3" Color="Color.Primary" Icon="@Icons.Material.Filled.ShoppingCart" IconSize="Size.Small" Label="Nouvelle catégorie" OnClick="@OpenIngredientCategoryDialog" Size="Size.Small"/>
+            </div>
+            
+            <div>
+                <MudItem xs="12" sm="12" >
+                <MudPaper Elevation="2" Style="height: inherit; width: inherit;" Square="true" Class="mx-5 pa-4">
+                    <MudFab Icon="@Icons.Material.Filled.ShoppingBasket" Label="Nouvel Ingrédient" Color="Color.Primary" OnClick="@OpenAddIngredientDialog"/>
+                    <GridIngredient ParentCategory="@SelectedCategory"></GridIngredient>
+                </MudPaper>
+                </MudItem>
+            </div>
+        </MudGrid>
+    </MudContainer>
 
 </div>
 
@@ -55,25 +92,28 @@
         var parameters = new DialogParameters();
         parameters.Add("Category", CategoryToAdd);
 
-        var dialog = DialogService.Show<DialogEditCreateIngredientCategory>("Simple Dialog", parameters);
+        var dialog = DialogService.Show<DialogEditCreateIngredientCategory>("Nouvelle catégorie", parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
             var res = (IngredientCategory) result.Data;
             IngredientCategoriesService.Create(res);
             IngredientCategoriesService.SaveChanges();
+            
+            Snackbar.Add("Catégorie ajouté", severity: Severity.Success);
         }
     }
 
     public async Task OpenAddIngredientDialog()
     {
-        var dialog = DialogService.Show<DialogEditCreateIngredient>("Simple Dialog");
+        var dialog = DialogService.Show<DialogEditCreateIngredient>("Ajouter ingérdient");
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
             var res = (Ingredient) result.Data;
             IngredientsService.Create(res);
             IngredientsService.SaveChanges();
+            Snackbar.Add("Ingérdient ajouté", severity: Severity.Success);
         }
     }
 
