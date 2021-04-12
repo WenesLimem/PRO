@@ -6,7 +6,7 @@ Notre super équipe 👨‍💻
 | Qui ?              | Role                      | Email                         |
 | ------------------ | ------------------------- | ----------------------------- |
 | Corentin Zeller    | Chef de projet            | corentin.zeller@heig-vd.ch    |
-| Wènes Limem        | remplaçant chef de projet | wenes.limem@heig-vd.ch        |
+| Wènes Limem        | Remplaçant chef de projet | wenes.limem@heig-vd.ch        |
 | Soulaymane Lamrani | Responsable domain métier | soulaymane.lamrani@heig-vd.ch |
 | Matthieu Godi      | Responsable qualité       | matthieu.godi@heig-vd.ch      |
 
