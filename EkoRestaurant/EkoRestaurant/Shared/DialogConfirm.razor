@@ -1,0 +1,25 @@
+
+<MudDialog>
+    <DialogContent>
+        @TextToDisplay
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Annuler</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">@ButtonOkText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    
+    [Parameter]
+    public String TextToDisplay { get; set; }
+
+    [Parameter]
+    public String ButtonOkText { get; set; } = "Confirmer";
+    
+    void Cancel() => MudDialog.Cancel();
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+}

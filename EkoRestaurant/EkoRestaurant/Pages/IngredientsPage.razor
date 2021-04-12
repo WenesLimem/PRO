@@ -118,7 +118,28 @@
 
     public async Task OpenAddDeleteCategoryDialog()
     {
-        // TODO: implement me
+        var parameters = new DialogParameters();
+        parameters.Add("TextToDisplay", "Veuillez confirmer la suppression de la catégorie " + SelectedCategory.Name + ", cela necessite de ne plus avoir d'ingrédient dans cette catégorie.");
+        parameters.Add("ButtonOkText", "Supprimer");
+        var dialog = DialogService.Show<DialogConfirm>("Supprimer la catégorie", parameters);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data.Equals(true))
+        {
+            if (SelectedCategory.Ingredients.Count > 0)
+            {
+                // snackbar error
+                return;
+            }
+            IngredientCategories.Remove(SelectedCategory);
+            IngredientCategoriesService.Delete(SelectedCategory.Id);
+            IngredientCategoriesService.SaveChanges();
+            SelectedCategory = null;
+            await GetIngredientsData();
+            StateHasChanged();
+        }
+
+    // TODO: implement me
         // faire un dialog générique de confirmation de suppression
     }
 
