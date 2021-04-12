@@ -9,4 +9,9 @@ EkoRestaurant/.vs/EkoRestaurant/v16/.suo
 EkoRestaurant/EkoRestaurant/obj/
 EkoRestaurant/EkoRestaurant/bin/
 EkoRestaurant/EkoRestaurant/.idea/
-                
+EkoRestaurant/.DS_Store
+.DS_Store
+
+*.xml
+*.iml
+*.meta
