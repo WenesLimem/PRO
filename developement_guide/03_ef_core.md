@@ -33,7 +33,7 @@ C'est la même chose lorsque les modifications des collègues instaures des chan
 
 
 
-| Quoi                                           | PMC                              | Dot net cli                                 |
+| Quoi                                           | PMC                              | Dot net cli (dans le dossier du .csproj)    |
 | ---------------------------------------------- | -------------------------------- | ------------------------------------------- |
 | Ajout de migrations dans le dossier migrations | `add-migration MyFirstMigration` | `dotnet ef migrations add MyFirstMigration` |
 | Application des migrations                     | `Update-Database`                | `dotnet ef database update`                 |
