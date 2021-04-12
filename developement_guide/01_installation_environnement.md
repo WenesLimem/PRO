@@ -24,14 +24,16 @@ Il existe là deux possibilitées:
   * sur mac: installer docker avant et le lancer, puis depuis azure data studio il est possible de créer "une instance locale"
   * sur windows, se referrer à la documentation docker
 
-
-
 ## 4. IDE
 
 L'ide de developpement le mieux adapté est Visual Studio 2019. 
 
 Si vous préferrez Jetbrains alors vous pouvez installer l'extension ReSharper afin d'avoir les mêmes raccourcis clavier. Sinon Rider est ok.
 
-## 5. outil pour uml
+## 5. Ef-Core tools
 
-*A completer*
+Ceci est necessaire pour le développement https://docs.microsoft.com/en-us/ef/core/cli/dotnet 
+
+Executer la commande dans un terminal `dotnet tool install --global dotnet-ef`
+Pour vérifier l'installation: `dotnet ef`
+
