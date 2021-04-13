@@ -1,10 +1,23 @@
 .navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%);
 }
 
 .top-row {
-    height: 3.5rem;
-    background-color: rgba(0,0,0,0.4);
+    /* Name */
+    background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%);
+
+    font-family: "Fredoka One",cursive;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 28px;
+    /* or 117% */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.15px;
+
+
+
 }
 
 .navbar-brand {
@@ -32,7 +45,7 @@
     }
 
     .nav-item ::deep a {
-        color: #d7d7d7;
+        color: #1b1e21;
         border-radius: 4px;
         height: 3rem;
         display: flex;
@@ -41,13 +54,12 @@
     }
 
 .nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.25);
-    color: white;
+    background-color:lightgray;
+    
 }
 
 .nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
+    color: #383d41;
 }
 
 @media (min-width: 641px) {

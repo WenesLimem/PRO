@@ -1,27 +1,36 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">EkoRestaurant</a>
+    <a class="navbar-brand" href=""> <img src="Images/logo.svg" style="height: 30px; width: 30px ; margin-right: 10px"/>EkoRestaurant</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"> </span>
     </button>
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
+    <ul class="sidebar" >
+        <li >
+            <MudNavLink Icon="Images/caisse.svg" IconColor="Color.Default" Href="/">
+                <MudText Typo="Typo.body1" Color="Color.Dark">
+                    <MudIcon Icon="@Icons.Rounded.Calculate" Size="Size.Medium"/>
+                    Caisse
+                </MudText>
+            </MudNavLink>
         </li>
-
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
+        
+        <li >
+            <MudNavLink Icon="Images/ingredient.svg" IconColor="Color.Default" Href="/ingredients">
+                <MudText Typo="Typo.body1" Color="Color.Dark">
+                    <MudIcon Icon="@Icons.Rounded.Assessment" Size="Size.Medium"/>
+                    Economat
+                </MudText>
+            </MudNavLink>
         </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="ingredients">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Ingredients
-            </NavLink>
+        <li>
+            <MudNavLink Icon="Images/ingredient.svg" IconColor="Color.Default" Href="/stocks">
+                <MudText Typo="Typo.body1" Color="Color.Dark">
+                    <MudIcon Icon="@Icons.Rounded.AccountBalanceWallet" Size="Size.Medium"/>
+                    Stocks
+                </MudText>
+            </MudNavLink>
         </li>
     </ul>
 </div>
