@@ -8,20 +8,29 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="sidebar" >
         <li >
-            <NavLink class="nav-link" href="">
-                <img style="margin-right:10px ;padding-left: 10px" src="Images/caisse.svg"/>Caisse
-            </NavLink>
+            <MudNavLink Icon="Images/caisse.svg" IconColor="Color.Default" Href="/">
+                <MudText Typo="Typo.body1" Color="Color.Dark">
+                    <MudIcon Icon="@Icons.Rounded.Calculate" Size="Size.Medium"/>
+                    Caisse
+                </MudText>
+            </MudNavLink>
         </li>
         
         <li >
-            <NavLink class="nav-link" href="ingredients">
-                <img style="margin-right: 10px; padding-left: 10px" src="Images/ingredient.svg"/>Economat
-            </NavLink>
+            <MudNavLink Icon="Images/ingredient.svg" IconColor="Color.Default" Href="/ingredients">
+                <MudText Typo="Typo.body1" Color="Color.Dark">
+                    <MudIcon Icon="@Icons.Rounded.Assessment" Size="Size.Medium"/>
+                    Economat
+                </MudText>
+            </MudNavLink>
         </li>
         <li>
-            <NavLink class="nav-link" href="ingredients">
-                <img style="margin-right: 10px; padding-left: 10px" src="Images/stocks.svg"/>Stocks
-                </NavLink>
+            <MudNavLink Icon="Images/ingredient.svg" IconColor="Color.Default" Href="/stocks">
+                <MudText Typo="Typo.body1" Color="Color.Dark">
+                    <MudIcon Icon="@Icons.Rounded.AccountBalanceWallet" Size="Size.Medium"/>
+                    Stocks
+                </MudText>
+            </MudNavLink>
         </li>
     </ul>
 </div>
