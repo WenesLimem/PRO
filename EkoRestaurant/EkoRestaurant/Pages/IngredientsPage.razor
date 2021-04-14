@@ -14,10 +14,10 @@
     </MudItem>
     <MudItem xs="12">
 
-        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg" />Ajouter</MudButton>
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg"/>Ajouter</MudButton>
         @if (SelectedCategory != null)
         {
-            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
+            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg"/>Supprimer la catégorie</MudButton>
         }
     </MudItem>
     <MudItem xs="4">
@@ -45,11 +45,19 @@
         <MudTable T="Ingredient" Items="@Ingredients" Hover="true" OnRowClick="@ClickedRow">
             <HeaderContent>
                 <MudTh>Id</MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.Name)">Nom</MudTableSortLabel></MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.Name)">Nom</MudTableSortLabel>
+                </MudTh>
                 <MudTh>Producteur</MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.ExpirationDate)">Date d'expiration</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.UnitInStock)">Qte en stock</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.UnitPrice)">Prix</MudTableSortLabel></MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.ExpirationDate)">Date d'expiration</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.UnitInStock)">Qte en stock</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.UnitPrice)">Prix</MudTableSortLabel>
+                </MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Id">@context.Id</MudTd>
@@ -97,6 +105,7 @@
             IngredientCategoriesService.Create(res);
             IngredientCategoriesService.SaveChanges();
             IngredientCategories.Add(res);
+            Snackbar.Add("The reactor is running at optimum temperature", Severity.Success);
             CategoryToAdd = new();
             StateHasChanged();
         }
@@ -150,7 +159,7 @@
         System.Console.WriteLine(clickEvent.Item.Name);
         // TODO: navigation to detail page
     }
-    
+
     private async Task GetIngredientsData()
     {
         Ingredients = SelectedCategory == null ? IngredientsService.Filter().ToList() : SelectedCategory.Ingredients;
