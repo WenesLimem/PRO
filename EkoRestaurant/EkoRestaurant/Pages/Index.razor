@@ -1,7 +1,26 @@
 ﻿@page "/"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+@inject DailyMenusService DailyMenusService
 
-<h1>Hello, world!</h1>
+<MudGrid Spacing="5" Justify="Justify.Center">
+    <MudItem xs="12">
+        <MudText Typo="Typo.h2">
+            Bienvenue Jean-marc !
+        </MudText>
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled">
+            <img src="Images/white-add-plus.svg" />Nouvelle commande
+        </MudButton>
+    </MudItem>
+    <MealInfo />
+    <MealInfo />
+    <MealInfo />
+</MudGrid>
 
-Welcome to your new app.
+@code {
+    [Parameter]
+    public DailyMenu CurrentDailyMenu { get; set; }
+}
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
