@@ -10,6 +10,10 @@ Notre super équipe 👨‍💻
 | Soulaymane Lamrani | Responsable domain métier | soulaymane.lamrani@heig-vd.ch |
 | Matthieu Godi      | Responsable qualité       | matthieu.godi@heig-vd.ch      |
 
+## Processus de développement
+
+[Lien sur le document](./developement_guide/04_contribution_guide.md)
+
 
 ## Languages & Frameworks  👨‍🏭
 
