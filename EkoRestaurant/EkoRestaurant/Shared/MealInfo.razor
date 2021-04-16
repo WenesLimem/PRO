@@ -6,10 +6,10 @@
     <MudPaper Height="140%" Elevation="2" Class="d-flex flex-column py-2 px-1">
         <MudPaper Class="d-flex justify-space-between pa-2 my-1 mx-2 mt-6" Outlined="false" Elevation="0">
             <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success"></MudIcon>
-            <MudText Typo="Typo.h5">@name</MudText>
+            <MudText Typo="Typo.h5">@title</MudText>
         </MudPaper>
         <MudPaper Class="pa-2 my-1 mx-2" Outlined="false" Elevation="0">
-            @description
+            @desc
         </MudPaper>
         <MudPaper Class="d-flex justify-end mt-auto pa-2 my-1 mx-2" Outlined="false" Elevation="0">
             <MudText Typo="Typo.body2"><b>@price CHF</b></MudText>
@@ -21,7 +21,7 @@
     [Parameter]
     public Recipe CurrentRecipe { get; set; }
 
-    public String name = "le plat";
-    public String description = "le mangeay le mangeay le mangeay le mangeayle mangeayle mangeaylemangeayle mangeayle mangeay ";
+    public String title = "Titre";
+    public String desc = "La magnifique description de mon repas";
     public double price = 27.00;
 }
