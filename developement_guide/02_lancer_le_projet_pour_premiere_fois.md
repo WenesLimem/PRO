@@ -11,7 +11,7 @@ Si cela ne se fait pas automatiquement, voir
 [ceci](https://docs.microsoft.com/en-us/nuget/consume-packages/package-restore)
 (la commande à executer est `nuget restore MySolution.sln`).
 
-## Paramètres d'accès à la base de donnés
+## Paramètres d'accès à la base de données
 
 Si vous avez installé Microsoft SQL Server de manière native sur Windows vous
 êtes déjà prêt. Sinon avec Docker il faudra remplacer la *connection string*
