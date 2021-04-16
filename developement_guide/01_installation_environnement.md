@@ -1,39 +1,46 @@
 # Installation de l'environnement de développement
 
-
+Voici les étapes et instructions qui permettent l'installation de
+l'environnement de développement.
 
 ## 1. SDK Net Core 5.0
 
-Le projet est basé sur blazor et le **.NET core 5.0** il est nécessaire d'installer le sdk. Pour ce faire il existe plusieurs possibilitées:
+Le projet est basé sur Blazor et le **.NET core 5.0** il est nécessaire
+d'installer le SDK. Pour ce faire il existe plusieurs possibilités:
 
-* Sur windows, installer visual studio (**pas code**), l'installeur permet de choisir les runtimes a installer et NET CORE 5.0 en fait partie.
+* Sur Windows, installer Visual Studio (**pas code**), l'installeur permet de
+  choisir les runtimes à installer et NET CORE 5.0 en fait partie,
+* Sur macOS, Visual Studio permet également d'installer le sdk,
+* Sinon il faut se réferrer au [site de Micro$oft](https://dotnet.microsoft.com/download).
 
-* Sur mac, visual studio permet également d'installer le sdk 
-* sinon il faut se referrer au [site microsoft](https://dotnet.microsoft.com/download) 
+## 2. Azure Data Studio
 
-## 2. Azure data studio
-
-Afin de voir le contenu de nos base de données et effectuer des requêtes "à la main" cet outil est [disponible ici](https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15)
+Afin de voir le contenu de nos bases de données et effectuer des requêtes "à la
+main", cet outil est [disponible ici](https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15).
 
 ## 3. Microsoft Sql Server 2019
 
-Il existe là deux possibilitées:
+Il existe là deux possibilités:
 
-* La plus facile installer *MSSQL* avec l'installeur windows directement [disponible ici](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) en choissisant la version developer
-* Sinon en utilisant docker [lien sur l'image docker](https://hub.docker.com/_/microsoft-mssql-server)
-  * sur mac: installer docker avant et le lancer, puis depuis azure data studio il est possible de créer "une instance locale"
-  * sur windows, se referrer à la documentation docker
+* La plus facile : installer *MSSQL* avec l'installeur Windows directement
+  [disponible ici](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) en
+  choisissant la version *developer*,
+* Sinon en utilisant Docker [lien sur l'image docker](https://hub.docker.com/_/microsoft-mssql-server) :
+  * sur macOS: installer Docker avant et le lancer, puis depuis Azure Data
+    Studio, il est possible de créer "une instance locale",
+  * sur Windows, se réferrer à la documentation Docker.
 
 ## 4. IDE
 
-L'ide de developpement le mieux adapté est Visual Studio 2019. 
+L'IDE de développement le mieux adapté est Visual Studio 2019. 
 
-Si vous préferrez Jetbrains alors vous pouvez installer l'extension ReSharper afin d'avoir les mêmes raccourcis clavier. Sinon Rider est ok.
+Si vous préférez JetBrains alors vous pouvez installer l'extension ReSharper
+afin d'avoir les mêmes raccourcis clavier. Sinon Rider est ok.
 
 ## 5. Ef-Core tools
 
-Ceci est necessaire pour le développement https://docs.microsoft.com/en-us/ef/core/cli/dotnet 
+Ceci est nécessaire pour le développement :
+https://docs.microsoft.com/en-us/ef/core/cli/dotnet 
 
-Executer la commande dans un terminal `dotnet tool install --global dotnet-ef`
-Pour vérifier l'installation: `dotnet ef`
-
+Exécuter la commande dans un terminal : `dotnet tool install --global dotnet-ef`
+Pour vérifier l'installation : `dotnet ef`
