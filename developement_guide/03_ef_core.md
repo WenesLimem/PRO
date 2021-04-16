@@ -44,9 +44,7 @@ changements sur les entités.
   <tbody>
     <tr>
       <td>
-        <ul>
-          <li>Si vraiment on est bloqué, on peut supprimer notre base de données et recommencer depuis une vide.</li>
-        </ul>
+          Si vraiment on est bloqué, on peut supprimer notre base de données et recommencer depuis une vide.
       </td>
     </tr>
   </tbody>
