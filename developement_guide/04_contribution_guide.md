@@ -34,7 +34,7 @@ Commitez alors vos fichier (il peut être pratique d'adapter le fichier
 ## Créer la pull request 
 
 Depuis l'interface du site GitHub, créez une Pull Request nommée `[WIP] …`
-dans l'issue vous pouvez alors lié la pull request à l'issue.
+dans l'issue vous pouvez alors lier la Pull Request à l'issue.
 
 ## Lors du développement
 
