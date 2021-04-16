@@ -103,10 +103,19 @@
         if (!result.Cancelled)
         {
             var res = (IngredientCategory)result.Data;
-            IngredientCategoriesService.Create(res);
-            IngredientCategoriesService.SaveChanges();
-            IngredientCategories.Add(res);
-            Snackbar.Add("Catégorie " + res.Name + "ajoutée avec succès", Severity.Success);
+            try
+            {
+                IngredientCategoriesService.Create(res);
+                IngredientCategoriesService.SaveChanges();
+                IngredientCategories.Add(res);
+                Snackbar.Add("Catégorie " + res.Name + " ajoutée avec succès", Severity.Success);
+
+            } catch(Exception e)
+            {
+                Snackbar.Add("Impossible d'ajouter la catégorie, elle existe déjà", Severity.Error);
+            }
+
+            CategoryToAdd = new();
             StateHasChanged();
         }
     }
@@ -118,16 +127,22 @@
         if (!result.Cancelled)
         {
             var res = (Ingredient)result.Data;
-            IngredientsService.Create(res);
-            IngredientsService.SaveChanges();
-            Snackbar.Add("Ingrédient " + res.Name + " ajouté avec succès", Severity.Success);
-            if (res.Category == SelectedCategory || SelectedCategory == null)
+            try
             {
-                Ingredients.Add(res);
+                IngredientsService.Create(res);
+                IngredientsService.SaveChanges();
+                Snackbar.Add("Ingrédient " + res.Name + " ajouté avec succès", Severity.Success);
+                if (res.Category == SelectedCategory || SelectedCategory == null)
+                {
+                    Ingredients.Add(res);
+                }
+                var currentCat = SelectedCategory;
+                SelectedCategory = new();
+                SelectedCategory = currentCat;
+            } catch (Exception e)
+            {
+                Snackbar.Add("Impossible d'ajouter l'ingrédient", Severity.Error);
             }
-            var currentCat = SelectedCategory;
-            SelectedCategory = new();
-            SelectedCategory = currentCat;
         }
     }
 
