@@ -77,6 +77,19 @@ html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 .clickable { cursor: pointer }
 
 
+.nav-item-icon-color {
+    color: #86878a;
+}
+.nav-item-icon-color:hover{
+    color : #F3AA18;
+}
+.nav-item-icon-color:active {
+    color : #F3AA18;
+}
+.nav-item-icon-color:selected{
+    color : #F3AA18;
+}
+
 
 /* en dessous: ce qui etait de base */
 
