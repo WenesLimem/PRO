@@ -1,0 +1,31 @@
+﻿@layout LoginLayout
+@page "/login"
+@using EkoRestaurant.Data
+@using EkoRestaurant.Services 
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<h3>Login</h3>
+<EditForm Model="@user" OnValidSubmit="@ValidateUser">
+    <input class="" @bind="user.emailAddress" />
+    <input class="" @bind="user.password" />
+
+</EditForm>
+
+@code {
+    private User user;
+
+    protected override Task OnInitializedAsync()
+    {
+        user = new User();
+        return base.OnInitializedAsync();
+    }
+
+    private async Task<bool> ValidateUser()
+    {
+
+        ((LoginService)AuthenticationStateProvider).MarkUserAsAuthenticated(user.emailAddress);
+
+        return await Task.FromResult(true);
+    }
+}
