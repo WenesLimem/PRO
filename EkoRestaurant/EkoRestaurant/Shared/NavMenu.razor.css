@@ -1,10 +1,11 @@
 .navbar-toggler {
-    background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%);
+    color : transparent;
+    background: white;
 }
 
 .top-row {
     /* Name */
-    background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%);
+    background: transparent;
 
     font-family: "Fredoka One",cursive;
     font-style: normal;
@@ -32,8 +33,27 @@
 }
 
 .nav-item {
-    font-size: 0.9rem;
-    padding-bottom: 0.5rem;
+    position: absolute;
+    left: 29px;
+    right: 4.34px;
+    top: 2px;
+    bottom: 2px;
+
+    /* 24 sp • H5 Roboto */
+    font-family: "Roboto";
+    font-style: italic;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+
+    /* Gray · 80% */
+    color: #5E6366;
+
+
 }
 
     .nav-item:first-of-type {
@@ -45,7 +65,7 @@
     }
 
     .nav-item ::deep a {
-        color: #1b1e21;
+        color: transparent;
         border-radius: 4px;
         height: 3rem;
         display: flex;
@@ -54,12 +74,11 @@
     }
 
 .nav-item ::deep a.active {
-    background-color:lightgray;
-    
+
 }
 
 .nav-item ::deep a:hover {
-    color: #383d41;
+    
 }
 
 @media (min-width: 641px) {

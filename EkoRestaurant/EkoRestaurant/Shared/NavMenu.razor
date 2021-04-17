@@ -1,37 +1,40 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href=""> <img src="Images/logo.svg" style="height: 30px; width: 30px ; margin-right: 10px"/>EkoRestaurant</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"> </span>
-    </button>
+    <img src="Images/Logo Ecommerce.svg"/>
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="sidebar" >
-        <li >
-            <MudNavLink Icon="Images/caisse.svg" IconColor="Color.Default" Href="/">
-                <MudText Typo="Typo.body1" Color="Color.Dark">
-                    <MudIcon Icon="@Icons.Rounded.Calculate" Size="Size.Medium"/>
-                    Caisse
-                </MudText>
-            </MudNavLink>
-        </li>
+    <ul class="sidebar">
         
         <li >
-            <MudNavLink Icon="Images/ingredient.svg" IconColor="Color.Default" Href="/ingredients">
-                <MudText Typo="Typo.body1" Color="Color.Dark">
-                    <MudIcon Icon="@Icons.Rounded.Assessment" Size="Size.Medium"/>
-                    Economat
-                </MudText>
-            </MudNavLink>
+            <NavLink>
+                <text class="nav-item-text">
+                    <a href="/"> <MudIcon Class="nav-item-icon-color" Icon="@Icons.Rounded.Home" Style="margin: 20px" Size="Size.Large" /> 
+                    </a>
+                    Caisse
+                </text>
+            </NavLink>
         </li>
-        <li>
-            <MudNavLink Icon="Images/ingredient.svg" IconColor="Color.Default" Href="/stocks">
-                <MudText Typo="Typo.body1" Color="Color.Dark">
-                    <MudIcon Icon="@Icons.Rounded.AccountBalanceWallet" Size="Size.Medium"/>
+        <hr>
+        <li >
+            <NavLink>
+                <text class="nav-item-text">
+                    <a href="/ingredients" > <MudIcon Class="nav-item-icon-color" Icon="@Icons.Rounded.ShoppingBasket" Style="margin: 20px" Size="Size.Large" /> 
+                    </a>
                     Stocks
-                </MudText>
-            </MudNavLink>
+                </text>
+            </NavLink>
         </li>
+        <hr>
+        <li>
+            <NavLink>
+                <text class="nav-item-text">
+                    <a href="/"> <MudIcon Class="nav-item-icon-color" Icon="@Icons.Rounded.FormatListBulleted" Style="margin: 20px" Size="Size.Large"/> 
+                    </a>
+                    Recette
+                </text>
+            </NavLink>
+        </li>
+        <hr>
     </ul>
 </div>
 

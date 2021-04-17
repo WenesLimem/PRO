@@ -4,18 +4,34 @@
     flex-direction: column;
 }
 
+.nav-item-text{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 28px;
+    margin-bottom: 30px;
+    padding-left: 50px; 
+    margin-top:20px; 
+    margin-bottom: 30px;
+    margin-right: 10px;
+}
 .main {
     flex: 1;
 }
 
 .sidebar {
-    color: transparent;
- 
+    position: absolute;
+    width: 354px;
+    left: 0px;
+    top: 52px;
+    bottom: 14px;
+    background: transparent;
     
-    justify-content: left;
-    
-}
-
+} 
+    .sidebar::deep a.hover{
+        color : #4e555b;
+    }
 .top-row {
     background: transparent;
     justify-content: flex-end;
