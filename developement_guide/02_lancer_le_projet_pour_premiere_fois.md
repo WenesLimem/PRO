@@ -1,17 +1,21 @@
 # Lancer le projet pour la première fois
 
-Ceci vous permet de lancer le projet pour la première fois afin de pouvoir le tester.
+Ceci vous permet de lancer le projet pour la première fois afin de pouvoir le
+tester.
 
-## Installation des dépendances nuget
+## Installation des dépendances `nuget`
 
-Le projet a des dépendances externe, il a donc besoin de récuperer celle-ci.
+Le projet a des dépendances externes, il a donc besoin de récupérer celles-ci.
 
-Si cela ne se fait pas automatiquement, voir [ceci](https://docs.microsoft.com/en-us/nuget/consume-packages/package-restore) (la commande é executer est `nuget restore MySolution.sln`)
+Si cela ne se fait pas automatiquement, voir
+[ceci](https://docs.microsoft.com/en-us/nuget/consume-packages/package-restore)
+(la commande à executer est `nuget restore MySolution.sln`).
 
-## Paramètres d'accès à la base de donnée
+## Paramètres d'accès à la base de données
 
-Si vous avez installé Microsoft Sql Server de manière native sur Windows vous êtes déjà prêt.
-Sinon avec docker il faudra remplacer la "connection string" dans le fichier `appsettings.json` de telle manière:
+Si vous avez installé Microsoft SQL Server de manière native sur Windows vous
+êtes déjà prêt. Sinon avec Docker il faudra remplacer la *connection string*
+dans le fichier `appsettings.json` de telle manière :
 
 ```json
 {
@@ -27,25 +31,23 @@ Sinon avec docker il faudra remplacer la "connection string" dans le fichier `ap
   },
   "AllowedHosts": "*"
 }
-
 ```
 
-## Création de la base de donnée
+## Création de la base de données
 
-Soit depuis Sql server management studio, soit depuis azure data studio, vous pouvez créer une base de donnée vide appelée "ekoDB"
+Soit depuis SQL Server Management Studio, soit depuis Azure Data Studio, vous
+pouvez créer une base de données vide appelée "ekoDB".
 
 ## Application des migrations EF-Core
 
-Pour créer les table dans notre base de données. 
+Pour créer les tables dans notre base de données, il faut :
 
-Il faut
-
-* soit depuis "Visual studio > Tools > nuget... > Packet manager Console" executer la commande `Update-Database`
-* Sinon depuis un terminal dans le dossier du fichier `.csproj` executer la commande `dotnet ef database update`
-
-
+* soit depuis "Visual Studio > Tools > nuget... > Packet manager Console"
+  exécuter la commande `Update-Database`,
+* Sinon depuis un terminal dans le dossier du fichier `.csproj` exécuter la
+  commande `dotnet ef database update`.
 
 ## C'est parti !
 
-Maintenant vous devriez voir le projet lorsque vous lancer l'exécution depuis votre IDE
-
+Maintenant vous devriez voir le projet lorsque vous lancez l'exécution depuis
+votre IDE.
