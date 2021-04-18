@@ -1,5 +1,7 @@
 # Digitalisation du millieux de la restauration
 
+[![dotnet](https://github.com/WenesLimem/PRO/actions/workflows/dotnet.yml/badge.svg)](https://github.com/WenesLimem/PRO/actions/workflows/dotnet.yml)
+
 ## Team : A-10 
 Notre super équipe 👨‍💻
 
