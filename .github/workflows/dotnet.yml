@@ -18,8 +18,11 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
+      working-directory: ./EkoRestaurant
       run: dotnet restore
     - name: Build
+      working-directory: ./EkoRestaurant
       run: dotnet build --no-restore
-    - name: Test
+    - name: Testss
+      working-directory: ./EkoRestaurant
       run: dotnet test --no-build --verbosity normal
