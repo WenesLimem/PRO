@@ -41,6 +41,7 @@ Ceci permet d'heriter du crudService pour chaque entité que l'on souhaite utili
 
  - Project Management (old): Monday.com https://goldenfish-team.monday.com/boards/1131125508 "PRO PROJECT BOARD"
  - Charts & Diagrams  : LucidChart.com [link] https://lucid.app/lucidchart/invitations/accept/492f8309-5489-4a34-a2bd-6df0d30ca325
+ - charts https://elegant-lichterman-ac3758.netlify.app/
  - Interface & UI     : Figma.com [link] https://www.figma.com/file/MO6bg34RGfaSVGcBIAXyvm/EkoRestaurant
  - Présentation intemédiaire:  GDrive [link] https://docs.google.com/presentation/d/1ly3ljTkGpUxOc5H364G4JnFolfno5Q0mIRcQboQwFOo/edit#slide=id.gcd4f631cc5_0_5
 
