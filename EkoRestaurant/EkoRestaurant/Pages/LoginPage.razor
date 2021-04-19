@@ -1,0 +1,43 @@
+﻿@page "/login"
+@layout LoginLayout
+@using EkoRestaurant.Data
+@inject NavigationManager NavigationManager
+
+
+<MudGrid Class="login-body">
+    <MudItem Style="width:60%;">
+        <a  href=""> <img class="login-big-logo" src="Images/login-logo.svg" style="height:auto;  width: 100%; margin-right: 10px" /></a>
+    </MudItem>
+    <MudItem Class="login-body-form" Style="float: right; width:40%;">
+        <div>
+            <a class="navbar-brand" href=""> <img class="login-small-logo" src="Images/login-logo.svg" style="height: 167px; width: 166px ; margin-right: 10px" /></a>
+            <h6 class="h6-quicksand">EkoRestaurant</h6>
+        </div>
+        <h1>Sign in</h1>
+        <MudForm Style="margin-left:50px;margin-right:50px">
+            <MudTextField @bind-Value="user.UserName" Label="UserName" />
+            <MudTextField @bind-Value="pass" Label="Password" />
+            <MudButton Color="Color.Primary" OnClick="ValidateUser">Login</MudButton>
+        </MudForm>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+    private ApplicationUser user;
+    private string pass;
+
+    protected override Task OnInitializedAsync()
+    {
+        user = new ApplicationUser();
+        return base.OnInitializedAsync();
+    }
+
+    private async Task<bool> ValidateUser()
+    {
+
+        NavigationManager.NavigateTo("/");
+
+        return await Task.FromResult(true);
+    }
+}

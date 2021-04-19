@@ -41,7 +41,7 @@ namespace EkoRestaurant
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, LoginService>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>> ();
             services.AddDatabaseDeveloperPageExceptionFilter();
             
             services.AddSingleton<WeatherForecastService>();
