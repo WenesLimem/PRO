@@ -7,14 +7,15 @@
 .nav-item-text{
     font-family: Roboto;
     font-style: normal;
+    text-align: center;   
     font-weight: 400;
     font-size: 50px;
+                 
     line-height: 28px;
-    margin-bottom: 30px;
-    padding-left: 50px; 
+                
     margin-top:20px; 
-    margin-bottom: 30px;
-    margin-right: 10px;
+    margin-bottom: 25px;
+  
 }
 .main {
     flex: 1;
@@ -53,10 +54,12 @@
 @media (max-width: 640.98px) {
     .top-row:not(.auth) {
         display: none;
+        float: left;
     }
 
     .top-row.auth {
         justify-content: space-between;
+        float:left;
     }
 
     .top-row a, .top-row .btn-link {

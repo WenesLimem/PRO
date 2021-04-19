@@ -75,21 +75,38 @@ html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 }
 
 .clickable { cursor: pointer }
-
-
+/*Vertical lines*/
+.vl {
+    border-left: 1px solid grey;
+    height: 500px;
+    position: absolute;
+    left: 100%;
+    margin-left: -3px;
+    top: 0;
+}
+/*This class is used for nav-menu*/
 .nav-item-icon-color {
+    text-align: center;
     color: #86878a;
 }
-.nav-item-icon-color:hover{
+.nav-item-icon-color:link{
     color : #F3AA18;
 }
-.nav-item-icon-color:active {
+.nav-item-icon-color:hover {
     color : #F3AA18;
 }
-.nav-item-icon-color:selected{
+.nav-item-icon-color:active{
     color : #F3AA18;
 }
 
+/*This class is for links , I dont like them underlined*/
+.a_personal:link{ text-decoration: none;}
+.a_personal:visited{ text-decoration: none;}
+.a_personal:hover {
+    text-decoration:none;
+    color:darkorange; 
+}
+.a_personal:active{ text-decoration: underline;}
 
 /* en dessous: ce qui etait de base */
 

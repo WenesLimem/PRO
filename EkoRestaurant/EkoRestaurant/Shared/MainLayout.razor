@@ -2,23 +2,28 @@
 
 
 <div class="page">
-<MudThemeProvider Theme="ekoMudTheme"/>
-
+    <MudThemeProvider Theme="ekoMudTheme"/>
     <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <div class="main">
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <MudDialogProvider/>
-            <MudSnackbarProvider/>
+        <div class="top-row pl-4 navbar navbar-dark">
+            <img src="Images/Logo Ecommerce.svg"/>
+            <div class="top-row px-4 auth" style="position: absolute; left: 1070px">
+                <LoginDisplay/>
+                <hr class="rounded">
+            </div>
         </div>
+        <NavMenu/>
+    </div>
+    <div class="main">
+
+        <MudDialogProvider/>
+        <MudSnackbarProvider/>
 
         <div class="content px-4">
             @Body
         </div>
     </div>
+
+
 </div>
 
 @code
@@ -30,5 +35,5 @@
             Primary = "#F3AA18", Secondary = "#86878a"
         }
     };
-    
+
 }
