@@ -1,12 +1,15 @@
 ﻿@page "/login"
 @layout LoginLayout
 @using EkoRestaurant.Data
+@using Microsoft.AspNetCore.Identity
 @inject NavigationManager NavigationManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 
 <MudGrid Class="login-body">
     <MudItem Style="width:60%;">
-        <a  href=""> <img class="login-big-logo" src="Images/login-logo.svg" style="height:auto;  width: 100%; margin-right: 10px" /></a>
+        <a href=""> <img class="login-big-logo" src="Images/login-logo.svg" style="height:auto;  width: 100%; margin-right: 10px" /></a>
     </MudItem>
     <MudItem Class="login-body-form" Style="float: right; width:40%;">
         <div>
@@ -15,8 +18,8 @@
         </div>
         <h1>Sign in</h1>
         <MudForm Style="margin-left:50px;margin-right:50px">
-            <MudTextField @bind-Value="user.UserName" Label="UserName" />
-            <MudTextField @bind-Value="pass" Label="Password" />
+            <MudTextField @bind-Value="username" Label="UserName" />
+            <MudTextField InputType="InputType.Password" @bind-Value="pass" Label="Password" />
             <MudButton Color="Color.Primary" OnClick="ValidateUser">Login</MudButton>
         </MudForm>
     </MudItem>
@@ -24,20 +27,31 @@
 
 
 @code {
-    private ApplicationUser user;
+    private String username;
     private string pass;
 
     protected override Task OnInitializedAsync()
     {
-        user = new ApplicationUser();
         return base.OnInitializedAsync();
     }
 
     private async Task<bool> ValidateUser()
     {
+        ApplicationUser user = await UserManager.FindByNameAsync(username);
+        if (user != null)
+        {            
+            SignInResult result = await SignInManager.PasswordSignInAsync(user, pass, true, false);
 
-        NavigationManager.NavigateTo("/");
+            if (result.Succeeded)
+            {
+                NavigationManager.NavigateTo("/");
 
-        return await Task.FromResult(true);
+                return await Task.FromResult(true);
+            }
+        }
+
+        //TODO afficher une erreur
+        NavigationManager.NavigateTo("/login");
+        return await Task.FromResult(false);
     }
 }
