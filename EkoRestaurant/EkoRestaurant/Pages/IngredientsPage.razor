@@ -173,11 +173,9 @@
         }
     }
 
-    public void ClickedRow()
+    public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
     {
-        nm.NavigateTo("ingDetails");
-        
-
+        nm.NavigateTo($"/ingredients/{clickEvent.Item.Id}");
     }
 
     private async Task GetIngredientsData()

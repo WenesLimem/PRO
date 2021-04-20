@@ -1,18 +1,34 @@
-@page "/ingDetails"
-
+@page "/ingredients/{Id:int}"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data 
+@inject IngredientsService IngredientsService
 
 
 <MudGrid>
     <MudItem xs="12">
-        <div class="page-title dark-color">Détails</div>
+        <div class="page-title dark-color">Stocks</div>
+
+        <div class="h2-quicksand dark-color">@currentIngredient.Name</div>
     </MudItem>
     <MudItem xs="12">
-         <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Outlined"><img src="Images/Vector.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
-        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Outlined"><img src="Images/Vector.svg" style="margin-right: 5px">Editer</MudButton>
 
+        <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Outlined"><img src="Images/Vector.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Outlined"><img src="Images/Vector.svg" style="margin-right: 5px">Editer</MudButton>
     </MudItem>
 </MudGrid>
+
+
 @code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    public Ingredient currentIngredient { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentIngredient = IngredientsService.GetById(Id);
+    }
 
     private void OpenModifiyIngredientDialog()
     {
