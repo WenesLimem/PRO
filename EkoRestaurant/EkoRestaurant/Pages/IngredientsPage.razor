@@ -2,15 +2,17 @@
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @inject IngredientsService IngredientsService
 @inject IngredientCategoriesService IngredientCategoriesService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
-
+@inject NavigationManager nm
 
 <MudGrid>
     <MudItem xs="12">
-        <div class="page-title dark-color">Ingredients</div>
+        <div class="page-title dark-color">Stocks</div>
     </MudItem>
     <MudItem xs="12">
 
@@ -31,12 +33,12 @@
                 @foreach (IngredientCategory category in IngredientCategories)
                 {
                     <div @onclick="() => SelectCategoryInSideBar(category)">
-                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)"/>
+                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)" />
                     </div>
                 }
             }
-            <div class="small-separator"/>
-            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
+            <div class="small-separator" />
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg" />Nouvelle catégorie</MudButton>
         </div>
 
     </MudItem>
@@ -45,11 +47,19 @@
         <MudTable T="Ingredient" Items="@Ingredients" Hover="true" OnRowClick="@ClickedRow">
             <HeaderContent>
                 <MudTh>Id</MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.Name)">Nom</MudTableSortLabel></MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.Name)">Nom</MudTableSortLabel>
+                </MudTh>
                 <MudTh>Producteur</MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.ExpirationDate)">Date d'expiration</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.UnitInStock)">Qte en stock</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Ingredient, object>(x=>x.UnitPrice)">Prix</MudTableSortLabel></MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.ExpirationDate)">Date d'expiration</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.UnitInStock)">Qte en stock</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.UnitPrice)">Prix</MudTableSortLabel>
+                </MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Id">@context.Id</MudTd>
@@ -76,6 +86,7 @@
     {
         IngredientCategories = IngredientCategoriesService.Filter().ToList();
         await GetIngredientsData();
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
     }
 
     public async Task SelectCategoryInSideBar(IngredientCategory category)
@@ -93,10 +104,19 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (IngredientCategory) result.Data;
-            IngredientCategoriesService.Create(res);
-            IngredientCategoriesService.SaveChanges();
-            IngredientCategories.Add(res);
+            var res = (IngredientCategory)result.Data;
+            try
+            {
+                IngredientCategoriesService.Create(res);
+                IngredientCategoriesService.SaveChanges();
+                IngredientCategories.Add(res);
+                Snackbar.Add("Catégorie " + res.Name + " ajoutée avec succès", Severity.Success);
+
+            } catch(Exception e)
+            {
+                Snackbar.Add("Impossible d'ajouter la catégorie, elle existe déjà", Severity.Error);
+            }
+
             CategoryToAdd = new();
             StateHasChanged();
         }
@@ -108,16 +128,23 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (Ingredient) result.Data;
-            IngredientsService.Create(res);
-            IngredientsService.SaveChanges();
-            if (res.Category == SelectedCategory || SelectedCategory == null)
+            var res = (Ingredient)result.Data;
+            try
             {
-                Ingredients.Add(res);
+                IngredientsService.Create(res);
+                IngredientsService.SaveChanges();
+                Snackbar.Add("Ingrédient " + res.Name + " ajouté avec succès", Severity.Success);
+                if (res.Category == SelectedCategory || SelectedCategory == null)
+                {
+                    Ingredients.Add(res);
+                }
+                var currentCat = SelectedCategory;
+                SelectedCategory = new();
+                SelectedCategory = currentCat;
+            } catch (Exception e)
+            {
+                Snackbar.Add("Impossible d'ajouter l'ingrédient", Severity.Error);
             }
-            var currentCat = SelectedCategory;
-            SelectedCategory = new();
-            SelectedCategory = currentCat;
         }
     }
 
@@ -133,24 +160,26 @@
         {
             if (SelectedCategory.Ingredients.Count > 0)
             {
-                // snackbar error
+                Snackbar.Add("Il reste des ingrédients dans la catégorie " + SelectedCategory.Name + ", impossible de la supprimer", Severity.Warning);
                 return;
             }
             IngredientCategories.Remove(SelectedCategory);
             IngredientCategoriesService.Delete(SelectedCategory.Id);
             IngredientCategoriesService.SaveChanges();
+            Snackbar.Add("Catégorie " + SelectedCategory.Name + " supprimée avec succès", Severity.Success);
             SelectedCategory = null;
             await GetIngredientsData();
             StateHasChanged();
         }
     }
 
-    public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
+    public void ClickedRow()
     {
-        System.Console.WriteLine(clickEvent.Item.Name);
-        // TODO: navigation to detail page
+        nm.NavigateTo("ingDetails");
+        
+
     }
-    
+
     private async Task GetIngredientsData()
     {
         Ingredients = SelectedCategory == null ? IngredientsService.Filter().ToList() : SelectedCategory.Ingredients;
