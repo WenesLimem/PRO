@@ -1,5 +1,4 @@
-﻿@page "/login"
-<AuthorizeView>
+﻿<AuthorizeView>
     <Authorized>
         <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
         <form method="post" action="Identity/Account/LogOut">
@@ -7,6 +6,6 @@
         </form>
     </Authorized>
     <NotAuthorized>
-        <MudAvatar Image="EkoRestaurant/wwwroot/Images/logo.svg"></MudAvatar>
+        <MudAvatar Color="Color.Secondary">AB</MudAvatar>
     </NotAuthorized>
 </AuthorizeView>

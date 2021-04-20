@@ -1,34 +1,55 @@
 ﻿@inherits LayoutComponentBase
 
-
-<div class="page">
 <MudThemeProvider Theme="ekoMudTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudLayout>
+    <MudAppBar Color="Color.Transparent" Dense="true" Elevation="1">
+        @if (open == false)
+        {
+            <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="@ToggleDrawer"><img src="Images/Logo Ecommerce.svg" style="height: 35px"/></MudButton>
+        }
+        <MudAppBarSpacer/>
+        <LoginDisplay />
+    </MudAppBar>
+    <MudDrawer @bind-Open="@open" Elevation="1">
+        <MudDrawerHeader>
+            <img src="Images/Logo Ecommerce.svg" style="height: 35px"/>
+        </MudDrawerHeader>
+        <MudNavMenu>
+            <MudNavLink Class="mt-2" Href="/index" Icon="@Icons.Filled.Home">Dashboard</MudNavLink>
+            <MudNavLink Href="/ingredients" Icon="@Icons.Filled.ShoppingBasket">Stocks</MudNavLink>
+            <MudNavLink Href="/recipes" Icon="@Icons.Custom.FileFormats.FileDocument" Disabled="true">Recettes</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent Class="pt-16 px-2">
+        <MudContainer >
+            @Body        
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
 
-    <div class="main">
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <MudDialogProvider/>
-            <MudSnackbarProvider/>
-        </div>
-
-        <div class="content px-4">
-            @Body
-        </div>
-    </div>
-</div>
 
 @code
 {
+    /// <summary>
+    /// define theme of the application
+    /// </summary>
     MudTheme ekoMudTheme = new MudTheme()
     {
         Palette = new Palette()
         {
-            Primary = "#F3AA18", Secondary = "#86878a"
+            Primary = "#F3AA18",
+            Secondary = "#86878a"
         }
     };
-    
+
+    bool open = true;
+
+    void ToggleDrawer()
+    {
+        open = !open;
+    }
+
 }
