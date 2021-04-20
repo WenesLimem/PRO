@@ -2,11 +2,13 @@
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @inject IngredientsService IngredientsService
 @inject IngredientCategoriesService IngredientCategoriesService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
-
+@inject NavigationManager nm
 
 <MudGrid>
     <MudItem xs="12">
@@ -171,10 +173,11 @@
         }
     }
 
-    public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
+    public void ClickedRow()
     {
-        System.Console.WriteLine(clickEvent.Item.Name);
-        // TODO: navigation to detail page
+        nm.NavigateTo("ingDetails");
+        
+
     }
 
     private async Task GetIngredientsData()

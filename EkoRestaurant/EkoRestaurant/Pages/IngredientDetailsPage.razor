@@ -1,0 +1,27 @@
+@page "/ingDetails"
+
+
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Détails</div>
+    </MudItem>
+    <MudItem xs="12">
+         <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Outlined"><img src="Images/Vector.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Outlined"><img src="Images/Vector.svg" style="margin-right: 5px">Editer</MudButton>
+
+    </MudItem>
+</MudGrid>
+@code {
+
+    private void OpenModifiyIngredientDialog()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void AddIngredientToList()
+    {
+        throw new NotImplementedException();
+    }
+
+}
