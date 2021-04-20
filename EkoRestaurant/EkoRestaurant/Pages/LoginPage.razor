@@ -8,13 +8,15 @@
 
 
 <MudGrid Class="login-body">
-    <MudItem Style="width:60%;">
+    <MudItem xs="6">
         <a href=""> <img class="login-big-logo" src="Images/login-logo.svg" style="height:auto;  width: 100%; margin-right: 10px" /></a>
     </MudItem>
-    <MudItem Class="login-body-form" Style="float: right; width:40%;">
-        <div>
+    <MudItem Class="login-body-form" xs="6">
+        <div style="width:50%;float:left;">
             <a class="navbar-brand" href=""> <img class="login-small-logo" src="Images/login-logo.svg" style="height: 167px; width: 166px ; margin-right: 10px" /></a>
-            <h6 class="h6-quicksand">EkoRestaurant</h6>
+        </div>
+        <div class="login-title">
+            <MudText Class="h6-quicksand">EkoRestaurant</MudText>
         </div>
         <h1>Sign in</h1>
         <MudForm Style="margin-left:50px;margin-right:50px">
@@ -39,7 +41,7 @@
     {
         ApplicationUser user = await UserManager.FindByNameAsync(username);
         if (user != null)
-        {            
+        {
             SignInResult result = await SignInManager.PasswordSignInAsync(user, pass, true, false);
 
             if (result.Succeeded)
