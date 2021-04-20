@@ -1,8 +1,11 @@
 @page "/ingredients/{Id:int}"
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data 
+@using EkoRestaurant.Extensions
 @inject IngredientsService IngredientsService
-
+@inject IngredientCategoriesService IngCatService
+@inject ISnackbar Snackbar
+@inject IDialogService Dialogservice
 
 <MudGrid>
     <MudItem xs="12">
@@ -12,9 +15,66 @@
     </MudItem>
     <MudItem xs="12">
 
-        <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Outlined"><img src="Images/Vector.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
-        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Outlined"><img src="Images/Vector.svg" style="margin-right: 5px">Editer</MudButton>
+        <MudButton  Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Filled"><img src="Images/Vector.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Filled"><img src="Images/Vector.svg" style="margin-right: 5px">Editer</MudButton>
+        
+        </MudItem>
+    
+    <MudItem xs="3">
+    <MudCard Elevation="4">
+        <MudCardContent>
+            <MudText >Prix</MudText>
+            <MudText Class="details-grid-content dark-color">@currentIngredient.UnitPrice CHF</MudText>
+        </MudCardContent>
+    </MudCard>
+     </MudItem>
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText >Restant</MudText>
+                <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.UnitInStock pce</MudText>
+            </MudCardContent>
+        </MudCard>
+            
     </MudItem>
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText >Date de préemption</MudText>
+                <MudText Class="details-grid-content" Color="Color.Info">@currentIngredient.ExpirationDate </MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText >Fournisseur</MudText>
+                @if (currentIngredient.Producer == null)
+                {
+                    <MudText Class="details-grid-content dark-color"> N/A </MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content dark-color">@currentIngredient.Producer </MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+                
+    </MudItem>
+    
+    
+    <MudItem xs="6">
+        <MudCard Elevation="4">
+                <MudCardContent>
+                    <MudText >Catégorie</MudText>
+                    <MudText Class="details-grid-content dark-color">@IgCategory.Name</MudText>
+                </MudCardContent>
+            </MudCard>
+    </MudItem>
+            
+  
+
+    
 </MudGrid>
 
 
@@ -23,21 +83,42 @@
     [Parameter]
     public int Id { get; set; }
 
+    public List<Ingredient> listeDesCourse = new();
+    public IngredientCategory IgCategory { get; set; }
     public Ingredient currentIngredient { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         currentIngredient = IngredientsService.GetById(Id);
+        IgCategory = IngCatService.GetById(currentIngredient.Category.Id); 
     }
 
-    private void OpenModifiyIngredientDialog()
-    {
-        throw new NotImplementedException();
-    }
 
     private void AddIngredientToList()
     {
-        throw new NotImplementedException();
+        listeDesCourse.Add(currentIngredient);
+        Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
+    }
+
+    private async  void OpenModifiyIngredientDialog()
+    {
+        var dialog = Dialogservice.Show<DialogEditCreateIngredient>("Modifier :");
+        var res = await dialog.Result;
+        if (!res.Cancelled)
+        {
+            var result = (Ingredient) res.Data;
+            try
+            {
+                IngredientsService.Edit(result);
+                IngredientsService.SaveChanges();
+                Snackbar.Add("Edition successful", Severity.Success);
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add("Erreur est survenue lors du modéficaiton", Severity.Error);
+                
+            }
+        }
     }
 
 }

@@ -44,6 +44,16 @@ html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
 .dark-color { color: rgba(0, 0, 0, 0.87) !important; }
 
+.details-grid-content {
+    font-family: Roboto !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 30px !important;
+    line-height: 56px !important;
+    display: flex!important;
+    align-items: flex-end !important;
+    
+}
 .h6-quicksand {
     font-family: Quicksand !important;
     font-style: normal !important;
