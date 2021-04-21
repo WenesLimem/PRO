@@ -6,7 +6,7 @@
 @inject IngredientCategoriesService IngCatService
 @inject ISnackbar Snackbar
 @inject IDialogService Dialogservice
-
+@inject NavigationManager nm
 <MudGrid>
     <MudItem xs="12">
         <div class="page-title dark-color">Stocks</div>
@@ -17,7 +17,7 @@
 
         <MudButton  Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Filled"><img src="Images/Vector.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
         <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Filled"><img src="Images/Vector.svg" style="margin-right: 5px">Editer</MudButton>
-        
+        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float:right;" ButtonType="ButtonType.Submit" OnClick="@DeleteIngredient"></MudIconButton>
         </MudItem>
     
     <MudItem xs="3">
@@ -109,7 +109,8 @@
             var result = (Ingredient) res.Data;
             try
             {
-                IngredientsService.Edit(result);
+
+                IngredientsService.Edit(currentIngredient);
                 IngredientsService.SaveChanges();
                 Snackbar.Add("Edition successful", Severity.Success);
             }
@@ -119,6 +120,14 @@
                 
             }
         }
+    }
+
+    private void DeleteIngredient()
+    {
+        IngredientsService.Delete(currentIngredient);
+        IngredientsService.SaveChanges();
+        Snackbar.Add("Deleted successfully ", Severity.Success);
+        nm.NavigateTo("/ingredients");
     }
 
 }
