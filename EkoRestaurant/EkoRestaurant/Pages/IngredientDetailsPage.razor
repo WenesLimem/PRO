@@ -2,10 +2,13 @@
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data 
 @using EkoRestaurant.Extensions
+@using  EkoRestaurant.Pages
+
 @inject IngredientsService IngredientsService
 @inject IngredientCategoriesService IngCatService
 @inject ISnackbar Snackbar
 @inject IDialogService Dialogservice
+@inject NavigationManager nm
 
 <MudGrid>
     <MudItem xs="12">
@@ -17,7 +20,7 @@
 
         <MudButton  Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Filled"><img src="Images/Vector.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
         <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Filled"><img src="Images/Vector.svg" style="margin-right: 5px">Editer</MudButton>
-        
+        <MudButton Style="float:  left; margin-left: 10px" Class="btn-mud-white-bg-rounded" OnClick="@VoirListeCourse" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ShoppingCart">Voir liste des courses</MudButton>
         </MudItem>
     
     <MudItem xs="3">
@@ -83,7 +86,9 @@
     [Parameter]
     public int Id { get; set; }
 
-    public List<Ingredient> listeDesCourse = new();
+    ListeDesCourses lds = new();
+    public  List<Ingredient> listeDesCourses = new();
+    
     public IngredientCategory IgCategory { get; set; }
     public Ingredient currentIngredient { get; set; }
 
@@ -94,9 +99,11 @@
     }
 
 
-    private void AddIngredientToList()
+    private  void AddIngredientToList()
     {
-        listeDesCourse.Add(currentIngredient);
+        ListeDesCourses.listeDesCourses.Add(currentIngredient);
+        
+        listeDesCourses.Add(currentIngredient);
         Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
     }
 
@@ -119,6 +126,11 @@
                 
             }
         }
+    }
+
+    private void VoirListeCourse()
+    {
+        nm.NavigateTo("listedescourses");
     }
 
 }
