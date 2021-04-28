@@ -60,20 +60,49 @@
                 }
             </MudCardContent>
         </MudCard>
+        </MudItem>
 
-    </MudItem>
+        <MudItem xs="6">
+            <MudCard Elevation="4">
 
+                <MudCardContent>
+                    <MudText >Catégorie</MudText>
+                    <MudText Class="details-grid-content dark-color">@GetCurrentCategoryName() </MudText>
 
-    <MudItem xs="6">
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+ 
+    <MudItem xs="3">
         <MudCard Elevation="4">
-
             <MudCardContent>
-                <MudText >Catégorie</MudText>
-                <MudText Class="details-grid-content dark-color">@GetCurrentCategoryName() </MudText>
-
+                <MudText >Vegan</MudText>
+                <MudText Class="details-grid-content" Color="Color.Success"> N-A </MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText >Allergènes</MudText>
+                <MudText Class="details-grid-content" Color="Color.Dark">N-A</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    
+        <MudItem xs="12">
+            <MudCard Elevation="4">
+                <MudCardContent>
+                     <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350px"></MudChart>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    
+    
+            
+
 
 
 </MudGrid>
@@ -87,6 +116,12 @@
     public List<Ingredient> listeDesCourse = new();
 
     public Ingredient currentIngredient { get; set; }
+    public List<ChartSeries> Series = new List<ChartSeries>()
+    {
+        new ChartSeries() { Name = "Suivi de consommation", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } }
+        
+    };
+    public string[] XAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
 
     protected override async Task OnInitializedAsync()
     {
