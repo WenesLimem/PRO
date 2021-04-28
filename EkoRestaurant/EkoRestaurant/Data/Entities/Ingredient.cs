@@ -19,6 +19,7 @@ namespace EkoRestaurant.Data
         public int UnitInStock { get; set; }
         public int UnitAtStart { get; set; }
 
+        public int? CategoryId { get; set; }
         public IngredientCategory? Category { get; set; }
     }
 }
