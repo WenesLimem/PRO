@@ -3,7 +3,8 @@
 @using EkoRestaurant.Data 
 @using EkoRestaurant.Extensions
 @using  EkoRestaurant.Pages
-
+@using ListeDesCourses = EkoRestaurant.Data.ListeDesCourses
+@inject ListeDesCoursesService ListeDesCoursesService
 @inject IngredientsService IngredientsService
 @inject IngredientCategoriesService IngCatService
 @inject ISnackbar Snackbar
@@ -86,9 +87,9 @@
     [Parameter]
     public int Id { get; set; }
 
-    ListeDesCourses lds = new();
-    public  List<Ingredient> listeDesCourses = new();
     
+    
+    public Data.ListeDesCourses lds = new();
     public IngredientCategory IgCategory { get; set; }
     public Ingredient currentIngredient { get; set; }
 
@@ -101,9 +102,10 @@
 
     private  void AddIngredientToList()
     {
-        ListeDesCourses.listeDesCourses.Add(currentIngredient);
+        ListeDesCoursesService.Create(lds);
+        lds.Ingredients.Add(currentIngredient);
+        ListeDesCoursesService.SaveChanges();
         
-        listeDesCourses.Add(currentIngredient);
         Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
     }
 

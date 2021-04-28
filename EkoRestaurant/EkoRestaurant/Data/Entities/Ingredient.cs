@@ -15,7 +15,7 @@ namespace EkoRestaurant.Data
         public double UnitPrice { get; set; }
 
         public String Producer { get; set; }
-
+        
         public int UnitInStock { get; set; }
         public int UnitAtStart { get; set; }
 

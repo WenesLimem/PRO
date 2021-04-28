@@ -59,6 +59,9 @@ namespace EkoRestaurant.Migrations
                     b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ListeDesCoursesId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -78,6 +81,8 @@ namespace EkoRestaurant.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("ListeDesCoursesId");
+
                     b.ToTable("Ingredients");
                 });
 
@@ -94,6 +99,21 @@ namespace EkoRestaurant.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("IngredientCategories");
+                });
+
+            modelBuilder.Entity("EkoRestaurant.Data.ListeDesCourses", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("ListDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ListeDesCourses");
                 });
 
             modelBuilder.Entity("EkoRestaurant.Data.Recipe", b =>
@@ -362,6 +382,10 @@ namespace EkoRestaurant.Migrations
                         .WithMany("Ingredients")
                         .HasForeignKey("CategoryId");
 
+                    b.HasOne("EkoRestaurant.Data.ListeDesCourses", null)
+                        .WithMany("Ingredient")
+                        .HasForeignKey("ListeDesCoursesId");
+
                     b.Navigation("Category");
                 });
 
@@ -419,6 +443,11 @@ namespace EkoRestaurant.Migrations
             modelBuilder.Entity("EkoRestaurant.Data.IngredientCategory", b =>
                 {
                     b.Navigation("Ingredients");
+                });
+
+            modelBuilder.Entity("EkoRestaurant.Data.ListeDesCourses", b =>
+                {
+                    b.Navigation("Ingredient");
                 });
 #pragma warning restore 612, 618
         }
