@@ -21,5 +21,9 @@ namespace EkoRestaurant.Data
 
         public int? CategoryId { get; set; }
         public IngredientCategory? Category { get; set; }
+
+        public bool? Vegan { get; set; }
+        
+        public String? Allergenes { get; set; }
     }
 }

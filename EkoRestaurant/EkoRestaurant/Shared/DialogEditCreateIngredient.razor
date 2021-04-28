@@ -18,6 +18,13 @@
             <MudTextField @bind-Value="@CurrentIngredient.Producer" Label="Producteur"/>
             <MudTextField @bind-Value="@CurrentIngredient.UnitInStock" T="int" Label="Nbr d'unités en stock"/>
             <MudTextField @bind-Value="@CurrentIngredient.UnitAtStart" T="int" Label="Nbr d'unités commandées initialement"/>
+            
+            <MudSwitch @bind-Checked="@CurrentIngredient.Vegan" Color="Color.Success">Vegan</MudSwitch>
+            <MudSelect T="string" Label="Allergènes" @bind-Value="CurrentIngredient.Allergenes" MultiSelection="true">
+                <MudSelectItem Value="@("Lactose")">Lactose</MudSelectItem>
+                <MudSelectItem Value="@("Arachides")">Arachides</MudSelectItem>
+                <MudSelectItem Value="@("Soja")">Soja</MudSelectItem>
+            </MudSelect>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -28,12 +35,12 @@
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-
+    
     [Parameter]
     public Ingredient CurrentIngredient { get; set; }
 
     public List<IngredientCategory> CategoriesAvailable { get; set; } = new();
-
+    
 
     protected override Task OnInitializedAsync()
     {

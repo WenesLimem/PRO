@@ -52,7 +52,7 @@
                 <MudText >Fournisseur</MudText>
                 @if (currentIngredient.Producer == null)
                 {
-                    <MudText Class="details-grid-content dark-color"> N/A </MudText>
+                    <MudText Class="details-grid-content dark-color"> - </MudText>
                 }
                 else
                 {
@@ -78,7 +78,7 @@
         <MudCard Elevation="4">
             <MudCardContent>
                 <MudText >Vegan</MudText>
-                <MudText Class="details-grid-content" Color="Color.Success"> N-A </MudText>
+                <MudText Class="details-grid-content" Color="Color.Success">@GetVegan()</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -87,7 +87,7 @@
         <MudCard Elevation="4">
             <MudCardContent>
                 <MudText >Allergènes</MudText>
-                <MudText Class="details-grid-content" Color="Color.Dark">N-A</MudText>
+                <MudText  Typo="Typo.h5" Color="Color.Dark">@currentIngredient.Allergenes</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -156,7 +156,7 @@
             {
                 var editRes = IngredientsService.Edit(result);
                 IngredientsService.SaveChanges();
-                Snackbar.Add("Edition successful", Severity.Success);
+                Snackbar.Add("Modifications sauvegardées avec succées.", Severity.Success);
             }
             catch (Exception e)
             {
@@ -175,5 +175,17 @@
     }
 
     string GetCurrentCategoryName() => currentIngredient.Category != null ? currentIngredient.Category.Name : "N / A";
+
+    private String GetVegan()
+    {
+        if (currentIngredient.Vegan == true)
+        {
+            return "Oui";
+        }
+        else
+        {
+            return "Non";
+        }
+    }
 
 }

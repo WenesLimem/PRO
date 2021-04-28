@@ -53,6 +53,9 @@ namespace EkoRestaurant.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Allergenes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
@@ -73,6 +76,9 @@ namespace EkoRestaurant.Migrations
 
                     b.Property<double>("UnitPrice")
                         .HasColumnType("float");
+
+                    b.Property<bool?>("Vegan")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
