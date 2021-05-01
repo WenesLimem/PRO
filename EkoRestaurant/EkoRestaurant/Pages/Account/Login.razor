@@ -1,0 +1,131 @@
+﻿
+@using Microsoft.AspNetCore.DataProtection
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Localization
+@using EkoRestaurant.Data
+@using EkoRestaurant.IdentityUtils
+@page "/Account/Login"
+
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavigationManager
+@inject IDataProtectionProvider DataProtectionProvider
+@inject LoginService LoginService
+
+@* <TextEdit @ref="_emailTextEdit" Placeholder="@L["EnterUsernameOrEmail"]" @bind-Text="@_model.UsernameOrEmail"> *@
+@*                                     <Feedback> *@
+@*        *@
+@*                                 <TextEdit Placeholder="@L["EnterPassword"]" Role="TextRole.Password" @bind-Text="@_model.Password" @onkeyup="OnKeyUp"> *@
+@*                               *@
+@*                    *@
+@* *@
+@*                 @if (ShowSignInError) *@
+@*                 { *@
+@*                     <Field Horizontal="true" JustifyContent="JustifyContent.End"> *@
+@*                         <FieldBody ColumnSize="ColumnSize.Is10.Is2.WithOffset"> *@
+@*                             <Alert Color="Color.Danger" Visible="true"> *@
+@*                                 <AlertMessage>@L["UnableToLogIn"]</AlertMessage> *@
+@*                             </Alert> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                 } *@
+@* *@
+@*                 @if (ShowLockedOutError) *@
+@*                 { *@
+@*                     <Field Horizontal="true" JustifyContent="JustifyContent.End"> *@
+@*                         <FieldBody ColumnSize="ColumnSize.Is10.Is2.WithOffset"> *@
+@*                             <Alert Color="Color.Danger" Visible="true"> *@
+@*                                 <AlertMessage>@L["LockedOut"]</AlertMessage> *@
+@*                             </Alert> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                 } *@
+@* *@
+@*                 <Field Horizontal="true" JustifyContent="JustifyContent.End"> *@
+@*                     <FieldBody ColumnSize="ColumnSize.Is10.Is2.WithOffset"> *@
+@*                         <Button Color="Color.Primary" Disabled="@SubmitButtonDisabled" Clicked="@SubmitClicked">@L["Login"]</Button> *@
+@*                     </FieldBody> *@
+@*                 </Field> *@
+@*             </CardBody> *@
+@*         </Card> *@
+@* *@
+@*         <Paragraph> *@
+@*             <Link To="/Account/ForgotPassword"> *@
+@*             @L["Forgot"] *@
+@*             </Link> *@
+@*         </Paragraph> *@
+@*         <Paragraph> *@
+@*             <Link To="/Account/Register"> *@
+@*             @L["RegisterNewUser"] *@
+@*             </Link> *@
+@*         </Paragraph> *@
+@*         <Paragraph> *@
+@*             <Link To="/Account/ResendEmailConfirmation"> *@
+@*             @L["ResendEmail"] *@
+@*             </Link> *@
+@*         </Paragraph> *@
+@*     </Column> *@
+@*                                 </Row> *@
+
+@code {
+    private readonly LogInModel _model = new LogInModel();
+    
+    /*
+    private TextEdit _emailTextEdit;
+    private TextEdit _passwordTextEdit;
+    */
+    private bool ShowSignInError { get; set; }
+    private bool ShowLockedOutError { get; set; }
+    private bool SubmitButtonDisabled { get; set; }
+    private string TwoFactorCodePlaceholder { get; set; }
+
+
+    private async Task SubmitClicked()
+    {
+        /*
+        if (!_validations.ValidateAll())
+        {
+            return;
+        }*/
+
+
+        SubmitButtonDisabled = true;
+
+        var identityUser = await UserManager.FindByEmailAsync(_model.UsernameOrEmail) ?? await UserManager.FindByNameAsync(_model.UsernameOrEmail);
+
+        bool authenticationFailed = identityUser == null ||
+                                    !await UserManager.CheckPasswordAsync(identityUser, _model.Password) ||
+                                    !identityUser.EmailConfirmed;
+
+
+        if (authenticationFailed)
+        {
+            ShowSignInError = true;
+            SubmitButtonDisabled = false;
+
+            if (identityUser != null)
+            {
+                await UserManager.AccessFailedAsync(identityUser);
+
+                if (await UserManager.IsLockedOutAsync(identityUser))
+                {
+                    ShowLockedOutError = true;
+                }
+            }
+
+            return;
+        }
+
+        ShowSignInError = false;
+
+        await LoginService.Login(identityUser, false);
+    }
+
+    private class LogInModel
+    {
+        public string UsernameOrEmail { get; set; }
+
+        public string Password { get; set; }
+
+    }
+
+}

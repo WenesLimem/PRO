@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorTable;
+using EkoRestaurant.IdentityUtils;
 using EkoRestaurant.Services;
 using Microsoft.AspNetCore.Identity;
 using MudBlazor.Services;
@@ -49,6 +50,10 @@ namespace EkoRestaurant
             services.AddTransient<IngredientsService>();
             services.AddTransient<RecipeCategoriesService>();
             services.AddTransient<RecipesService>();
+
+            // identity related service
+            services.AddScoped<LoginService, LoginService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
