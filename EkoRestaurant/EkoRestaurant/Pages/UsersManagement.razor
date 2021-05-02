@@ -96,7 +96,6 @@
             <td>@user.UserName</td>
             <td>@user.Email</td>
             <td>
-                <!-- Edit the current forecast -->
                 <button class="btn btn-primary"
                         @onclick="(() => EditUser(user))">
                     Edit
@@ -108,6 +107,11 @@
 </table>
 
 @code {
+
+
+    // for complete tutorial:
+    // see https://blazorhelpwebsite.com/ViewBlogPost/21
+
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
