@@ -19,8 +19,8 @@ namespace EkoRestaurant
         {
             (string name, string password, string role)[] demoUsers = new[]
             {
-                (name: "sally@sally.com", password: "Passw0rd!", role: "Administrator"),
-                (name: "employee", password: "Passw0rd!", role: "Employee"),
+                (name: "Administrator", password: "Administrator+1", role: "Administrator"),
+                (name: "Employee", password: "Employee+1", role: "Employee"),
                 (name: "fred@fred.com", password: "Passw0rd!", role: "")
             };
 

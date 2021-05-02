@@ -14,7 +14,8 @@ namespace EkoRestaurant.Shared
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
 
-        protected override void OnInitialized()
+
+        protected override void OnAfterRender(bool firstRender)
         {
             NavigationManager.NavigateTo("/login", true);
         }
