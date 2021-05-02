@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace EkoRestaurant.Shared
 {
+    /// <summary>
+    /// Use this component to automatically redirect to login page
+    /// </summary>
     public class RedirectToLogin : ComponentBase
     {
         [Inject]
@@ -13,7 +16,7 @@ namespace EkoRestaurant.Shared
 
         protected override void OnInitialized()
         {
-            NavigationManager.NavigateTo("login");
+            NavigationManager.NavigateTo("/login", true);
         }
     }
 }

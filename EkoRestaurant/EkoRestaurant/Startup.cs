@@ -6,8 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorTable;
+using EkoRestaurant.Areas.Identity;
 using EkoRestaurant.IdentityUtils;
 using EkoRestaurant.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MudBlazor.Services;
 
@@ -52,7 +54,9 @@ namespace EkoRestaurant
             services.AddTransient<RecipesService>();
 
             // identity related service
-            services.AddScoped<LoginService, LoginService>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
+
+            //services.AddScoped<LoginService, LoginService>();
 
         }
 
@@ -64,6 +68,7 @@ namespace EkoRestaurant
             UserManager<ApplicationUser> userManager
             )
         {
+            
             ApplicationDbInitialiser.SeedRoles(roleManager);
             ApplicationDbInitialiser.SeedUsers(userManager);
 
@@ -87,11 +92,12 @@ namespace EkoRestaurant
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // used for blazor identity
+            app.UseMiddleware<BlazorCookieLoginMiddleware<ApplicationUser>>();
+
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");

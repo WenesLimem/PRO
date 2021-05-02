@@ -13,7 +13,6 @@ namespace EkoRestaurant
         {
             AddRoleIfNotExists(roleManager, "Administrator");
             AddRoleIfNotExists(roleManager, "Employee");
-            AddRoleIfNotExists(roleManager, "TenantAdmin");
         }
 
         public static void SeedUsers(UserManager<ApplicationUser> userManager)
@@ -21,7 +20,7 @@ namespace EkoRestaurant
             (string name, string password, string role)[] demoUsers = new[]
             {
                 (name: "sally@sally.com", password: "Passw0rd!", role: "Administrator"),
-                (name: "abi@abi.com", password: "Passw0rd!", role: "TenantAdmin"),
+                (name: "employee", password: "Passw0rd!", role: "Employee"),
                 (name: "fred@fred.com", password: "Passw0rd!", role: "")
             };
 
