@@ -56,8 +56,6 @@ namespace EkoRestaurant
             // identity related service
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 
-            //services.AddScoped<LoginService, LoginService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +66,6 @@ namespace EkoRestaurant
             UserManager<ApplicationUser> userManager
             )
         {
-            
             ApplicationDbInitialiser.SeedRoles(roleManager);
             ApplicationDbInitialiser.SeedUsers(userManager);
 
@@ -94,7 +91,6 @@ namespace EkoRestaurant
 
             // used for blazor identity
             app.UseMiddleware<BlazorCookieLoginMiddleware<ApplicationUser>>();
-
 
             app.UseEndpoints(endpoints =>
             {

@@ -33,10 +33,7 @@ namespace EkoRestaurant.IdentityUtils
             {
                 return Logins[key];
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         #endregion
@@ -66,11 +63,6 @@ namespace EkoRestaurant.IdentityUtils
                     context.Response.Redirect("/");
                     return;
                 }
-                else if (result.RequiresTwoFactor)
-                {
-                    context.Response.Redirect("/loginwith2fa/" + key);
-                    return;
-                }
                 else if (result.IsLockedOut)
                 {
                     info.Error = "You are locked out. Please contact support.";
@@ -79,39 +71,6 @@ namespace EkoRestaurant.IdentityUtils
                 {
                     info.Error = "Login failed. Check your username and password.";
                     await _next.Invoke(context);
-                }
-            }
-            else if (context.Request.Path.StartsWithSegments("/loginwith2fa"))
-            {
-                var key = Guid.Parse(context.Request.Path.Value.Split('/').Last());
-                var info = Logins[key];
-
-                if (string.IsNullOrEmpty(info.TwoFactorCode))
-                {
-                    //user is opening 2FA first time...
-                    //...Get user model and cache it for the 2FA-View:
-                    var user = await signInMgr.GetTwoFactorAuthenticationUserAsync();
-                    info.User = user;
-                }
-                else
-                {
-                    //user has submitted 2FA, check:
-                    var result = await signInMgr.TwoFactorAuthenticatorSignInAsync(info.TwoFactorCode, info.RememberMe, info.RememberMachine);
-
-                    if (result.Succeeded)
-                    {
-                        Logins.Remove(key);
-                        context.Response.Redirect(info.ReturnUrl);
-                        return;
-                    }
-                    else if (result.IsLockedOut)
-                    {
-                        info.Error = "You are locked out. Please contact support.";
-                    }
-                    else
-                    {
-                        info.Error = "Invalid authenticator code";
-                    }
                 }
             }
             else if (context.Request.Path.StartsWithSegments("/logout"))
