@@ -20,11 +20,9 @@
             <MudTextField @bind-Value="@CurrentIngredient.UnitAtStart" T="int" Label="Nbr d'unités commandées initialement"/>
             
             <MudSwitch @bind-Checked="@CurrentIngredient.Vegan" Color="Color.Success">Vegan</MudSwitch>
-            <MudSelect T="string" Label="Allergènes" @bind-Value="CurrentIngredient.Allergenes" MultiSelection="true">
-                <MudSelectItem Value="@("Lactose")">Lactose</MudSelectItem>
-                <MudSelectItem Value="@("Arachides")">Arachides</MudSelectItem>
-                <MudSelectItem Value="@("Soja")">Soja</MudSelectItem>
-            </MudSelect>
+            <MudSwitch @bind-Checked="@CurrentIngredient.Anarchaides" Color="Color.Info"> Anarchaïdes </MudSwitch>
+            <MudSwitch @bind-Checked="@CurrentIngredient.Lactose" Color="Color.Info"> Lactose </MudSwitch>
+
         </MudForm>
     </DialogContent>
     <DialogActions>

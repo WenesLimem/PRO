@@ -62,7 +62,7 @@
         </MudCard>
         </MudItem>
 
-        <MudItem xs="6">
+        <MudItem xs="3">
             <MudCard Elevation="4">
 
                 <MudCardContent>
@@ -86,8 +86,17 @@
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
-                <MudText >Allergènes</MudText>
-                <MudText  Typo="Typo.h5" Color="Color.Dark">@currentIngredient.Allergenes</MudText>
+                <MudText >Arachides</MudText>
+                <MudText  Class="details-grid-content" Color="Color.Success">@GetArachides()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText >Lacotse</MudText>
+                <MudText  Class="details-grid-content" Color="Color.Success">@GetLactose()</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -187,5 +196,32 @@
             return "Non";
         }
     }
+
+    private String GetArachides()
+    { 
+        
+        if (currentIngredient.Anarchaides == true)
+        {
+            return "Oui";
+        }
+        else
+        {
+            return "Non";
+        }
+    }
+
+    private String GetLactose()
+    {
+        if (currentIngredient.Lactose == true)
+        {
+            return "Oui";
+        }
+        else
+        {
+            return "Non";
+        }
+    }
+    
+    
 
 }

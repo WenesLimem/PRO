@@ -24,6 +24,7 @@ namespace EkoRestaurant.Data
 
         public bool? Vegan { get; set; }
         
-        public String? Allergenes { get; set; }
+        public bool? Anarchaides { get; set; }
+        public bool? Lactose { get; set; }
     }
 }
