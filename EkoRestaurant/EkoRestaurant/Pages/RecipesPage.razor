@@ -1,0 +1,80 @@
+﻿@page "/recipes"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+@inject RecipesService RecipesService
+@inject RecipeCategoriesService RecipeCategoriesService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Recettes</div>
+    </MudItem>
+
+    <MudItem xs="12">
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddRecipeDialog" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" />Ajouter</MudButton>
+        @if (SelectedCategory != null)
+        {
+            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
+        }
+    </MudItem>
+    <MudItem xs="4">
+        <div class="data-grid-categories-title">
+            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right" 12px></MudIcon>Catégories
+        </div>
+        <div class="flex-column">
+
+            @if (RecipeCategories.Count > 0)
+            {
+                @foreach (RecipeCategory category in RecipeCategories)
+                {
+                    <div @onclick="() => SelectedCategoryInSideBar(category)">
+
+                    </div>
+                }
+            }
+
+        </div>
+    </MudItem>
+</MudGrid>
+
+@code {
+    public RecipeCategory CategoryToAdd { get; set; } = new();
+
+    public List<RecipeCategory> RecipeCategories = new();
+
+    public RecipeCategory SelectedCategory { get; set; }
+
+    public List<Recipe> Recipes { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        RecipeCategories = RecipeCategoriesService.Filter().ToList();
+        await GetRecipesData();
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+    }
+
+    public async Task SelectCategoryInSideBar(RecipeCategory category)
+    {
+        SelectedCategory = SelectedCategory == category ? null : category;
+        await GetRecipesData();
+    }
+
+    public async Task OpenAddRecipeDialog()
+    {
+
+    }
+
+    public async Task OpenAddDeleteCategoryDialog()
+    {
+
+    }
+
+    private async Task GetRecipesData()
+    {
+        Recipes = SelectedCategory == null ? RecipesService.Filter().ToList() : SelectedCategory.Recipes;
+    }
+
+}
