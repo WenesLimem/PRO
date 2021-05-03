@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using EkoRestaurant.Data;
 using EkoRestaurant.Services.Abstractions;
@@ -12,29 +13,64 @@ namespace EkoRestaurant.Services
         {
         }
 
-        public void GetData()
+
+        public new ListeDesCourses Create(ListeDesCourses entity)
         {
-            
-
-
+            throw new ApplicationException("use GetActiveListeDesCourses() instead of Create()");
         }
-        public void AddIngredientToList(Ingredient ing)
+
+        public ListeDesCourses AddIngredientToCurrent(Ingredient ingredient)
         {
-            var currlist = this.Filter().Where(i => i.isCompleted == false).FirstOrDefault();
-            if (currlist == null)
+            var current = GetActiveListeDesCourses();
+            current.Ingredients.Add(ingredient);
+            SaveChanges();
+            return current;
+        }
+
+        public ListeDesCourses DeleteIngredientToCurrent(Ingredient ingredient)
+        {
+            var current = GetActiveListeDesCourses();
+            var success = current.Ingredients.Remove(ingredient);
+            if (!success)
             {
-                currlist = Create(new ListeDesCourses());
-                currlist.dateDeListe = DateTime.Today;
-                currlist.isCompleted = false;
-                currlist.listeDesIngredients.Add(ing);
-                SaveChanges();
-                
+                throw new ApplicationException("error while removing from active liste de course");
             }
-            else
+            SaveChanges();
+            return current;
+        }
+
+        public ListeDesCourses GetActiveListeDesCourses()
+        {
+            var current = this.FilterWithIngredients().FirstOrDefault(x => x.IsCompleted == false);
+            if (current == null)
             {
-                currlist.listeDesIngredients.Add(ing);
+                // need to create the active list
+                var newListe = new ListeDesCourses()
+                {
+                    CreationDateTime = DateTime.Now,
+                    IsCompleted = false
+                };
+
+                var addedEntityEntry = _dbContext.Set<ListeDesCourses>().Add(newListe);
                 SaveChanges();
+                return addedEntityEntry.Entity;
             }
+
+            return current;
+        }
+
+        public void MarkActiveAsCompleted()
+        {
+            var current = GetActiveListeDesCourses();
+            current.IsCompleted = true;
+            current.CompletionDateTime = DateTime.Now;
+            SaveChanges();
+        }
+
+        public IEnumerable<ListeDesCourses> FilterWithIngredients()
+        {
+            return _dbContext.Set<ListeDesCourses>()
+                .Include((x) => x.Ingredients);
         }
     }
 }
