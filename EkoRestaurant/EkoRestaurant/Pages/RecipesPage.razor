@@ -93,6 +93,27 @@
     {
         var parameters = new DialogParameters();
         parameters.Add("Category", CategoryToAdd);
+
+        var dialog = DialogService.Show<DialogEditCreateRecipeCategory>("Nouvelle catégorie", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (RecipeCategory)result.Data;
+            try
+            {
+                RecipeCategoriesService.Create(res);
+                RecipeCategoriesService.SaveChanges();
+                RecipeCategories.Add(res);
+                Snackbar.Add("Catégorie " + res.Name + " ajoutée avec succès", Severity.Success);
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add("Impossible d'ajouter la catégorie, elle existe déjà", Severity.Error);
+            }
+
+            CategoryToAdd = new();
+            StateHasChanged();
+        }
     }
 
     public async Task OpenAddRecipeDialog()
@@ -102,7 +123,7 @@
 
     public async Task OpenAddDeleteCategoryDialog()
     {
-
+        
     }
 
     public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
