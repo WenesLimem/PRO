@@ -56,6 +56,7 @@ namespace EkoRestaurant
             services.AddTransient<IngredientsService>();
             services.AddTransient<RecipeCategoriesService>();
             services.AddTransient<RecipesService>();
+            services.AddTransient<ListeDesCoursesServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,7 +7,7 @@
 @inject ISnackbar Snackbar
 @inject IDialogService Dialogservice
 @inject NavigationManager nm
-
+@inject ListeDesCoursesServices ListeDesCoursesServices
 
 <MudGrid>
     <MudItem xs="12">
@@ -134,8 +134,17 @@
 
     private void AddIngredientToList()
     {
-        listeDesCourse.Add(currentIngredient);
-        Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
+        try
+        {
+            ListeDesCoursesServices.AddIngredientToList(currentIngredient);
+            Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Une erreur est survenue lors de l'ajout du produit à la liste des courses.", severity: Severity.Error);
+
+        }
+       
     }
 
     private async void OpenModifiyIngredientDialog()

@@ -1,0 +1,47 @@
+@page "/listedescourses"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@inject ListeDesCoursesServices ListeDesCoursesServices
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Liste des courses</div>
+    </MudItem>
+    <MudItem xs="8">
+        <MudTable T="Ingredient" Items="LDC.listeDesIngredients" Hover="true">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>Nom</MudTh>
+                <MudTh>Producteur</MudTh>
+                <MudTh>Date d'expiration</MudTh>
+                <MudTh>Qte en stock</MudTh>
+                <MudTh>Prix</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Nom">@context.Name</MudTd>
+                <MudTd DataLabel="Qte en stock">@context.UnitInStock</MudTd>
+                <MudTd DataLabel="Prix">@context.UnitPrice</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+
+@code
+{
+    ListeDesCourses LDC;
+    List<Ingredient> ldctobs;
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+      ListeDesCoursesServices.GetData();
+    }
+
+
+
+
+
+}
