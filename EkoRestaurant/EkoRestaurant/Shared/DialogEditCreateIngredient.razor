@@ -19,9 +19,9 @@
             <MudTextField @bind-Value="@CurrentIngredient.UnitInStock" T="int" Label="Nbr d'unités en stock"/>
             <MudTextField @bind-Value="@CurrentIngredient.UnitAtStart" T="int" Label="Nbr d'unités commandées initialement"/>
             
-            <MudSwitch @bind-Checked="@CurrentIngredient.Vegan" Color="Color.Success">Vegan</MudSwitch>
-            <MudSwitch @bind-Checked="@CurrentIngredient.Anarchaides" Color="Color.Info"> Anarchaïdes </MudSwitch>
-            <MudSwitch @bind-Checked="@CurrentIngredient.Lactose" Color="Color.Info"> Lactose </MudSwitch>
+            <MudSwitch @bind-Checked="@CurrentIngredient.IsVegan" Color="Color.Success">Vegan</MudSwitch>
+            <MudSwitch @bind-Checked="@CurrentIngredient.ContainsArachides" Color="Color.Info">Arachides</MudSwitch>
+            <MudSwitch @bind-Checked="@CurrentIngredient.ContainsLactose" Color="Color.Info">Lactose</MudSwitch>
 
         </MudForm>
     </DialogContent>

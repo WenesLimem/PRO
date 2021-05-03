@@ -22,9 +22,9 @@ namespace EkoRestaurant.Data
         public int? CategoryId { get; set; }
         public IngredientCategory? Category { get; set; }
 
-        public bool? Vegan { get; set; }
-        
-        public bool? Anarchaides { get; set; }
-        public bool? Lactose { get; set; }
+        public bool IsVegan { get; set; } = false;
+
+        public bool ContainsArachides { get; set; } = false;
+        public bool ContainsLactose { get; set; } = false;
     }
 }

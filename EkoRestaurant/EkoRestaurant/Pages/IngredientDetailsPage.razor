@@ -41,7 +41,7 @@
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
-                <MudText >Date de préemption</MudText>
+                <MudText>Date de péremption</MudText>
                 <MudText Class="details-grid-content" Color="Color.Info">@currentIngredient.ExpirationDate </MudText>
             </MudCardContent>
         </MudCard>
@@ -50,35 +50,26 @@
         <MudCard Elevation="4">
             <MudCardContent>
                 <MudText >Fournisseur</MudText>
-                @if (currentIngredient.Producer == null)
-                {
-                    <MudText Class="details-grid-content dark-color"> - </MudText>
-                }
-                else
-                {
-                    <MudText Class="details-grid-content dark-color">@currentIngredient.Producer </MudText>
-                }
+                <MudText Class="details-grid-content dark-color">@currentIngredient.GetProducerName() </MudText>
             </MudCardContent>
         </MudCard>
-        </MudItem>
+    </MudItem>
 
-        <MudItem xs="3">
-            <MudCard Elevation="4">
+    <MudItem xs="3">
+        <MudCard Elevation="4">
 
-                <MudCardContent>
-                    <MudText >Catégorie</MudText>
-                    <MudText Class="details-grid-content dark-color">@GetCurrentCategoryName() </MudText>
+            <MudCardContent>
+                <MudText >Catégorie</MudText>
+                <MudText Class="details-grid-content dark-color"> @currentIngredient.GetCategoryName()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
 
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-
- 
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
                 <MudText >Vegan</MudText>
-                <MudText Class="details-grid-content" Color="Color.Success">@GetVegan()</MudText>
+                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -86,34 +77,28 @@
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
-                <MudText >Arachides</MudText>
-                <MudText  Class="details-grid-content" Color="Color.Success">@GetArachides()</MudText>
+                <MudText >Contient des Arachides</MudText>
+                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
-    
+
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
-                <MudText >Lacotse</MudText>
-                <MudText  Class="details-grid-content" Color="Color.Success">@GetLactose()</MudText>
+                <MudText>Contient des Lactoses</MudText>
+                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
-    
-        <MudItem xs="12">
-            <MudCard Elevation="4">
-                <MudCardContent>
-                     <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350px"></MudChart>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    
-    
-            
 
-
-
+    <MudItem xs="12">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350px"></MudChart>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
 </MudGrid>
 
 
@@ -125,12 +110,13 @@
     public List<Ingredient> listeDesCourse = new();
 
     public Ingredient currentIngredient { get; set; }
+
     public List<ChartSeries> Series = new List<ChartSeries>()
     {
-        new ChartSeries() { Name = "Suivi de consommation", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } }
-        
+        new ChartSeries() {Name = "Suivi de consommation", Data = new double[] {90, 79, 72, 69, 62, 62, 55, 65, 70}}
     };
-    public string[] XAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
+
+    public string[] XAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"};
 
     protected override async Task OnInitializedAsync()
     {
@@ -165,11 +151,11 @@
             {
                 var editRes = IngredientsService.Edit(result);
                 IngredientsService.SaveChanges();
-                Snackbar.Add("Modifications sauvegardées avec succées.", Severity.Success);
+                Snackbar.Add("Modifications sauvegardées avec succès.", Severity.Success);
             }
             catch (Exception e)
             {
-                Snackbar.Add("Erreur est survenue lors du modéficaiton", Severity.Error);
+                Snackbar.Add("Erreur est survenue lors de l'édition", Severity.Error);
             }
         }
         StateHasChanged();
@@ -179,49 +165,8 @@
     {
         IngredientsService.Delete(currentIngredient);
         IngredientsService.SaveChanges();
-        Snackbar.Add("Suppression effectuées avec succées ", Severity.Success);
+        Snackbar.Add("Suppression effectuée avec succès ", Severity.Success);
         nm.NavigateTo("/ingredients");
     }
-
-    string GetCurrentCategoryName() => currentIngredient.Category != null ? currentIngredient.Category.Name : "N / A";
-
-    private String GetVegan()
-    {
-        if (currentIngredient.Vegan == true)
-        {
-            return "Oui";
-        }
-        else
-        {
-            return "Non";
-        }
-    }
-
-    private String GetArachides()
-    { 
-        
-        if (currentIngredient.Anarchaides == true)
-        {
-            return "Oui";
-        }
-        else
-        {
-            return "Non";
-        }
-    }
-
-    private String GetLactose()
-    {
-        if (currentIngredient.Lactose == true)
-        {
-            return "Oui";
-        }
-        else
-        {
-            return "Non";
-        }
-    }
-    
-    
 
 }
