@@ -13,5 +13,8 @@ namespace EkoRestaurant.Data
 
         public double PreparationTimeMinutes { get; set; }
         public double Price { get; set; }
+
+        public int? CategoryId { get; set; }
+        public RecipeCategory? Category { get; set; }
     }
 }

@@ -36,7 +36,7 @@
                 }
             }
             <div class="small-separator"/>
-            <MudButton Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenRecipeCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenRecipeCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
         </div>
     </MudItem>
     <MudItem xs="8">
@@ -118,7 +118,29 @@
 
     public async Task OpenAddRecipeDialog()
     {
-
+        var dialog = DialogService.Show<DialogEditCreateRecipe>("Ajouter recette");
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (Recipe)result.Data;
+            try
+            {
+                RecipesService.Create(res);
+                RecipesService.SaveChanges();
+                Snackbar.Add("Recette " + res.Name + "ajouté avec succès", Severity.Success);
+                if (res.Category == SelectedCategory || SelectedCategory == null)
+                {
+                    Recipes.Add(res);
+                }
+                var currentCat = SelectedCategory;
+                SelectedCategory = new();
+                SelectedCategory = currentCat;
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add("Imposible d'ajouter la recette", Severity.Error);
+            }
+        }
     }
 
     public async Task OpenAddDeleteCategoryDialog()
