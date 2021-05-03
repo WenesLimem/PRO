@@ -123,7 +123,27 @@
 
     public async Task OpenAddDeleteCategoryDialog()
     {
-        
+        var parameters = new DialogParameters();
+        parameters.Add("TextToDisplay", "Veuillez confirmer la suppression de la catégorie " + SelectedCategory.Name + ", cela nécessite de ne plus avoir de recettes dans cette catégorie.");
+        parameters.Add("ButtonOkText", "Supprimer");
+        var dialog = DialogService.Show<DialogConfirm>("Supprimer la catégorie", parameters);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data.Equals(true))
+        {
+            if (SelectedCategory.Recipes.Count > 0)
+            {
+                Snackbar.Add("Il reste des recettes dans la catégorie " + SelectedCategory.Name + ", impossible de la supprimer", Severity.Warning);
+                return;
+            }
+            RecipeCategories.Remove(SelectedCategory);
+            RecipeCategoriesService.Delete(SelectedCategory.Id);
+            RecipeCategoriesService.SaveChanges();
+            Snackbar.Add("Catégorie " + SelectedCategory.Name + " supprimée avec succès", Severity.Success);
+            SelectedCategory = null;
+            await GetRecipesData();
+            StateHasChanged();
+        }
     }
 
     public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
