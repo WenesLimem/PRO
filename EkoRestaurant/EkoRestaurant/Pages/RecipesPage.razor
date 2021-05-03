@@ -14,7 +14,7 @@
     </MudItem>
 
     <MudItem xs="12">
-        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddRecipeDialog" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" />Ajouter</MudButton>
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddRecipeDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg"/>Ajouter</MudButton>
         @if (SelectedCategory != null)
         {
             <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
@@ -22,7 +22,7 @@
     </MudItem>
     <MudItem xs="4">
         <div class="data-grid-categories-title">
-            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right" 12px></MudIcon>Catégories
+            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right: 12px"></MudIcon>Catégories
         </div>
         <div class="flex-column">
 
@@ -30,13 +30,40 @@
             {
                 @foreach (RecipeCategory category in RecipeCategories)
                 {
-                    <div @onclick="() => SelectedCategoryInSideBar(category)">
-
+                    <div @onclick="() => SelectCategoryInSideBar(category)">
+                        <RecipeCategorySideBar Category="@category" Selected="@(category == SelectedCategory)" />
                     </div>
                 }
             }
-
+            <div class="small-separator"/>
+            <MudButton Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenRecipeCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
         </div>
+    </MudItem>
+    <MudItem xs="8">
+        <MudTable T="Recipe" Items="@Recipes" Hover="true" >
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Name)">Nom</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Description)">Description</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.PreparationTimeMinutes)">Temps de préparation (en minutes)</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Price)">Prix</MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Name">@context.Description</MudTd>
+                <MudTd DataLabel="Name">@context.PreparationTimeMinutes</MudTd>
+                <MudTd DataLabel="Name">@context.Price</MudTd>
+            </RowTemplate>
+        </MudTable>
     </MudItem>
 </MudGrid>
 
@@ -62,6 +89,11 @@
         await GetRecipesData();
     }
 
+    public async Task OpenRecipeCategoryDialog()
+    {
+
+    }
+
     public async Task OpenAddRecipeDialog()
     {
 
@@ -70,6 +102,11 @@
     public async Task OpenAddDeleteCategoryDialog()
     {
 
+    }
+
+    public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
+    {
+        NavigationManager.NavigateTo($"/recipes/{clickEvent.Item.Id}");
     }
 
     private async Task GetRecipesData()
