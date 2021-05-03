@@ -14,10 +14,10 @@
     </MudItem>
     <MudItem xs="12">
 
-        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg" />Ajouter</MudButton>
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg"/>Ajouter</MudButton>
         @if (SelectedCategory != null)
         {
-            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
+            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg"/>Supprimer la catégorie</MudButton>
         }
     </MudItem>
     <MudItem xs="4">
@@ -31,12 +31,12 @@
                 @foreach (IngredientCategory category in IngredientCategories)
                 {
                     <div @onclick="() => SelectCategoryInSideBar(category)">
-                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)" />
+                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)"/>
                     </div>
                 }
             }
-            <div class="small-separator" />
-            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg" />Nouvelle catégorie</MudButton>
+            <div class="small-separator"/>
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
         </div>
 
     </MudItem>
@@ -62,7 +62,7 @@
             <RowTemplate>
                 <MudTd DataLabel="Id">@context.Id</MudTd>
                 <MudTd DataLabel="Nom">@context.Name</MudTd>
-                <MudTd DataLabel="Producteur">@context.Producer</MudTd>
+                <MudTd DataLabel="Producteur">@context.GetProducerName()</MudTd>
                 <MudTd DataLabel="Date d'expiration">@context.ExpirationDate.Nice()</MudTd>
                 <MudTd DataLabel="Qte en stock">@context.UnitInStock</MudTd>
                 <MudTd DataLabel="Prix">@context.UnitPrice</MudTd>
@@ -103,15 +103,15 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (IngredientCategory)result.Data;
+            var res = (IngredientCategory) result.Data;
             try
             {
                 IngredientCategoriesService.Create(res);
                 IngredientCategoriesService.SaveChanges();
                 IngredientCategories.Add(res);
                 Snackbar.Add("Catégorie " + res.Name + " ajoutée avec succès", Severity.Success);
-
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Snackbar.Add("Impossible d'ajouter la catégorie, elle existe déjà", Severity.Error);
             }
@@ -127,7 +127,7 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (Ingredient)result.Data;
+            var res = (Ingredient) result.Data;
             try
             {
                 IngredientsService.Create(res);
@@ -140,7 +140,8 @@
                 var currentCat = SelectedCategory;
                 SelectedCategory = new();
                 SelectedCategory = currentCat;
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Snackbar.Add("Impossible d'ajouter l'ingrédient", Severity.Error);
             }
@@ -150,7 +151,7 @@
     public async Task OpenAddDeleteCategoryDialog()
     {
         var parameters = new DialogParameters();
-        parameters.Add("TextToDisplay", "Veuillez confirmer la suppression de la catégorie " + SelectedCategory.Name + ", cela necessite de ne plus avoir d'ingrédient dans cette catégorie.");
+        parameters.Add("TextToDisplay", "Veuillez confirmer la suppression de la catégorie " + SelectedCategory.Name + ", cela nécessite de ne plus avoir d'ingrédients dans cette catégorie.");
         parameters.Add("ButtonOkText", "Supprimer");
         var dialog = DialogService.Show<DialogConfirm>("Supprimer la catégorie", parameters);
 
