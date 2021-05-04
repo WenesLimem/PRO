@@ -1,8 +1,9 @@
 ﻿@using EkoRestaurant.Data
 @using EkoRestaurant.Services
 
-@* @inject IngredientCategoriesService IngredientCategoriesService *@
+@inject IngredientsService IngredientsService
 @inject RecipeCategoriesService RecipeCategoriesService
+@inject RecipeIngredientQuantitiesService RecipeIngredientQuantitiesService
 
 <MudDialog>
     <DialogContent>
@@ -15,6 +16,15 @@
             </MudSelect>
             <MudTextField @bind-Value="CurrentRecipe.Name" Label="Nom" Variant="Variant.Text"></MudTextField>
             <MudTextField @bind-Value="CurrentRecipe.Description" Label="Description" Variant="Variant.Text"></MudTextField>
+            <MudItem>
+                <MudSelect T="Ingredient" @bind-Value="@CurrentIngredientQty.Ingredient" Label="Ingrédient" ToStringFunc="@(e => e == null ? null : $"{e.Name}")">
+                    @foreach (var ing in Ingredients)
+                    { 
+                        <MudSelectItem Value="@ing" />
+                    }
+                </MudSelect>
+                <MudTextField @bind-Value="CurrentIngredientQty.Quantity" T="int" Label="Qté"></MudTextField>
+            </MudItem>
             <MudTextField @bind-Value="CurrentRecipe.PreparationTimeMinutes" T="double" Label="Temps de préparation (en minute)"></MudTextField>
             <MudTextField @bind-Value="CurrentRecipe.Price" T="double" Label="Prix"></MudTextField>
         </MudForm>
@@ -30,15 +40,23 @@
 
     [Parameter]
     public Recipe CurrentRecipe { get; set; }
+    public RecipeIngredientQuantity CurrentIngredientQty { get; set; }
 
     public List<RecipeCategory> CategoriesAvailable { get; set; } = new();
+    public List<Ingredient> Ingredients { get; set; } = new();
+
 
     protected override Task OnInitializedAsync()
     {
         CategoriesAvailable = RecipeCategoriesService.Filter().ToList();
+        Ingredients = IngredientsService.Filter().ToList();
         if (CurrentRecipe == null)
         {
             CurrentRecipe = new Recipe();
+        }
+        if (CurrentIngredientQty == null)
+        {
+            CurrentIngredientQty = new RecipeIngredientQuantity();
         }
 
         return base.OnInitializedAsync();

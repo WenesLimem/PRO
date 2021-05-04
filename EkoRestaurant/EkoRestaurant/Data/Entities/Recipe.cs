@@ -16,5 +16,6 @@ namespace EkoRestaurant.Data
 
         public int? CategoryId { get; set; }
         public RecipeCategory? Category { get; set; }
+        public List<RecipeIngredientQuantity> IngredientQuantitys { get; set; }
     }
 }
