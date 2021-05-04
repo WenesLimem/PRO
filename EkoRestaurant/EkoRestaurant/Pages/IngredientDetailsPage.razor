@@ -136,7 +136,7 @@
     {
         try
         {
-            ListeDesCoursesServices.AddIngredientToList(currentIngredient);
+            ListeDesCoursesServices.AddIngredientToCurrent(currentIngredient);
             Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
         }
         catch (Exception e)
