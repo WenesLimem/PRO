@@ -1,0 +1,45 @@
+﻿@page "/recipes/{Id:int}"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+@inject RecipesService RecipesService
+@inject RecipeCategoriesService RecipeCategoriesService
+@inject RecipeIngredientQuantitiesService RecipeIngredientQuantitiesService
+@inject IngredientsService IngredientsService
+@inject ISnackbar Snackbar
+@inject IDialogService Dialogservice
+@inject NavigationManager nm
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Recettes</div>
+        <div class="h2-quicksand dark-color">@CurrentRecipe.Name</div>
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    public List<RecipeIngredientQuantity> ListIngredient = new();
+    public List<Ingredient> Ingredients = new();
+
+    public Recipe CurrentRecipe { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Ingredients = IngredientsService.Filter().ToList();
+        await getData();
+    }
+
+    private async Task getData()
+    {
+        CurrentRecipe = RecipesService.GetById(Id);
+        if (CurrentRecipe.CategoryId != 0 && CurrentRecipe.Category == null && CurrentRecipe.CategoryId != null)
+        {
+            CurrentRecipe.Category = RecipeCategoriesService.GetById((int)CurrentRecipe.CategoryId);
+        }
+    }
+
+}
