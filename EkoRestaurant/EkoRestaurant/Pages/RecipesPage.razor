@@ -48,9 +48,6 @@
                     <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Name)">Nom</MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Description)">Description</MudTableSortLabel>
-                </MudTh>
-                <MudTh>
                     <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.PreparationTimeMinutes)">Temps de préparation (en minutes)</MudTableSortLabel>
                 </MudTh>
                 <MudTh>
@@ -60,7 +57,6 @@
             <RowTemplate>
                 <MudTd DataLabel="Id">@context.Id</MudTd>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd DataLabel="Name">@context.Description</MudTd>
                 <MudTd DataLabel="Name">@context.PreparationTimeMinutes</MudTd>
                 <MudTd DataLabel="Name">@context.Price</MudTd>
             </RowTemplate>
@@ -128,11 +124,6 @@
             {
                 RecipesService.Create(res);
                 RecipesService.SaveChanges();
-                foreach (RecipeIngredientQuantity qty in res.IngredientQuantitys)
-                {
-                    RecipeIngredientQuantitiesService.Create(qty);
-                }
-                RecipeIngredientQuantitiesService.SaveChanges();
                 Snackbar.Add("Recette " + res.Name + "ajouté avec succès", Severity.Success);
                 if (res.Category == SelectedCategory || SelectedCategory == null)
                 {
