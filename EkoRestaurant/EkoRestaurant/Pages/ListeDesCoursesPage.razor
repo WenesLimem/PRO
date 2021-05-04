@@ -1,46 +1,76 @@
 @page "/listedescourses"
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+@using Humanizer
 @inject ListeDesCoursesServices ListeDesCoursesServices
-
+@inject IngredientsService IngredientsService
 <MudGrid>
     <MudItem xs="12">
         <div class="page-title dark-color">Liste des courses</div>
     </MudItem>
-    <MudItem xs="8">
-        <MudTable T="Ingredient" Items="LDC.Ingredients" Hover="true">
+    <MudItem xs="3">
+        <MudTable T="ListeDesCourses" Items="ListeDesListes" Hover="true">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>Fini</MudTh>
+                <MudTh>Date creation</MudTh>
+                
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Statut" >@context.IsCompleted.BooleanToFrench()</MudTd> 
+                <MudTd DataLabel="Date de creation">@context.CreationDateTime.Nice()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+    <MudItem xs="8" Style="float: right">
+        <MudTable T="Ingredient" Items="LDC.Ingredients" Hover="true" CommitEditTooltip="Sauvegardé la modifcation">
             <HeaderContent>
                 <MudTh>Id</MudTh>
                 <MudTh>Nom</MudTh>
-                <MudTh>Producteur</MudTh>
                 <MudTh>Qte Commandée</MudTh>
-                <MudTh>Prix</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Id">@context.Id</MudTd>
                 <MudTd DataLabel="Nom">@context.Name</MudTd>
-                <MudTd DataLabel="Producteur">@context.Producer</MudTd>
-                <MudTd DataLabel="Qte en stock">@context.UnitAtStart</MudTd>
-                <MudTd DataLabel="Prix">@context.UnitPrice</MudTd>
+                <MudTd DataLabel="Qte commandée">@context.UnitAtStart</MudTd>
             </RowTemplate>
+            <RowEditingTemplate>
+                <MudTd></MudTd>
+                <MudTd></MudTd>
+                <MudTd DataLabel="Qte commandée ">
+                    <MudTextField int @bind-Value="@context.UnitAtStart"></MudTextField>
+                </MudTd>
+            </RowEditingTemplate>
         </MudTable>
+         <MudFab Icon="@Icons.Material.Filled.Save" OnClick="@FinishList" Size="@Size.Medium" Style="float: right"/>
     </MudItem>
+    
+    
 </MudGrid>
 
 
 @code
 {
     ListeDesCourses LDC;
-    
-    
+    IEnumerable<ListeDesCourses> ListeDesListes;
 
     protected override async Task OnInitializedAsync()
     {
         LDC = ListeDesCoursesServices.GetActiveListeDesCourses();
+        ListeDesListes = ListeDesCoursesServices.FilterWithIngredients();
+       
     }
 
 
+    private void FinishList()
+    {
+        LDC.IsCompleted = true;
+    }
 
-
-
+    private void AddOne()
+    {
+        
+    }
 }

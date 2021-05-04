@@ -107,7 +107,6 @@
     [Parameter]
     public int Id { get; set; }
 
-    public List<Ingredient> listeDesCourse = new();
 
     public Ingredient currentIngredient { get; set; }
 
@@ -137,7 +136,17 @@
         try
         {
             ListeDesCoursesServices.AddIngredientToCurrent(currentIngredient);
-            Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
+            Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success,
+                config =>  
+                {
+                    config.Action = "Afficher la liste des courses";
+                    config.ActionColor = Color.Primary;
+                    config.Onclick = async snackbar =>
+                    {
+                       ViewListe();
+                    };
+
+                });
         }
         catch (Exception e)
         {
@@ -145,6 +154,11 @@
 
         }
        
+    }
+
+    private void ViewListe()
+    {
+        nm.NavigateTo("/listedescourses");
     }
 
     private async void OpenModifiyIngredientDialog()
