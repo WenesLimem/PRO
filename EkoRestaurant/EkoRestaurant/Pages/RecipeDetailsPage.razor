@@ -15,6 +15,9 @@
         <div class="page-title dark-color">Recettes</div>
         <div class="h2-quicksand dark-color">@CurrentRecipe.Name</div>
     </MudItem>
+    <MudItem xs="12">
+        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit" OnClick="@DeleteRecipe"></MudIconButton>
+    </MudItem>
 </MudGrid>
 
 @code {
@@ -40,6 +43,14 @@
         {
             CurrentRecipe.Category = RecipeCategoriesService.GetById((int)CurrentRecipe.CategoryId);
         }
+    }
+
+    private void DeleteRecipe()
+    {
+        RecipesService.Delete(CurrentRecipe);
+        RecipesService.SaveChanges();
+        Snackbar.Add("Supression effectuée avec succès", Severity.Success);
+        nm.NavigateTo("/recipes");
     }
 
 }
