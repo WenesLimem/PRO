@@ -1,0 +1,40 @@
+﻿@using EkoRestaurant.Data
+@using EkoRestaurant.Services
+@inject RecipeCategoriesService RecipeCategoriesService
+@inject RecipesService RecipesService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudTextField @bind-Value="Category.Name" Immediate="true" Label="Nom"/>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public RecipeCategory Category { get; set; }
+
+    void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(Category));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+    protected override Task OnInitializedAsync()
+    {
+        if (Category == null)
+        {
+            Category = new RecipeCategory();
+        }
+
+        return base.OnInitializedAsync();
+    }
+}
