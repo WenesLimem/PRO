@@ -1,0 +1,110 @@
+﻿@page "/recipes/edit/{Id:int}"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+@inject RecipesService recSer
+@inject RecipeCategoriesService recCatSer
+@inject RecipeIngredientQuantitiesService recIngQtySer
+@inject IngredientsService ingSer
+@inject ISnackbar Snackbar
+@inject IDialogService Dialogservice
+@inject NavigationManager nm
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Recettes</div>
+        <div class="h2-quicksand dark-color">Éditer @curRecipe.Name</div>
+    </MudItem>
+    <MudItem xs="12">
+        <MudCard>
+            <MudCardContent>
+                <MudForm @ref="editRecForm">
+                    <MudTextField T="string" @bind-Value="@curRecipe.Name" Label="Nom"
+                                  Required="true" RequiredError="@recNameError" Variant="Variant.Outlined" />
+                    <MudTextField T="string" @bind-Value="@curRecipe.Description" Label="Description"
+                                  Required="true" RequiredError="@recDescError" Variant="Variant.Outlined" />
+                    <MudTextField T="double" @bind-Value="@curRecipe.PreparationTimeMinutes" Label="Temps de préparation (minutes)"
+                                  Required="true" RequiredError="@recTimePrepError" Variant="Variant.Outlined"
+                                  Adornment="Adornment.End" AdornmentText="minutes" />
+                    <MudTextField T="double" @bind-Value="@curRecipe.Price" Label="Prix"
+                                  Required="true" RequiredError="@recPriceError" Variant="Variant.Outlined"
+                                  Adornment="Adornment.End" AdornmentText="CHF" />
+                    <MudTable T="RecipeIngredientQuantity" Items="@curRecipe.IngredientQuantities">
+                        <HeaderContent>
+                            <MudTh>Ingrédient</MudTh>
+                            <MudTh>Quantité</MudTh>
+                            <MudTh>Action</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Ingrédient">@context.Ingredient.Name</MudTd>
+                            <MudTd DataLabel="Quantité">@context.Quantity</MudTd>
+                            <MudTd DataLabel="Action">
+                                <MudIconButton Icon="@Icons.Filled.Clear" OnClick="@DeleteIng"></MudIconButton>
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                    <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddIng"></MudIconButton>
+                </MudForm>
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Filled.Check" OnClick="@Submit"></MudIconButton>
+                <MudIconButton Icon="@Icons.Filled.Clear" OnClick="@Cancel"></MudIconButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    public List<Ingredient> Ingredients = new();
+    public List<RecipeIngredientQuantitiesService> ingList = new();
+
+    public Recipe curRecipe { get; set; }
+
+    MudForm editRecForm;
+
+    String recNameError = "Un nom est requis";
+    String recDescError = "Une description est requise";
+    String recTimePrepError = "Un temps de préparation est requis";
+    String recPriceError = "Un prix est requis";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Ingredients = ingSer.Filter().ToList();
+        await getData();
+    }
+
+    private async Task getData()
+    {
+        curRecipe = recSer.GetById(Id);
+        if (curRecipe.CategoryId != 0 && curRecipe.Category == null && curRecipe.CategoryId != null)
+        {
+            curRecipe.Category = recCatSer.GetById((int)curRecipe.CategoryId);
+        }
+    }
+
+    private void Submit()
+    {
+
+    }
+
+    private void Cancel()
+    {
+        editRecForm.Reset();
+        nm.NavigateTo($"/recipes/{curRecipe.Id}");
+    }
+
+    private void DeleteIng()
+    {
+
+    }
+
+    private void AddIng()
+    {
+
+    }
+
+}
