@@ -1,0 +1,47 @@
+@using EkoRestaurant.Data
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudTextField @bind-Value="@User.FirstName" Label="Prénom"/>
+            <MudTextField @bind-Value="@User.LastName" Label="Nom de Famille"/>
+            <MudTextField @bind-Value="@User.UserName" Label="Nom d'utilisateur"/>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Annuler</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">@GetSubmitButtonText()</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ApplicationUser User { get; set; }
+
+    private Boolean IsCreateMode { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (User == null)
+        {
+            IsCreateMode = true;
+            User = new ApplicationUser();
+        }
+        else
+        {
+            IsCreateMode = true;
+        }
+        return base.OnInitializedAsync();
+    }
+
+    public String GetSubmitButtonText()
+    {
+        return IsCreateMode ? "Créer" : "Sauvegarder";
+    }
+    
+    void Cancel() => MudDialog.Cancel();
+    void Submit() => MudDialog.Close(DialogResult.Ok(User));
+}
