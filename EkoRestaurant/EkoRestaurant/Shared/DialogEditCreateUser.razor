@@ -3,9 +3,15 @@
 <MudDialog>
     <DialogContent>
         <MudForm>
-            <MudTextField @bind-Value="@User.FirstName" Label="Prénom"/>
-            <MudTextField @bind-Value="@User.LastName" Label="Nom de Famille"/>
-            <MudTextField @bind-Value="@User.UserName" Label="Nom d'utilisateur"/>
+            <MudTextField @bind-Value="@DialogData.User.FirstName" Label="Prénom"/>
+            <MudTextField @bind-Value="@DialogData.User.LastName" Label="Nom de Famille"/>
+            <MudTextField @bind-Value="@DialogData.User.UserName" Label="Nom d'utilisateur"/>
+            <MudTextField @bind-Value="@DialogData.Password" Label="Mot de passe"/>
+            <MudSelect T="string" Label="Role" @bind-Value="DialogData.Role">
+                @foreach (var role in RolesAvailable) {
+                    <MudSelectItem T="string" Value="@role">@role</MudSelectItem>
+                }
+            </MudSelect>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -19,16 +25,19 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter]
-    public ApplicationUser User { get; set; }
+    public DialogEditCreateUserData DialogData { get; set; }
 
+    private readonly List<string> RolesAvailable = new List<string>() {"Employee", "Administrator"};
+    private string valueRole { get; set; } = "Employee";
+    
     private Boolean IsCreateMode { get; set; }
 
     protected override Task OnInitializedAsync()
     {
-        if (User == null)
+        if (DialogData.User == null)
         {
             IsCreateMode = true;
-            User = new ApplicationUser();
+            DialogData.User = new ApplicationUser();
         }
         else
         {
@@ -43,5 +52,7 @@
     }
     
     void Cancel() => MudDialog.Cancel();
-    void Submit() => MudDialog.Close(DialogResult.Ok(User));
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(DialogData));   
+    
 }

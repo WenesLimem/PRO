@@ -31,7 +31,7 @@ namespace EkoRestaurant
 
         }
 
-        private static void AddUserIfNotExists(UserManager<ApplicationUser> userManager, (string name, string password, string role) demoUser)
+        public static void AddUserIfNotExists(UserManager<ApplicationUser> userManager, (string name, string password, string role) demoUser)
         {
             ApplicationUser user = userManager.FindByNameAsync(demoUser.name).Result;
             if (user == default)
@@ -56,7 +56,7 @@ namespace EkoRestaurant
             }
         }
 
-        private static void AddRoleIfNotExists(RoleManager<IdentityRole> roleManager, string roleName)
+        public static void AddRoleIfNotExists(RoleManager<IdentityRole> roleManager, string roleName)
         {
             if (roleManager.FindByNameAsync(roleName).Result == default)
             {

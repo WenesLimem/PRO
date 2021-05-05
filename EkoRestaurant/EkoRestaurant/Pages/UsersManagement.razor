@@ -14,6 +14,7 @@
 </MudButton>
 
 
+@* TODO: display roles *@
 <MudTable T="ApplicationUser" Items="@ColUsers" Hover="true">
     <HeaderContent>
         <MudTh>Id</MudTh>
@@ -53,15 +54,25 @@
     async Task AddNewUser()
     {
     // Make new user
+        DialogEditCreateUserData dialogData = new DialogEditCreateUserData();
         var parameters = new DialogParameters();
+        parameters.Add("DialogData", dialogData);
         var dialog = DialogService.Show<DialogEditCreateUser>("Ajouter un utilisateur", parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (ApplicationUser) result.Data;
-            res.PasswordHash = "*****";
-            objUser = res;
+            var res = (DialogEditCreateUserData) result.Data;
+            res.User.Email = "account@ekorestaurant.ch";
+            res.User.EmailConfirmed = true;
+            var identityResult = await _UserManager.CreateAsync(res.User, res.Password);
+            if (!string.IsNullOrWhiteSpace(res.Role))
+            {
+                _ = await _UserManager.AddToRoleAsync(res.User, res.Role);
+            }
+            
         }
+        
+        GetUsers();
     }
 
     async Task SaveUser()
@@ -74,29 +85,7 @@
                 user.Email = objUser.Email;
                 await _UserManager.UpdateAsync(user);
     
-                if (objUser.PasswordHash != "*****")// Only update password if the current value is not the default value
-                {
-                    var resetToken =
-                        await _UserManager.GeneratePasswordResetTokenAsync(user);
-                    var passworduser =
-                        await _UserManager.ResetPasswordAsync(
-                            user,
-                            resetToken,
-                            objUser.PasswordHash);
-                    if (!passworduser.Succeeded){
-                        if (passworduser.Errors.FirstOrDefault() != null){
-                            strError = passworduser
-                                    .Errors
-                                    .FirstOrDefault()
-                                    .Description;
-                        }
-                        else
-                        {
-                            strError = "Pasword error";
-                        }
-                        return;
-                    }
-                }
+                
                 var UserResult =
                     await _UserManager
                         .IsInRoleAsync(user, "Administrator");
