@@ -9,18 +9,20 @@ namespace EkoRestaurant
 {
     public static class ApplicationDbInitialiser
     {
+        public static String ADMINISTRATOR_ROLE_NAME = "Administrator";
+        public static String EMPLOYEE_ROLE_NAME = "Employee";
         public static void SeedRoles(RoleManager<IdentityRole> roleManager)
         {
-            AddRoleIfNotExists(roleManager, "Administrator");
-            AddRoleIfNotExists(roleManager, "Employee");
+            AddRoleIfNotExists(roleManager, ADMINISTRATOR_ROLE_NAME);
+            AddRoleIfNotExists(roleManager, EMPLOYEE_ROLE_NAME);
         }
 
         public static void SeedUsers(UserManager<ApplicationUser> userManager)
         {
             (string name, string password, string role)[] demoUsers = new[]
             {
-                (name: "Administrator", password: "Administrator+1", role: "Administrator"),
-                (name: "Employee", password: "Employee+1", role: "Employee"),
+                (name: "Administrator", password: "Administrator+1", role: ADMINISTRATOR_ROLE_NAME),
+                (name: "Employee", password: "Employee+1", role: EMPLOYEE_ROLE_NAME),
                 (name: "fred@fred.com", password: "Passw0rd!", role: "")
             };
 

@@ -42,7 +42,7 @@
     string CurrentUserRole { get; set; } = "Users";
 
     List<ApplicationUser> ColUsers = new List<ApplicationUser>();
-    List<string> Options = new List<string>() {"Employee", "Administrator"};
+    List<string> Options = new List<string>() {ApplicationDbInitialiser.EMPLOYEE_ROLE_NAME, ApplicationDbInitialiser.ADMINISTRATOR_ROLE_NAME};
     string strError = "";
 
     protected override async Task OnInitializedAsync()
@@ -75,132 +75,33 @@
         GetUsers();
     }
 
-    async Task SaveUser()
+    private async Task ChangePasswordOfUser(String userId, String newPassword)
     {
-        try
-        {
-            if (objUser.Id != "")
-            {
-                var user = await _UserManager.FindByIdAsync(objUser.Id);
-                user.Email = objUser.Email;
-                await _UserManager.UpdateAsync(user);
+        
+    }
     
-                
-                var UserResult =
-                    await _UserManager
-                        .IsInRoleAsync(user, "Administrator");
-                if ((CurrentUserRole == "Administrator") & (!UserResult)){
-                    await _UserManager
-                        .AddToRoleAsync(user, "Administrator");
-                }
-                else {
-                        if ((CurrentUserRole != "Administrator") & (UserResult))
-                    {
-                        await _UserManager
-                            .RemoveFromRoleAsync(user, "Administrator");
-                    }
-                }
-            }
-            else
-            {
-                var NewUser =
-                    new ApplicationUser()
-                    {
-                        UserName = objUser.UserName,
-                        Email = objUser.Email
-                    };
-                var CreateResult =
-                    await _UserManager
-                        .CreateAsync(NewUser, objUser.PasswordHash);
-                if (!CreateResult.Succeeded)
-                {
-                    if (CreateResult
-                        .Errors
-                        .FirstOrDefault() != null)
-                    {
-                        strError =
-                            CreateResult
-                                .Errors
-                                .FirstOrDefault()
-                                .Description;
-                    }
-                    else
-                    {
-                        strError = "Create error";
-                    }
-                    return;
-                }
-                else
-                {
-                    if (CurrentUserRole == "Administrator")
-                    {
-                        await _UserManager
-                            .AddToRoleAsync(NewUser, "Administrator");
-                    }
-                }
-            }
-            // dialog close
-            GetUsers();
-        }
-        catch (Exception ex)
-        {
-            strError = ex.GetBaseException().Message;
-        }
-    }
-
-    async Task EditUser(ApplicationUser _IdentityUser)
+    async Task DeleteUserById(String userId)
     {
-    // Set the selected user
-    // as the current user
-        objUser = _IdentityUser;
-    // Get the user
-        var user = await _UserManager.FindByIdAsync(objUser.Id);
+        var user = await _UserManager.FindByIdAsync(userId);
         if (user != null)
         {
-    // Is user in administrator role?
-            var UserResult =
-                await _UserManager
-                    .IsInRoleAsync(user, "Administrator");
-            if (UserResult)
-            {
-                CurrentUserRole = "Administrator";
-            }
-            else
-            {
-                CurrentUserRole = "Employee";
-            }
-        }
-    // Open the Popup
-    }
-
-    async Task DeleteUser()
-    {
-    // Close the Popup
-    // Get the user
-        var user = await _UserManager.FindByIdAsync(objUser.Id);
-        if (user != null)
-        {
-    // Delete the user
             await _UserManager.DeleteAsync(user);
         }
-    // Refresh Users
         GetUsers();
     }
     
 
     public void GetUsers()
     {
-    // clear any error messages
         strError = "";
-    // Collection to hold users
         ColUsers = new List<ApplicationUser>();
-    // get users from _UserManager
         var user = _UserManager.Users.Select(x => new ApplicationUser()
         {
             Id = x.Id,
             UserName = x.UserName,
             Email = x.Email,
-            PasswordHash = "*****"
+            FirstName =  x.FirstName,
+            LastName = x.LastName,
         });
         foreach (var item in user)
         {
