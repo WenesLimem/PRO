@@ -1,33 +1,34 @@
 @page "/ingredients/{Id:int}"
 @using EkoRestaurant.Services
-@using EkoRestaurant.Data 
+@using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
 @inject IngredientsService IngredientsService
 @inject IngredientCategoriesService IngCatService
 @inject ISnackbar Snackbar
 @inject IDialogService Dialogservice
+@inject NavigationManager nm
+
 
 <MudGrid>
     <MudItem xs="12">
         <div class="page-title dark-color">Stocks</div>
-
         <div class="h2-quicksand dark-color">@currentIngredient.Name</div>
     </MudItem>
     <MudItem xs="12">
 
-        <MudButton  Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Filled"><img src="Images/Vector.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
-        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Filled"><img src="Images/Vector.svg" style="margin-right: 5px">Editer</MudButton>
-        
-        </MudItem>
-    
+        <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Editer</MudButton>
+        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit" OnClick="@DeleteIngredient"></MudIconButton>
+    </MudItem>
+
     <MudItem xs="3">
-    <MudCard Elevation="4">
-        <MudCardContent>
-            <MudText >Prix</MudText>
-            <MudText Class="details-grid-content dark-color">@currentIngredient.UnitPrice CHF</MudText>
-        </MudCardContent>
-    </MudCard>
-     </MudItem>
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText >Prix</MudText>
+                <MudText Class="details-grid-content dark-color">@currentIngredient.UnitPrice CHF</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
@@ -35,12 +36,12 @@
                 <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.UnitInStock pce</MudText>
             </MudCardContent>
         </MudCard>
-            
+
     </MudItem>
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
-                <MudText >Date de préemption</MudText>
+                <MudText>Date de péremption</MudText>
                 <MudText Class="details-grid-content" Color="Color.Info">@currentIngredient.ExpirationDate </MudText>
             </MudCardContent>
         </MudCard>
@@ -49,32 +50,55 @@
         <MudCard Elevation="4">
             <MudCardContent>
                 <MudText >Fournisseur</MudText>
-                @if (currentIngredient.Producer == null)
-                {
-                    <MudText Class="details-grid-content dark-color"> N/A </MudText>
-                }
-                else
-                {
-                    <MudText Class="details-grid-content dark-color">@currentIngredient.Producer </MudText>
-                }
+                <MudText Class="details-grid-content dark-color">@currentIngredient.GetProducerName() </MudText>
             </MudCardContent>
         </MudCard>
-                
     </MudItem>
-    
-    
-    <MudItem xs="6">
-        <MudCard Elevation="4">
-                <MudCardContent>
-                    <MudText >Catégorie</MudText>
-                    <MudText Class="details-grid-content dark-color">@IgCategory.Name</MudText>
-                </MudCardContent>
-            </MudCard>
-    </MudItem>
-            
-  
 
-    
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+
+            <MudCardContent>
+                <MudText >Catégorie</MudText>
+                <MudText Class="details-grid-content dark-color"> @currentIngredient.GetCategoryName()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText >Vegan</MudText>
+                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText >Contient des Arachides</MudText>
+                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudText>Contient des Lactoses</MudText>
+                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12">
+        <MudCard Elevation="4">
+            <MudCardContent>
+                <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350px"></MudChart>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
 </MudGrid>
 
 
@@ -84,15 +108,29 @@
     public int Id { get; set; }
 
     public List<Ingredient> listeDesCourse = new();
-    public IngredientCategory IgCategory { get; set; }
+
     public Ingredient currentIngredient { get; set; }
+
+    public List<ChartSeries> Series = new List<ChartSeries>()
+    {
+        new ChartSeries() {Name = "Suivi de consommation", Data = new double[] {90, 79, 72, 69, 62, 62, 55, 65, 70}}
+    };
+
+    public string[] XAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"};
 
     protected override async Task OnInitializedAsync()
     {
-        currentIngredient = IngredientsService.GetById(Id);
-        IgCategory = IngCatService.GetById(currentIngredient.Category.Id); 
+        await getData();
     }
 
+    private async Task getData()
+    {
+        currentIngredient = IngredientsService.GetById(Id);
+        if (currentIngredient.CategoryId != 0 && currentIngredient.Category == null && currentIngredient.CategoryId != null)
+        {
+            currentIngredient.Category = IngCatService.GetById((int) currentIngredient.CategoryId);
+        }
+    }
 
     private void AddIngredientToList()
     {
@@ -100,25 +138,35 @@
         Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
     }
 
-    private async  void OpenModifiyIngredientDialog()
+    private async void OpenModifiyIngredientDialog()
     {
-        var dialog = Dialogservice.Show<DialogEditCreateIngredient>("Modifier :");
+        var param = new DialogParameters();
+        param.Add("CurrentIngredient", currentIngredient);
+        var dialog = Dialogservice.Show<DialogEditCreateIngredient>("Modifier :", param);
         var res = await dialog.Result;
         if (!res.Cancelled)
         {
             var result = (Ingredient) res.Data;
             try
             {
-                IngredientsService.Edit(result);
+                var editRes = IngredientsService.Edit(result);
                 IngredientsService.SaveChanges();
-                Snackbar.Add("Edition successful", Severity.Success);
+                Snackbar.Add("Modifications sauvegardées avec succès.", Severity.Success);
             }
             catch (Exception e)
             {
-                Snackbar.Add("Erreur est survenue lors du modéficaiton", Severity.Error);
-                
+                Snackbar.Add("Erreur est survenue lors de l'édition", Severity.Error);
             }
         }
+        StateHasChanged();
+    }
+
+    private void DeleteIngredient()
+    {
+        IngredientsService.Delete(currentIngredient);
+        IngredientsService.SaveChanges();
+        Snackbar.Add("Suppression effectuée avec succès ", Severity.Success);
+        nm.NavigateTo("/ingredients");
     }
 
 }
