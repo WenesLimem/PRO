@@ -75,6 +75,7 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
+                @*
                 <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true">
                     <HeaderContent>
                         <MudTh>Ingrédient</MudTh>
@@ -85,6 +86,11 @@
                         <MudTd DataLabel="Quantité">@context.Quantity</MudTd>
                     </RowTemplate>
                 </MudTable>
+                *@
+                @foreach (var ing in CurrentRecipe.IngredientQuantities)
+                {
+                    <MudText>@ing.Ingredient.Name</MudText>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>

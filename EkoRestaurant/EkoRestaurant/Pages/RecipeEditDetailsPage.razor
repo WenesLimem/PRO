@@ -7,7 +7,7 @@
 @inject RecipeIngredientQuantitiesService recIngQtySer
 @inject IngredientsService ingSer
 @inject ISnackbar Snackbar
-@inject IDialogService Dialogservice
+@inject IDialogService DialogService
 @inject NavigationManager nm
 
 <MudGrid>
@@ -19,17 +19,17 @@
         <MudCard>
             <MudCardContent>
                 <MudForm @ref="editRecForm">
-                    <MudTextField T="string" @bind-Value="@curRecipe.Name" Label="Nom"
+                    <MudTextField T="string" @bind-Value="@newName" Label="Nom"
                                   Required="true" RequiredError="@recNameError" Variant="Variant.Outlined" />
-                    <MudTextField T="string" @bind-Value="@curRecipe.Description" Label="Description"
+                    <MudTextField T="string" @bind-Value="@newDesc" Label="Description"
                                   Required="true" RequiredError="@recDescError" Variant="Variant.Outlined" />
-                    <MudTextField T="double" @bind-Value="@curRecipe.PreparationTimeMinutes" Label="Temps de préparation (minutes)"
+                    <MudTextField T="double" @bind-Value="@newPrepTime" Label="Temps de préparation (minutes)"
                                   Required="true" RequiredError="@recTimePrepError" Variant="Variant.Outlined"
                                   Adornment="Adornment.End" AdornmentText="minutes" />
-                    <MudTextField T="double" @bind-Value="@curRecipe.Price" Label="Prix"
+                    <MudTextField T="double" @bind-Value="@newPrice" Label="Prix"
                                   Required="true" RequiredError="@recPriceError" Variant="Variant.Outlined"
                                   Adornment="Adornment.End" AdornmentText="CHF" />
-                    <MudTable T="RecipeIngredientQuantity" Items="@curRecipe.IngredientQuantities">
+                    <MudTable T="RecipeIngredientQuantity" Items="@ingList">
                         <HeaderContent>
                             <MudTh>Ingrédient</MudTh>
                             <MudTh>Quantité</MudTh>
@@ -47,8 +47,8 @@
                 </MudForm>
             </MudCardContent>
             <MudCardActions>
-                <MudIconButton Icon="@Icons.Filled.Check" OnClick="@Submit"></MudIconButton>
-                <MudIconButton Icon="@Icons.Filled.Clear" OnClick="@Cancel"></MudIconButton>
+                <MudIconButton Icon="@Icons.Filled.Check" OnClick="Submit"></MudIconButton>
+                <MudIconButton Icon="@Icons.Filled.Clear" ButtonType="ButtonType.Submit" OnClick="Cancel"></MudIconButton>
             </MudCardActions>
         </MudCard>
     </MudItem>
@@ -56,13 +56,14 @@
 
 @code {
 
-    [Parameter]
-    public int Id { get; set; }
+        [Parameter]
+        public int Id { get; set; }
 
     public List<Ingredient> Ingredients = new();
-    public List<RecipeIngredientQuantitiesService> ingList = new();
+    public List<RecipeIngredientQuantity> ingList = new();
 
     public Recipe curRecipe { get; set; }
+    public RecipeIngredientQuantity newIng { get; set; }
 
     MudForm editRecForm;
 
@@ -70,6 +71,11 @@
     String recDescError = "Une description est requise";
     String recTimePrepError = "Un temps de préparation est requis";
     String recPriceError = "Un prix est requis";
+
+    string newName;
+    string newDesc;
+    double newPrepTime;
+    double newPrice;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,11 +90,50 @@
         {
             curRecipe.Category = recCatSer.GetById((int)curRecipe.CategoryId);
         }
+        ingList = curRecipe.IngredientQuantities;
+        newName = curRecipe.Name;
+        newDesc = curRecipe.Description;
+        newPrepTime = curRecipe.PreparationTimeMinutes;
+        newPrice = curRecipe.Price;
     }
 
     private void Submit()
     {
+        Recipe newRec = new Recipe() { Id=curRecipe.Id,
+            Name=newName,
+            Description=newDesc,
+            PreparationTimeMinutes=newPrepTime,
+            Category=curRecipe.Category,
+            CategoryId=curRecipe.CategoryId,
+            IngredientQuantities=ingList,
+            Price=newPrice,
+        };
 
+        try
+        {
+            foreach (var ing in ingList)
+            {
+                if (recIngQtySer.GetById(ing.Id) == null)
+                {
+                    var editRecIngQty = recIngQtySer.Create(ing);
+                }
+                else
+                {
+                    var editRecIngQty = recIngQtySer.Edit(ing);
+                }
+            }
+            recIngQtySer.SaveChanges();
+            var editRec = recSer.Edit(newRec);
+            recSer.SaveChanges();
+            Snackbar.Add("Modifications sauvegardées avec succès.", Severity.Success);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Erreur est survenue lors de l'édition", Severity.Error);
+        }
+        StateHasChanged();
+        
+        nm.NavigateTo($"/recipes/{curRecipe.Id}");
     }
 
     private void Cancel()
@@ -102,9 +147,15 @@
 
     }
 
-    private void AddIng()
+    public async Task AddIng()
     {
-
+        var dialog = DialogService.Show<DialogAddRecipeIngredientQuantity>("Ajouter ingrédient");
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (RecipeIngredientQuantity)result.Data;
+            curRecipe.IngredientQuantities.Add(res);
+        }
     }
 
 }
