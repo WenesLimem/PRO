@@ -19,18 +19,18 @@ namespace EkoRestaurant.Services
             throw new ApplicationException("use GetActiveListeDesCourses() instead of Create()");
         }
 
-        public ListeDesCourses AddIngredientToCurrent(Ingredient ingredient)
+        public ListeDesCourses AddIngredientToCurrent(ListeDesCoursesElement listeDesCoursesElement)
         {
             var current = GetActiveListeDesCourses();
-            current.Ingredients.Add(ingredient);
+            current.ListeDesCoursesElements.Add(listeDesCoursesElement);
             SaveChanges();
             return current;
         }
 
-        public ListeDesCourses DeleteIngredientToCurrent(Ingredient ingredient)
+        public ListeDesCourses DeleteIngredientToCurrent(ListeDesCoursesElement listeSourceElement)
         {
             var current = GetActiveListeDesCourses();
-            var success = current.Ingredients.Remove(ingredient);
+            var success = current.ListeDesCoursesElements.Remove(listeSourceElement);
             if (!success)
             {
                 throw new ApplicationException("error while removing from active liste de course");
@@ -70,7 +70,10 @@ namespace EkoRestaurant.Services
         public IEnumerable<ListeDesCourses> FilterWithIngredients()
         {
             return _dbContext.Set<ListeDesCourses>()
-                .Include((x) => x.Ingredients);
+                .Include((x) => x.ListeDesCoursesElements)
+                .ThenInclude(g => g.Ingredient);
+
+
         }
     }
 }

@@ -3,7 +3,9 @@
 @using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
 @using Humanizer
+@using System.Runtime.CompilerServices
 @inject ListeDesCoursesServices ListeDesCoursesServices
+@inject ListeDesCoursesElementService ListeDesCoursesElementService
 @inject IngredientsService IngredientsService
 <MudGrid>
     <MudItem xs="12">
@@ -25,22 +27,25 @@
         </MudTable>
     </MudItem>
     <MudItem xs="8" Style="float: right">
-        <MudTable T="Ingredient" Items="LDC.Ingredients" Hover="true" CommitEditTooltip="Sauvegardé la modifcation">
+        <MudTable T="ListeDesCoursesElement" Items="Ldce" Hover="true" CommitEditTooltip="Sauvegardé la modifcation">
             <HeaderContent>
-                <MudTh>Id</MudTh>
-                <MudTh>Nom</MudTh>
-                <MudTh>Qte Commandée</MudTh>
+                <MudTh>Numero Liste des courses </MudTh>
+                <MudTh>Ingredient</MudTh>
+                <MudTh>Quantité Commmandée</MudTh>
+                
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Id">@context.Id</MudTd>
-                <MudTd DataLabel="Nom">@context.Name</MudTd>
-                <MudTd DataLabel="Qte commandée">@context.UnitAtStart</MudTd>
+                <MudTd DataLabel="Id Liste des courses">@context.ListeDesCourses.Id</MudTd>
+                <MudTd DataLabel="Ingredient name">@context.Ingredient.Name</MudTd> 
+                <MudTd DataLabel="Qunatity">@context.Quantity</MudTd>
+             
+    
             </RowTemplate>
             <RowEditingTemplate>
                 <MudTd></MudTd>
                 <MudTd></MudTd>
                 <MudTd DataLabel="Qte commandée ">
-                    <MudTextField int @bind-Value="@context.UnitAtStart"></MudTextField>
+                   <MudTextField int @bind-Value="@context.Quantity"></MudTextField> 
                 </MudTd>
             </RowEditingTemplate>
         </MudTable>
@@ -53,24 +58,22 @@
 
 @code
 {
-    ListeDesCourses LDC;
+    IEnumerable<ListeDesCoursesElement> Ldce;
     IEnumerable<ListeDesCourses> ListeDesListes;
-
+    
     protected override async Task OnInitializedAsync()
     {
-        LDC = ListeDesCoursesServices.GetActiveListeDesCourses();
+       
+        Ldce = ListeDesCoursesServices.GetActiveListeDesCourses().ListeDesCoursesElements;
         ListeDesListes = ListeDesCoursesServices.FilterWithIngredients();
        
+
     }
 
-
+    
     private void FinishList()
     {
-        LDC.IsCompleted = true;
+        ListeDesCoursesServices.MarkActiveAsCompleted();
     }
 
-    private void AddOne()
-    {
-        
-    }
 }

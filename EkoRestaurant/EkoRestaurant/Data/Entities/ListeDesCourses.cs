@@ -6,7 +6,7 @@ namespace EkoRestaurant.Data
 {
     public class ListeDesCourses : BaseEntity
     {
-        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        public List<ListeDesCoursesElement> ListeDesCoursesElements { get; set; } = new List<ListeDesCoursesElement>();
 
         public DateTime? CompletionDateTime { get; set; }
         public DateTime? CreationDateTime { get; set; }

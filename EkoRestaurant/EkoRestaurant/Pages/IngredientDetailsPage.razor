@@ -8,6 +8,7 @@
 @inject IDialogService Dialogservice
 @inject NavigationManager nm
 @inject ListeDesCoursesServices ListeDesCoursesServices
+@inject ListeDesCoursesElementService ListeDesCoursesElementService
 
 <MudGrid>
     <MudItem xs="12">
@@ -107,6 +108,7 @@
     [Parameter]
     public int Id { get; set; }
 
+    public ListeDesCoursesElement ListeDesCoursesElement { get; set; } = new ListeDesCoursesElement();
 
     public Ingredient currentIngredient { get; set; }
 
@@ -130,17 +132,28 @@
             currentIngredient.Category = IngCatService.GetById((int) currentIngredient.CategoryId);
         }
     }
+    private  void AddElement(Ingredient ingredient, int qty)
+    {
 
+        var element = new ListeDesCoursesElement()
+        {
+            Quantity = qty, Ingredient = ingredient, ListeDesCourses = ListeDesCoursesServices.GetActiveListeDesCourses()
+        };
+        var created = ListeDesCoursesElementService.Create(element);
+        ListeDesCoursesElementService.SaveChanges();
+        ListeDesCoursesServices.AddIngredientToCurrent(created);
+
+    }
     private void AddIngredientToList()
     {
         try
-        {
-            ListeDesCoursesServices.AddIngredientToCurrent(currentIngredient);
+        {   
+            AddElement(currentIngredient,currentIngredient.UnitAtStart);
             Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success,
                 config =>  
                 {
                     config.Action = "Afficher la liste des courses";
-                    config.ActionColor = Color.Primary;
+                    config.ActionColor = Color.Surface;
                     config.Onclick = async snackbar =>
                     {
                        ViewListe();
