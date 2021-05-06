@@ -41,7 +41,7 @@
         </div>
     </MudItem>
     <MudItem xs="8">
-        <MudTable T="Recipe" Items="@Recipes" Hover="true" >
+        <MudTable T="Recipe" Items="@Recipes" Hover="true" OnRowClick="@ClickedRow">
             <HeaderContent>
                 <MudTh>Id</MudTh>
                 <MudTh>
@@ -165,7 +165,7 @@
         }
     }
 
-    public void ClickedRow(TableRowClickEventArgs<Ingredient> clickEvent)
+    public void ClickedRow(TableRowClickEventArgs<Recipe> clickEvent)
     {
         NavigationManager.NavigateTo($"/recipes/{clickEvent.Item.Id}");
     }
