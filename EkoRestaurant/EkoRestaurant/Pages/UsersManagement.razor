@@ -134,12 +134,21 @@
         dialogData.Role = actualRoleOfUser;
         var parameters = new DialogParameters();
         parameters.Add("DialogData", dialogData);
-        var dialog = DialogService.Show<DialogEditCreateUser>("Ajouter un utilisateur", parameters);
+        var dialog = DialogService.Show<DialogEditCreateUser>("Editer un utilisateur", parameters);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
+
             var res = (DialogEditCreateUserData) result.Data;
             var dbUser = await _UserManager.FindByIdAsync(res.User.Id);
+
+            if (res.IsDeleting)
+            {
+                await _UserManager.DeleteAsync(dbUser);
+                await GetUsers();
+                return;
+            }
+            
             dbUser.FirstName = res.User.FirstName;
             dbUser.LastName = res.User.LastName;
             dbUser.UserName = res.User.UserName;
@@ -152,7 +161,6 @@
                 // change password of user
                 var token = await _UserManager.GeneratePasswordResetTokenAsync(dbUser);
                 var resultOfPasswordChange = await _UserManager.ResetPasswordAsync(dbUser, token, res.Password);
-                var x = 2;
             }
             if (actualRoleOfUser != res.Role)
             {

@@ -10,5 +10,7 @@ namespace EkoRestaurant.Shared
         public String Role { get; set; }
 
         public String Password { get; set; }
+
+        public Boolean IsDeleting { get; set; } = false;
     }
 }

@@ -17,6 +17,10 @@
     <DialogActions>
         <MudButton OnClick="Cancel">Annuler</MudButton>
         <MudButton Color="Color.Primary" OnClick="Submit">@GetSubmitButtonText()</MudButton>
+        @if (!IsCreateMode)
+        {
+            <MudButton Color="Color.Error" OnClick="SubmitDelete">Supprimer</MudButton>
+        }
     </DialogActions>
 </MudDialog>
 
@@ -29,7 +33,7 @@
 
     private readonly List<string> RolesAvailable = new List<string>() {"Employee", "Administrator"};
     private string valueRole { get; set; } = "Employee";
-    
+
     private Boolean IsCreateMode { get; set; }
 
     protected override Task OnInitializedAsync()
@@ -41,7 +45,7 @@
         }
         else
         {
-            IsCreateMode = true;
+            IsCreateMode = false;
         }
         return base.OnInitializedAsync();
     }
@@ -50,9 +54,15 @@
     {
         return IsCreateMode ? "Créer" : "Sauvegarder";
     }
-    
+
     void Cancel() => MudDialog.Cancel();
 
-    void Submit() => MudDialog.Close(DialogResult.Ok(DialogData));   
-    
+    void Submit() => MudDialog.Close(DialogResult.Ok(DialogData));
+
+    private void SubmitDelete()
+    {
+        DialogData.IsDeleting = true;
+        MudDialog.Close(DialogResult.Ok(DialogData));
+    }
+
 }
