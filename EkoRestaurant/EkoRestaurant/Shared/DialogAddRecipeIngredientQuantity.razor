@@ -36,7 +36,10 @@
 
     void Submit()
     {
-        newRecIng = new RecipeIngredientQuantity() { Ingredient = ingredient, Quantity = quantity, Recipe = curRecipe };
+        newRecIng = new RecipeIngredientQuantity() { Ingredient = ingredient, 
+            Quantity = quantity, 
+            Recipe = curRecipe,
+        };
         MudDialog.Close(DialogResult.Ok(newRecIng));
     }
 

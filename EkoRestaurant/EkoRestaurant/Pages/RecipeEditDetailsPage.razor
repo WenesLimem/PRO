@@ -10,6 +10,9 @@
 @inject IDialogService DialogService
 @inject NavigationManager nm
 
+@using Microsoft.Extensions.Logging
+@inject ILogger<RecipeEditDetailsPage> Logger
+
 <MudGrid>
     <MudItem xs="12">
         <div class="page-title dark-color">Recettes</div>
@@ -56,8 +59,8 @@
 
 @code {
 
-        [Parameter]
-        public int Id { get; set; }
+    [Parameter]
+    public int Id { get; set; }
 
     public List<Ingredient> Ingredients = new();
     public List<RecipeIngredientQuantity> ingList = new();
@@ -99,15 +102,12 @@
 
     private void Submit()
     {
-        Recipe newRec = new Recipe() { Id=curRecipe.Id,
-            Name=newName,
-            Description=newDesc,
-            PreparationTimeMinutes=newPrepTime,
-            Category=curRecipe.Category,
-            CategoryId=curRecipe.CategoryId,
-            IngredientQuantities=ingList,
-            Price=newPrice,
-        };
+        Recipe newRec = curRecipe;
+        newRec.Name = newName;
+        newRec.Description = newDesc;
+        newRec.PreparationTimeMinutes = newPrepTime;
+        newRec.Price = newPrice;
+        newRec.IngredientQuantities = ingList;
 
         try
         {
@@ -123,6 +123,7 @@
                 }
             }
             recIngQtySer.SaveChanges();
+
             var editRec = recSer.Edit(newRec);
             recSer.SaveChanges();
             Snackbar.Add("Modifications sauvegardées avec succès.", Severity.Success);
@@ -130,9 +131,11 @@
         catch (Exception e)
         {
             Snackbar.Add("Erreur est survenue lors de l'édition", Severity.Error);
+            Logger.LogError("Error:ProcessError - Type: {Type},\n Message: {Message}",
+                e.GetType(), e.Message);
         }
         StateHasChanged();
-        
+
         nm.NavigateTo($"/recipes/{curRecipe.Id}");
     }
 
@@ -149,12 +152,14 @@
 
     public async Task AddIng()
     {
-        var dialog = DialogService.Show<DialogAddRecipeIngredientQuantity>("Ajouter ingrédient");
+        var param = new DialogParameters();
+        param.Add("curRecipe", curRecipe);
+        var dialog = DialogService.Show<DialogAddRecipeIngredientQuantity>("Ajouter ingrédient", param);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
             var res = (RecipeIngredientQuantity)result.Data;
-            curRecipe.IngredientQuantities.Add(res);
+            ingList.Add(res);
         }
     }
 
