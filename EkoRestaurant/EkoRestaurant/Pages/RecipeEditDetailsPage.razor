@@ -2,13 +2,13 @@
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
-@inject RecipesService recSer
-@inject RecipeCategoriesService recCatSer
-@inject RecipeIngredientQuantitiesService recIngQtySer
-@inject IngredientsService ingSer
+@inject RecipesService _RecipesService
+@inject RecipeCategoriesService _RecipeCategoriesService
+@inject RecipeIngredientQuantitiesService _RecIngQtySer
+@inject IngredientsService _IngredientsService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
-@inject NavigationManager nm
+@inject NavigationManager NavigationManager
 
 @using Microsoft.Extensions.Logging
 @inject ILogger<RecipeEditDetailsPage> Logger
@@ -16,23 +16,23 @@
 <MudGrid>
     <MudItem xs="12">
         <div class="page-title dark-color">Recettes</div>
-        <div class="h2-quicksand dark-color">Éditer @curRecipe.Name</div>
+        <div class="h2-quicksand dark-color">Éditer @CurrentRecipe.Name</div>
     </MudItem>
     <MudItem xs="12">
         <MudCard>
             <MudCardContent>
-                <MudForm @ref="editRecForm">
-                    <MudTextField T="string" @bind-Value="@newName" Label="Nom"
+                <MudForm @ref="RecipeEditionForm">
+                    <MudTextField T="string" @bind-Value="@CurrentRecipe.Name" Label="Nom"
                                   Required="true" RequiredError="@recNameError" Variant="Variant.Outlined" />
-                    <MudTextField T="string" @bind-Value="@newDesc" Label="Description"
+                    <MudTextField T="string" @bind-Value="@CurrentRecipe.Description" Label="Description"
                                   Required="true" RequiredError="@recDescError" Variant="Variant.Outlined" />
-                    <MudTextField T="double" @bind-Value="@newPrepTime" Label="Temps de préparation (minutes)"
+                    <MudTextField T="double" @bind-Value="@CurrentRecipe.PreparationTimeMinutes" Label="Temps de préparation (minutes)"
                                   Required="true" RequiredError="@recTimePrepError" Variant="Variant.Outlined"
                                   Adornment="Adornment.End" AdornmentText="minutes" />
-                    <MudTextField T="double" @bind-Value="@newPrice" Label="Prix"
+                    <MudTextField T="double" @bind-Value="@CurrentRecipe.Price" Label="Prix"
                                   Required="true" RequiredError="@recPriceError" Variant="Variant.Outlined"
                                   Adornment="Adornment.End" AdornmentText="CHF" />
-                    <MudTable T="RecipeIngredientQuantity" Items="@ingList">
+                    <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities">
                         <HeaderContent>
                             <MudTh>Ingrédient</MudTh>
                             <MudTh>Quantité</MudTh>
@@ -50,8 +50,8 @@
                 </MudForm>
             </MudCardContent>
             <MudCardActions>
-                <MudIconButton Icon="@Icons.Filled.Check" OnClick="Submit"></MudIconButton>
-                <MudIconButton Icon="@Icons.Filled.Clear" ButtonType="ButtonType.Submit" OnClick="Cancel"></MudIconButton>
+                <MudIconButton Icon="@Icons.Filled.Check" OnClick="Submit">Sauvegarder</MudIconButton>
+                <MudIconButton Icon="@Icons.Filled.Clear" ButtonType="ButtonType.Submit" OnClick="Cancel">Annuler</MudIconButton>
             </MudCardActions>
         </MudCard>
     </MudItem>
@@ -62,87 +62,70 @@
     [Parameter]
     public int Id { get; set; }
 
-    public List<Ingredient> Ingredients = new();
-    public List<RecipeIngredientQuantity> ingList = new();
+    public List<Ingredient> IngredientsAvailable = new();
 
-    public Recipe curRecipe { get; set; }
-    public RecipeIngredientQuantity newIng { get; set; }
+    public Recipe CurrentRecipe { get; set; }
 
-    MudForm editRecForm;
+    public MudForm RecipeEditionForm { get; set; }
 
     String recNameError = "Un nom est requis";
     String recDescError = "Une description est requise";
     String recTimePrepError = "Un temps de préparation est requis";
     String recPriceError = "Un prix est requis";
 
-    string newName;
-    string newDesc;
-    double newPrepTime;
-    double newPrice;
 
     protected override async Task OnInitializedAsync()
     {
-        Ingredients = ingSer.Filter().ToList();
-        await getData();
+        IngredientsAvailable = _IngredientsService.Filter().ToList();
+        await GetData();
     }
 
-    private async Task getData()
+    private async Task GetData()
     {
-        curRecipe = recSer.GetById(Id);
-        if (curRecipe.CategoryId != 0 && curRecipe.Category == null && curRecipe.CategoryId != null)
-        {
-            curRecipe.Category = recCatSer.GetById((int)curRecipe.CategoryId);
-        }
-        ingList = curRecipe.IngredientQuantities;
-        newName = curRecipe.Name;
-        newDesc = curRecipe.Description;
-        newPrepTime = curRecipe.PreparationTimeMinutes;
-        newPrice = curRecipe.Price;
+        CurrentRecipe = _RecipesService.GetByIdWithIngredients(Id);
     }
 
-    private void Submit()
+    private async Task Submit()
     {
-        Recipe newRec = curRecipe;
-        newRec.Name = newName;
-        newRec.Description = newDesc;
-        newRec.PreparationTimeMinutes = newPrepTime;
-        newRec.Price = newPrice;
-        newRec.IngredientQuantities = ingList;
 
-        try
-        {
-            foreach (var ing in ingList)
-            {
-                if (recIngQtySer.GetById(ing.Id) == null)
-                {
-                    var editRecIngQty = recIngQtySer.Create(ing);
-                }
-                else
-                {
-                    var editRecIngQty = recIngQtySer.Edit(ing);
-                }
-            }
-            recIngQtySer.SaveChanges();
+        _RecipesService.Edit(CurrentRecipe);
+        _RecipesService.SaveChanges();
 
-            var editRec = recSer.Edit(newRec);
-            recSer.SaveChanges();
-            Snackbar.Add("Modifications sauvegardées avec succès.", Severity.Success);
-        }
-        catch (Exception e)
-        {
-            Snackbar.Add("Erreur est survenue lors de l'édition", Severity.Error);
-            Logger.LogError("Error:ProcessError - Type: {Type},\n Message: {Message}",
-                e.GetType(), e.Message);
-        }
+        // try
+        // {
+        //     foreach (var ing in ingList)
+        //     {
+        //         if (recIngQtySer.GetById(ing.Id) == null)
+        //         {
+        //             var editRecIngQty = recIngQtySer.Create(ing);
+        //         }
+        //         else
+        //         {
+        //             var editRecIngQty = recIngQtySer.Edit(ing);
+        //         }
+        //     }
+        //     recIngQtySer.SaveChanges();
+        //
+        //     var editRec = recipesService.Edit(newRec);
+        //     recipesService.SaveChanges();
+        //     Snackbar.Add("Modifications sauvegardées avec succès.", Severity.Success);
+        // }
+        // catch (Exception e)
+        // {
+        //     Snackbar.Add("Erreur est survenue lors de l'édition", Severity.Error);
+        //     Logger.LogError("Error:ProcessError - Type: {Type},\n Message: {Message}",
+        //         e.GetType(), e.Message);
+        // }
+        await GetData();
         StateHasChanged();
 
-        nm.NavigateTo($"/recipes/{curRecipe.Id}");
+        // N.NavigateTo($"/recipes/{curRecipe.Id}");
     }
 
     private void Cancel()
     {
-        editRecForm.Reset();
-        nm.NavigateTo($"/recipes/{curRecipe.Id}");
+        RecipeEditionForm.Reset();
+        NavigationManager.NavigateTo($"/recipes/{CurrentRecipe.Id}");
     }
 
     private void DeleteIng()
@@ -153,14 +136,18 @@
     public async Task AddIng()
     {
         var param = new DialogParameters();
-        param.Add("curRecipe", curRecipe);
+        param.Add("curRecipe", CurrentRecipe); // TODO: est-ce vraiment necessaire?
         var dialog = DialogService.Show<DialogAddRecipeIngredientQuantity>("Ajouter ingrédient", param);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
             var res = (RecipeIngredientQuantity)result.Data;
-            ingList.Add(res);
+            CurrentRecipe.IngredientQuantities.Add(res);
+            _RecipesService.Edit(CurrentRecipe); // TODO: voir si c'est ici que l'on veut faire ca
+            _RecipesService.SaveChanges(); // TODO: voir si c'est ici que l'on veut faire ca
         }
+
+        await GetData(); // TODO: voir si c'est ici que l'on veut faire ca
     }
 
 }
