@@ -1,0 +1,23 @@
+﻿@inherits LayoutComponentBase
+<MudThemeProvider Theme="ekoMudTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<div style="height: 100vh; display: flex; flex-direction: row">
+    <div Style="background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%); width: 60%"></div>
+    <div Style="height: 100%; padding: 50px 20px">
+        @Body
+    </div>
+</div>
+
+
+
+@code {
+    MudTheme ekoMudTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = "#F3AA18",
+            Secondary = "#86878a"
+        }
+    };
+}

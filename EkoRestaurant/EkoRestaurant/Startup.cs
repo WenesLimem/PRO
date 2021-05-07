@@ -1,22 +1,16 @@
-using EkoRestaurant.Areas.Identity;
 using EkoRestaurant.Data;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BlazorTable;
+using EkoRestaurant.Areas.Identity;
+using EkoRestaurant.IdentityUtils;
 using EkoRestaurant.Services;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using MudBlazor.Services;
 
 namespace EkoRestaurant
@@ -34,14 +28,16 @@ namespace EkoRestaurant
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             
             services.AddSingleton<WeatherForecastService>();
@@ -57,11 +53,23 @@ namespace EkoRestaurant
             services.AddTransient<RecipeCategoriesService>();
             services.AddTransient<RecipesService>();
             services.AddTransient<RecipeIngredientQuantitiesService>();
+
+            // identity related service
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager
+            )
         {
+            ApplicationDbInitialiser.SeedRoles(roleManager);
+            ApplicationDbInitialiser.SeedUsers(userManager);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -81,6 +89,9 @@ namespace EkoRestaurant
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // used for blazor identity
+            app.UseMiddleware<BlazorCookieLoginMiddleware<ApplicationUser>>();
 
             app.UseEndpoints(endpoints =>
             {
