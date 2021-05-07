@@ -8,7 +8,7 @@
 @inject IngredientsService _IngredientsService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
-@inject NavigationManager NavigationManager
+@inject NavigationManager _NavigationManager
 
 @using Microsoft.Extensions.Logging
 @inject ILogger<RecipeEditDetailsPage> Logger
@@ -42,7 +42,8 @@
                             <MudTd DataLabel="Ingrédient">@context.Ingredient.Name</MudTd>
                             <MudTd DataLabel="Quantité">@context.Quantity</MudTd>
                             <MudTd DataLabel="Action">
-                                <MudIconButton Icon="@Icons.Filled.Clear" OnClick="@DeleteIng"></MudIconButton>
+                                <MudIconButton Icon="@Icons.Filled.Clear" OnClick="() => DeleteIng(context)">Supprimer</MudIconButton>
+                                <MudIconButton Icon="@Icons.Filled.Edit" OnClick="() => EditIng(context)">Modifier</MudIconButton>
                             </MudTd>
                         </RowTemplate>
                     </MudTable>
@@ -87,67 +88,62 @@
 
     private async Task Submit()
     {
+        try
+        {
+            foreach (var ing in CurrentRecipe.IngredientQuantities)
+            {
+                _RecIngQtySer.Edit(ing);
+                _RecIngQtySer.SaveChanges();
+            }
+            _RecipesService.Edit(CurrentRecipe);
+            _RecipesService.SaveChanges();
+            Snackbar.Add("Modifications sauvegardées avec succès.", Severity.Success);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Erreur est survenue lors de l'édition", Severity.Error);
+        }
 
-        _RecipesService.Edit(CurrentRecipe);
-        _RecipesService.SaveChanges();
-
-        // try
-        // {
-        //     foreach (var ing in ingList)
-        //     {
-        //         if (recIngQtySer.GetById(ing.Id) == null)
-        //         {
-        //             var editRecIngQty = recIngQtySer.Create(ing);
-        //         }
-        //         else
-        //         {
-        //             var editRecIngQty = recIngQtySer.Edit(ing);
-        //         }
-        //     }
-        //     recIngQtySer.SaveChanges();
-        //
-        //     var editRec = recipesService.Edit(newRec);
-        //     recipesService.SaveChanges();
-        //     Snackbar.Add("Modifications sauvegardées avec succès.", Severity.Success);
-        // }
-        // catch (Exception e)
-        // {
-        //     Snackbar.Add("Erreur est survenue lors de l'édition", Severity.Error);
-        //     Logger.LogError("Error:ProcessError - Type: {Type},\n Message: {Message}",
-        //         e.GetType(), e.Message);
-        // }
-        await GetData();
         StateHasChanged();
 
-        // N.NavigateTo($"/recipes/{curRecipe.Id}");
+        _NavigationManager.NavigateTo($"/recipes/{CurrentRecipe.Id}");
     }
 
     private void Cancel()
     {
         RecipeEditionForm.Reset();
-        NavigationManager.NavigateTo($"/recipes/{CurrentRecipe.Id}");
+        _NavigationManager.NavigateTo($"/recipes/{CurrentRecipe.Id}");
     }
 
-    private void DeleteIng()
+    private void DeleteIng(RecipeIngredientQuantity ingredient)
     {
-
+        _RecIngQtySer.Delete(ingredient);
+        _RecIngQtySer.SaveChanges();
     }
 
-    public async Task AddIng()
+    public async Task EditIng(RecipeIngredientQuantity ingredient)
     {
         var param = new DialogParameters();
-        param.Add("curRecipe", CurrentRecipe); // TODO: est-ce vraiment necessaire?
+        param.Add("newRecIng", ingredient);
         var dialog = DialogService.Show<DialogAddRecipeIngredientQuantity>("Ajouter ingrédient", param);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
             var res = (RecipeIngredientQuantity)result.Data;
+            CurrentRecipe.IngredientQuantities.Remove(ingredient);
             CurrentRecipe.IngredientQuantities.Add(res);
-            _RecipesService.Edit(CurrentRecipe); // TODO: voir si c'est ici que l'on veut faire ca
-            _RecipesService.SaveChanges(); // TODO: voir si c'est ici que l'on veut faire ca
         }
+    }
 
-        await GetData(); // TODO: voir si c'est ici que l'on veut faire ca
+    public async Task AddIng()
+    {
+        var dialog = DialogService.Show<DialogAddRecipeIngredientQuantity>("Ajouter ingrédient");
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (RecipeIngredientQuantity)result.Data;
+            CurrentRecipe.IngredientQuantities.Add(res);
+        }
     }
 
 }

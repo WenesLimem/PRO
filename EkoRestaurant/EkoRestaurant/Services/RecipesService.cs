@@ -19,7 +19,7 @@ namespace EkoRestaurant.Services
         {
             return _dbContext.Set<Recipe>()
                 .Include(x => x.IngredientQuantities)
-                    .ThenInclude(y => y.Ingredient)
+                .ThenInclude(y => y.Ingredient)
                 .FirstOrDefault(e => e.Id == id);
         }
 
@@ -27,7 +27,7 @@ namespace EkoRestaurant.Services
         {
             return _dbContext.Set<Recipe>()
                 .Include(x => x.IngredientQuantities)
-                    .ThenInclude(y =>y.Ingredient);
+                .ThenInclude(y => y.Ingredient);
         }
 
 

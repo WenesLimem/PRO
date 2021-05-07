@@ -75,7 +75,6 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                @*
                 <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true">
                     <HeaderContent>
                         <MudTh>Ingrédient</MudTh>
@@ -86,11 +85,6 @@
                         <MudTd DataLabel="Quantité">@context.Quantity</MudTd>
                     </RowTemplate>
                 </MudTable>
-                *@
-                @foreach (var ing in CurrentRecipe.IngredientQuantities)
-                {
-                    <MudText>@ing.Ingredient.Name</MudText>
-                }
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -113,7 +107,7 @@
 
     private async Task getData()
     {
-        CurrentRecipe = RecipesService.GetById(Id);
+        CurrentRecipe = RecipesService.GetByIdWithIngredients(Id);
 
         if (CurrentRecipe.CategoryId != 0 && CurrentRecipe.Category == null && CurrentRecipe.CategoryId != null)
         {
@@ -128,6 +122,11 @@
 
     private void DeleteRecipe()
     {
+        while (CurrentRecipe.IngredientQuantities.Count > 0)
+        {
+            RecipeIngredientQuantitiesService.Delete(CurrentRecipe.IngredientQuantities.ElementAt(0));
+            RecipeIngredientQuantitiesService.SaveChanges();
+        }
         RecipesService.Delete(CurrentRecipe);
         RecipesService.SaveChanges();
         Snackbar.Add("Supression effectuée avec succès", Severity.Success);
