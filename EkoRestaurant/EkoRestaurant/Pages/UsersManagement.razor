@@ -1,0 +1,175 @@
+@page "/users-management"
+@using EkoRestaurant.Data
+@using System.Security.Claims
+@inject UserManager<ApplicationUser> _UserManager
+@inject RoleManager<IdentityRole> _RoleManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IDialogService DialogService
+@inject ApplicationDbContext _DbContext
+
+
+<div class="page-title dark-color">Gestion des utilisateurs</div>
+
+<MudButton Style="margin-bottom: 40px" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@AddNewUser" Variant="Variant.Filled">
+    <img src="Images/white-add-plus.svg"/>Ajouter un utilisateur
+</MudButton>
+
+
+@* TODO: display roles *@
+<MudTable T="ApplicationUser" Items="@ColUsers" Hover="true" OnRowClick="@ClickedRow">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Username</MudTh>
+        <MudTh>Role</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Username">@context.UserName</MudTd>
+        <MudTd DataLabel="Role">@RoleByUserId.GetValueOrDefault(context.Id)</MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+@code {
+
+    // for complete tutorial:
+    // see https://blazorhelpwebsite.com/ViewBlogPost/21
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    ClaimsPrincipal CurrentUser;
+
+
+    ApplicationUser objUser { get; set; } = new ApplicationUser();
+    // Tracks the selected role for the currently selected user
+
+    List<ApplicationUser> ColUsers = new List<ApplicationUser>();
+    Dictionary<String, string> RoleByUserId = new Dictionary<string, string>();
+    string strError = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await GetUsers();
+    }
+
+    async Task AddNewUser()
+    {
+    // Make new user
+        DialogEditCreateUserData dialogData = new DialogEditCreateUserData();
+        var parameters = new DialogParameters();
+        parameters.Add("DialogData", dialogData);
+        var dialog = DialogService.Show<DialogEditCreateUser>("Ajouter un utilisateur", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (DialogEditCreateUserData) result.Data;
+            res.User.Email = "account@ekorestaurant.ch";
+            res.User.EmailConfirmed = true;
+            var identityResult = await _UserManager.CreateAsync(res.User, res.Password);
+            if (!string.IsNullOrWhiteSpace(res.Role))
+            {
+                _ = await _UserManager.AddToRoleAsync(res.User, res.Role);
+            }
+        }
+
+        await GetUsers();
+    }
+
+    private async Task<string> getUserRole(string userId)
+    {
+        var dbUser = await _UserManager.FindByIdAsync(userId);
+        var rolesOfUser = await _UserManager.GetRolesAsync(dbUser);
+        var actualRoleOfUser = rolesOfUser.FirstOrDefault();
+
+        return actualRoleOfUser ?? "-";
+    }
+
+    private async Task ChangePasswordOfUser(String userId, String newPassword)
+    {
+    }
+
+    async Task DeleteUserById(String userId)
+    {
+        var user = await _UserManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            await _UserManager.DeleteAsync(user);
+        }
+        await GetUsers();
+    }
+
+
+    public async Task GetUsers()
+    {
+        strError = "";
+        ColUsers = new List<ApplicationUser>();
+        var user = _UserManager.Users.Select(x => new ApplicationUser()
+        {
+            Id = x.Id,
+            UserName = x.UserName,
+            Email = x.Email,
+            FirstName = x.FirstName,
+            LastName = x.LastName,
+        });
+
+        foreach (var item in user)
+        {
+            RoleByUserId.Add(item.Id, await getUserRole(item.Id));
+            ColUsers.Add(item);
+        }
+    }
+
+    public async Task ClickedRow(TableRowClickEventArgs<ApplicationUser> clickEvent)
+    {
+        DialogEditCreateUserData dialogData = new DialogEditCreateUserData();
+        dialogData.User = clickEvent.Item;
+        var rolesOfUser = await _UserManager.GetRolesAsync(dialogData.User);
+        var actualRoleOfUser = rolesOfUser.FirstOrDefault();
+        dialogData.Role = actualRoleOfUser;
+        var parameters = new DialogParameters();
+        parameters.Add("DialogData", dialogData);
+        var dialog = DialogService.Show<DialogEditCreateUser>("Editer un utilisateur", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (DialogEditCreateUserData) result.Data;
+            var dbUser = await _UserManager.FindByIdAsync(res.User.Id);
+
+            if (res.IsDeleting)
+            {
+                await _UserManager.DeleteAsync(dbUser);
+                await GetUsers();
+                return;
+            }
+
+            dbUser.FirstName = res.User.FirstName;
+            dbUser.LastName = res.User.LastName;
+            dbUser.UserName = res.User.UserName;
+            dbUser.Email = $"account-{dbUser.UserName}@ekorestaurant.ch";
+            dbUser.EmailConfirmed = true;
+
+            await _DbContext.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(res.Password))
+            {
+                var token = await _UserManager.GeneratePasswordResetTokenAsync(dbUser);
+                var resultOfPasswordChange = await _UserManager.ResetPasswordAsync(dbUser, token, res.Password);
+            }
+            if (actualRoleOfUser != res.Role)
+            {
+                if (!string.IsNullOrEmpty(actualRoleOfUser))
+                {
+                    var succesFromRole = await _UserManager.RemoveFromRoleAsync(dbUser, actualRoleOfUser);
+                }
+                await _UserManager.AddToRoleAsync(dbUser, res.Role);
+            }
+        }
+
+        await GetUsers();
+    }
+
+
+
+
+}
