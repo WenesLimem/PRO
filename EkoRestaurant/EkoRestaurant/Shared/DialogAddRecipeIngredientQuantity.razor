@@ -1,0 +1,82 @@
+﻿@using EkoRestaurant.Data
+@using EkoRestaurant.Services
+@inject RecipesService _RecipesService
+@inject IngredientsService _IngredientsService
+@inject RecipeIngredientQuantitiesService _RecIngQtySer
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudSelect T="Ingredient" @bind-Value="@ingredient"
+                       Label="Nouvel ingrédient" ToStringFunc="@(e => e == null ? null : $"{e.Name}")">
+                @foreach (var ing in ingredients)
+                {
+                    <MudSelectItem Value="@ing" />
+                }
+            </MudSelect>
+            <MudTextField @bind-Value="@quantity" T="int" Label="Quantité" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+        [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+        [Parameter] public Recipe CurrentRecipe { get; set; }
+        [Parameter] public RecipeIngredientQuantity newRecIng { get; set; }
+
+    public Ingredient ingredient { get; set; }
+    public int quantity;
+    public List<Ingredient> ingredients { get; set; } = new();
+
+    void Submit()
+    {
+        if (newRecIng == null)
+        {
+            newRecIng = new RecipeIngredientQuantity()
+            {
+                Ingredient = ingredient,
+                Quantity = quantity,
+                Recipe = CurrentRecipe,
+            };
+        }
+        else
+        {
+            if (newRecIng.Quantity != quantity)
+            {
+                newRecIng.Quantity = quantity;
+            }
+
+            if (newRecIng.Ingredient != ingredient)
+            {
+                newRecIng.Ingredient = ingredient;
+            }
+        }
+
+        MudDialog.Close(DialogResult.Ok(newRecIng));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+    protected override Task OnInitializedAsync()
+    {
+        if (newRecIng == null)
+        {
+            newRecIng = new RecipeIngredientQuantity();
+        }
+        else
+        {
+            ingredient = newRecIng.Ingredient;
+            quantity = newRecIng.Quantity;
+        }
+
+        ingredients = _IngredientsService.Filter().ToList();
+
+        return base.OnInitializedAsync();
+    }
+
+}
