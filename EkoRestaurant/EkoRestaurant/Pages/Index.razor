@@ -1,9 +1,8 @@
 @page "/"
 @page "/index"
 @using EkoRestaurant.Services
-@using EkoRestaurant.Data
-@using EkoRestaurant.Extensions
 @inject DailyMenusService DailyMenusService
+@inject NavigationManager _NavigationManager
 
 <MudGrid Spacing="5" Justify="Justify.Center">
     <MudItem xs="12">
@@ -14,7 +13,7 @@
                 </AuthorizeView>
 
 </MudText>
-            <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled">
+            <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled" OnClick="RedirectToCommandCreation">
                 <img src="Images/white-add-plus.svg" />Nouvelle commande
             </MudButton>
         </MudPaper>
@@ -33,6 +32,12 @@
 @code {
     // Faire la récupération des données depuis la DB
     // public DailyMenu CurrentDailyMenu { get; set; }
+    
+    private void RedirectToCommandCreation()
+    {
+        _NavigationManager.NavigateTo("/commands-creation");
+    }
+
 }
 
 

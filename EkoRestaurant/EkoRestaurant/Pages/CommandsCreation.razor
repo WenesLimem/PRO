@@ -1,0 +1,49 @@
+@page "/commands-creation"
+@using EkoRestaurant.Data
+
+<div class="page-title dark-color">Saisie de commande</div>
+
+Pour
+<MudForm>
+    <MudTextField @bind-Value="@EditedCommand.ClientName" Label="Nom du client"/>
+    <MudTextField @bind-Value="@EditedCommand.ClientPhoneNumber" Label="Nr de téléphone"/>
+</MudForm>
+
+
+<MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled" OnClick="AddElementToCommand">
+    <img src="Images/white-add-plus.svg" />ajouter élément a la commande
+</MudButton>
+<MudTable Items="@EditedCommand.CommandElements" Hover="true" Breakpoint="Breakpoint.Sm">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Contenu de la commande</MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Recette</MudTh>
+        <MudTh>Prix unitaire</MudTh>
+        <MudTh>Qte</MudTh>
+        <MudTh>Remarque</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Recette">@context.Recipe.Name</MudTd>
+        <MudTd DataLabel="Prix unitaire">@context.Recipe.Price</MudTd>
+        <MudTd DataLabel="Qte">@context.Qty</MudTd>
+        <MudTd DataLabel="Remarque">@context.Remark</MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+
+@code {
+    public Command EditedCommand { get; set; } = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+
+    private void AddElementToCommand()
+    {
+        throw new NotImplementedException();
+    }
+
+}
