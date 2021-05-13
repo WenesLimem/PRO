@@ -9,5 +9,7 @@ namespace EkoRestaurant.Data
     public class RecipeCategory : BaseEntity
     {
         public String Name { get; set; }
+
+        public List<Recipe> Recipes { get; set; } = new List<Recipe>();
     }
 }

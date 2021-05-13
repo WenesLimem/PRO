@@ -8,4 +8,8 @@
 @using Microsoft.JSInterop
 @using EkoRestaurant
 @using EkoRestaurant.Shared
+@using EkoRestaurant.IdentityUtils
 @using MudBlazor
+@using Microsoft.AspNetCore.Identity
+@*Ensure that all views are protected by default:*@
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]

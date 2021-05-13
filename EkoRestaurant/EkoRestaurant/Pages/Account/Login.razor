@@ -1,0 +1,74 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Components
+@using EkoRestaurant.IdentityUtils
+@using EkoRestaurant.Data
+@using InputType = MudBlazor.InputType
+@layout LoginLayout
+@attribute [AllowAnonymous]
+@inject SignInManager<ApplicationUser> SignInMgr
+@inject UserManager<ApplicationUser> UserMgr
+@inject NavigationManager NavMgr
+
+<div class="page-title" style="margin-bottom: 100px">Sign in</div>
+
+<MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+    <MudTextField T="string"
+                  Label="Username"
+                  Required="true" RequiredError="Username is required!"
+                  @bind-Value="Model.Email"
+                  Variant="Variant.Outlined"
+    />
+
+    <MudTextField T="string"
+                  Label="Password"
+                  @bind-Value="Model.Password"
+                  InputType="InputType.Password"
+                  Required="true" RequiredError="Password is required!"
+                  Variant="Variant.Outlined"
+    />
+    <MudCheckBox T="bool"
+                 @bind-Checked="@Model.RememberMe"
+                 Label="Remember me"
+                 Style="margin-top: 30px"/>
+</MudForm>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" OnClick="Submit">Login</MudButton>
+
+@code {
+    bool success;
+    string[] errors = {};
+    MudForm form;
+
+    private LoginModel<ApplicationUser> Model { get; set; } = new LoginModel<ApplicationUser>();
+
+    private async Task Submit()
+    {
+        Model.Error = null;
+        var usr = await UserMgr.FindByEmailAsync(Model.Email) ?? await UserMgr.FindByNameAsync(Model.Email);
+        if (usr == null)
+        {
+            errors = new[] {"Login failed. Check your username and password."};
+            return;
+        }
+
+
+        if (await SignInMgr.CanSignInAsync(usr))
+        {
+            var result = await SignInMgr.CheckPasswordSignInAsync(usr, Model.Password, true);
+            if (result.Succeeded)
+            {
+                Guid key = BlazorCookieLoginMiddleware<ApplicationUser>.AnnounceLogin(Model);
+                NavMgr.NavigateTo($"/login?key={key}", true);
+            }
+            else
+            {
+                errors = new[] {"Login failed. Check your username and password."};
+            }
+        }
+        else
+        {
+            errors = new[] {"Your account is blocked"};
+        }
+    }
+
+}

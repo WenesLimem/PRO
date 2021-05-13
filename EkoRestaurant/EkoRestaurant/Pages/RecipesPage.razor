@@ -1,0 +1,178 @@
+﻿@page "/recipes"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+@inject RecipesService RecipesService
+@inject RecipeCategoriesService RecipeCategoriesService
+@inject RecipeIngredientQuantitiesService RecipeIngredientQuantitiesService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Recettes</div>
+    </MudItem>
+
+    <MudItem xs="12">
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddRecipeDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg"/>Ajouter</MudButton>
+        @if (SelectedCategory != null)
+        {
+            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
+        }
+    </MudItem>
+    <MudItem xs="4">
+        <div class="data-grid-categories-title">
+            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right: 12px"></MudIcon>Catégories
+        </div>
+        <div class="flex-column">
+
+            @if (RecipeCategories.Count > 0)
+            {
+                @foreach (RecipeCategory category in RecipeCategories)
+                {
+                    <div @onclick="() => SelectCategoryInSideBar(category)">
+                        <RecipeCategorySideBar Category="@category" Selected="@(category == SelectedCategory)" />
+                    </div>
+                }
+            }
+            <div class="small-separator"/>
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenRecipeCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
+        </div>
+    </MudItem>
+    <MudItem xs="8">
+        <MudTable T="Recipe" Items="@Recipes" Hover="true" OnRowClick="@ClickedRow">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Name)">Nom</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.PreparationTimeMinutes)">Temps de préparation (en minutes)</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Price)">Prix</MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Name">@context.PreparationTimeMinutes</MudTd>
+                <MudTd DataLabel="Name">@context.Price</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+@code {
+    public RecipeCategory CategoryToAdd { get; set; } = new();
+
+    public List<RecipeCategory> RecipeCategories = new();
+
+    public RecipeCategory SelectedCategory { get; set; }
+
+    public List<Recipe> Recipes { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        RecipeCategories = RecipeCategoriesService.Filter().ToList();
+        await GetRecipesData();
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+    }
+
+    public async Task SelectCategoryInSideBar(RecipeCategory category)
+    {
+        SelectedCategory = SelectedCategory == category ? null : category;
+        await GetRecipesData();
+    }
+
+    public async Task OpenRecipeCategoryDialog()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("Category", CategoryToAdd);
+
+        var dialog = DialogService.Show<DialogEditCreateRecipeCategory>("Nouvelle catégorie", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (RecipeCategory)result.Data;
+            try
+            {
+                RecipeCategoriesService.Create(res);
+                RecipeCategoriesService.SaveChanges();
+                RecipeCategories.Add(res);
+                Snackbar.Add("Catégorie " + res.Name + " ajoutée avec succès", Severity.Success);
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add("Impossible d'ajouter la catégorie, elle existe déjà", Severity.Error);
+            }
+
+            CategoryToAdd = new();
+            StateHasChanged();
+        }
+    }
+
+    public async Task OpenAddRecipeDialog()
+    {
+        var dialog = DialogService.Show<DialogEditCreateRecipe>("Ajouter recette");
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var res = (Recipe)result.Data;
+            try
+            {
+                RecipesService.Create(res);
+                RecipesService.SaveChanges();
+                Snackbar.Add("Recette " + res.Name + "ajouté avec succès", Severity.Success);
+                if (res.Category == SelectedCategory || SelectedCategory == null)
+                {
+                    Recipes.Add(res);
+                }
+                var currentCat = SelectedCategory;
+                SelectedCategory = new();
+                SelectedCategory = currentCat;
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add("Imposible d'ajouter la recette", Severity.Error);
+            }
+        }
+    }
+
+    public async Task OpenAddDeleteCategoryDialog()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("TextToDisplay", "Veuillez confirmer la suppression de la catégorie " + SelectedCategory.Name + ", cela nécessite de ne plus avoir de recettes dans cette catégorie.");
+        parameters.Add("ButtonOkText", "Supprimer");
+        var dialog = DialogService.Show<DialogConfirm>("Supprimer la catégorie", parameters);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data.Equals(true))
+        {
+            if (SelectedCategory.Recipes.Count > 0)
+            {
+                Snackbar.Add("Il reste des recettes dans la catégorie " + SelectedCategory.Name + ", impossible de la supprimer", Severity.Warning);
+                return;
+            }
+            RecipeCategories.Remove(SelectedCategory);
+            RecipeCategoriesService.Delete(SelectedCategory.Id);
+            RecipeCategoriesService.SaveChanges();
+            Snackbar.Add("Catégorie " + SelectedCategory.Name + " supprimée avec succès", Severity.Success);
+            SelectedCategory = null;
+            await GetRecipesData();
+            StateHasChanged();
+        }
+    }
+
+    public void ClickedRow(TableRowClickEventArgs<Recipe> clickEvent)
+    {
+        NavigationManager.NavigateTo($"/recipes/{clickEvent.Item.Id}");
+    }
+
+    private async Task GetRecipesData()
+    {
+        Recipes = SelectedCategory == null ? RecipesService.Filter().ToList() : SelectedCategory.Recipes;
+    }
+
+}
