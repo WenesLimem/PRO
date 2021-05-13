@@ -1,0 +1,50 @@
+﻿@using EkoRestaurant.Data
+@using EkoRestaurant.Services
+
+@inject IngredientsService IngredientsService
+@inject RecipeCategoriesService RecipeCategoriesService
+@inject RecipeIngredientQuantitiesService RecipeIngredientQuantitiesService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudSelect T="RecipeCategory" @bind-Value="@CurrentRecipe.Category" Label="Catégorie" ToStringFunc="@(e => e == null ? null : $"{e.Name}")">
+                @foreach (var cat in CategoriesAvailable)
+                {
+                    <MudSelectItem Value="@cat" />
+                }
+            </MudSelect>
+            <MudTextField @bind-Value="CurrentRecipe.Name" Label="Nom" Variant="Variant.Text"></MudTextField>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+        [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+        [Parameter]
+        public Recipe CurrentRecipe { get; set; }
+
+    public List<RecipeCategory> CategoriesAvailable { get; set; } = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        CategoriesAvailable = RecipeCategoriesService.Filter().ToList();
+        if (CurrentRecipe == null)
+        {
+            CurrentRecipe = new Recipe() { Description="", PreparationTimeMinutes=0, Price=0 };
+        }
+        return base.OnInitializedAsync();
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+    void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(CurrentRecipe));
+    }
+}

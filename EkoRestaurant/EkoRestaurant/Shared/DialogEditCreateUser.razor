@@ -1,0 +1,68 @@
+@using EkoRestaurant.Data
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudTextField @bind-Value="@DialogData.User.FirstName" Label="Prénom"/>
+            <MudTextField @bind-Value="@DialogData.User.LastName" Label="Nom de Famille"/>
+            <MudTextField @bind-Value="@DialogData.User.UserName" Label="Nom d'utilisateur"/>
+            <MudTextField @bind-Value="@DialogData.Password" Label="Mot de passe"/>
+            <MudSelect T="string" Label="Role" @bind-Value="DialogData.Role">
+                @foreach (var role in RolesAvailable) {
+                    <MudSelectItem T="string" Value="@role">@role</MudSelectItem>
+                }
+            </MudSelect>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Annuler</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">@GetSubmitButtonText()</MudButton>
+        @if (!IsCreateMode)
+        {
+            <MudButton Color="Color.Error" OnClick="SubmitDelete">Supprimer</MudButton>
+        }
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public DialogEditCreateUserData DialogData { get; set; }
+
+    private readonly List<string> RolesAvailable = new List<string>() {"Employee", "Administrator"};
+    private string valueRole { get; set; } = "Employee";
+
+    private Boolean IsCreateMode { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (DialogData.User == null)
+        {
+            IsCreateMode = true;
+            DialogData.User = new ApplicationUser();
+        }
+        else
+        {
+            IsCreateMode = false;
+        }
+        return base.OnInitializedAsync();
+    }
+
+    public String GetSubmitButtonText()
+    {
+        return IsCreateMode ? "Créer" : "Sauvegarder";
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(DialogData));
+
+    private void SubmitDelete()
+    {
+        DialogData.IsDeleting = true;
+        MudDialog.Close(DialogResult.Ok(DialogData));
+    }
+
+}

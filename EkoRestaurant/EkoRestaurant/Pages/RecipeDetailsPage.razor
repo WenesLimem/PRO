@@ -1,0 +1,135 @@
+﻿@page "/recipes/{Id:int}"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+@inject RecipesService RecipesService
+@inject RecipeCategoriesService RecipeCategoriesService
+@inject RecipeIngredientQuantitiesService RecipeIngredientQuantitiesService
+@inject IngredientsService IngredientsService
+@inject ISnackbar Snackbar
+@inject IDialogService Dialogservice
+@inject NavigationManager nm
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Recettes</div>
+        <div class="h2-quicksand dark-color">@CurrentRecipe.Name</div>
+    </MudItem>
+    <MudItem xs="12">
+        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit" OnClick="@DeleteRecipe"></MudIconButton>
+        <MudIconButton Icon="@Icons.Material.Filled.Edit" Style="float: right;" OnClick="@EditRecipe"></MudIconButton>
+    </MudItem>
+    <MudItem xs="4">
+        <MudCard Elevation="4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Prix</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.Price</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="4">
+        <MudCard Elevation="4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Temps de préparation (minutes)</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.PreparationTimeMinutes</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="4">
+        <MudCard Elevation="4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Catégorie</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.GetCategoryName()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="6">
+        <MudCard Elevation="4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Description</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.Description</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="6">
+        <MudCard Elevation="4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Liste d'ingrédient</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true">
+                    <HeaderContent>
+                        <MudTh>Ingrédient</MudTh>
+                        <MudTh>Quantité</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Ingrédient">@context.Ingredient.Name</MudTd>
+                        <MudTd DataLabel="Quantité">@context.Quantity</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    public List<Ingredient> Ingredients = new();
+
+    public Recipe CurrentRecipe { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Ingredients = IngredientsService.Filter().ToList();
+        await getData();
+    }
+
+    private async Task getData()
+    {
+        CurrentRecipe = RecipesService.GetByIdWithIngredients(Id);
+
+        if (CurrentRecipe.CategoryId != 0 && CurrentRecipe.Category == null && CurrentRecipe.CategoryId != null)
+        {
+            CurrentRecipe.Category = RecipeCategoriesService.GetById((int)CurrentRecipe.CategoryId);
+        }
+    }
+
+    private void EditRecipe()
+    {
+        nm.NavigateTo($"/recipes/edit/{CurrentRecipe.Id}");
+    }
+
+    private void DeleteRecipe()
+    {
+        while (CurrentRecipe.IngredientQuantities.Count > 0)
+        {
+            RecipeIngredientQuantitiesService.Delete(CurrentRecipe.IngredientQuantities.ElementAt(0));
+            RecipeIngredientQuantitiesService.SaveChanges();
+        }
+        RecipesService.Delete(CurrentRecipe);
+        RecipesService.SaveChanges();
+        Snackbar.Add("Supression effectuée avec succès", Severity.Success);
+        nm.NavigateTo("/recipes");
+    }
+}
