@@ -11,20 +11,21 @@
     <MudItem xs="12">
         <div class="page-title dark-color">Liste des courses</div>
     </MudItem>
-    <MudItem xs="3">
-        <MudTable T="ListeDesCourses" Items="ListeDesListes" Hover="true">
-            <HeaderContent>
-                <MudTh>Id</MudTh>
-                <MudTh>Fini</MudTh>
-                <MudTh>Date creation</MudTh>
-                
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="Id">@context.Id</MudTd>
-                <MudTd DataLabel="Statut" >@context.IsCompleted.BooleanToFrench()</MudTd> 
-                <MudTd DataLabel="Date de creation">@context.CreationDateTime.Nice()</MudTd>
-            </RowTemplate>
-        </MudTable>
+    <MudItem xs="4">
+        <div class="data-grid-categories-title">
+            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right: 12px"></MudIcon>
+        </div>
+        <div class="flex-column">
+            @if (ListeDesListes.Any())
+            {
+              @foreach (ListeDesCourses ldc in ListeDesListes)
+              {
+                  <div @onclick="()=> SelectListeInSideBar(ldc)">
+                      <ListeDesCoursesSideBar ListeDesCourses="@ldc" Selected="@(ldc == selectedList)"></ListeDesCoursesSideBar>
+                  </div>
+              }   
+            }
+        </div>
     </MudItem>
     <MudItem xs="8" Style="float: right">
         <MudTable T="ListeDesCoursesElement" Items="Ldce" Hover="true" CommitEditTooltip="Sauvegardé la modifcation">
@@ -60,7 +61,8 @@
 {
     IEnumerable<ListeDesCoursesElement> Ldce;
     IEnumerable<ListeDesCourses> ListeDesListes;
-    
+    public ListeDesCourses selectedList { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
        
@@ -76,4 +78,8 @@
         ListeDesCoursesServices.MarkActiveAsCompleted();
     }
 
+    private void SelectListeInSideBar(ListeDesCourses ldc)
+    {
+        selectedList = selectedList == ldc ? null : ldc;
+    }
 }

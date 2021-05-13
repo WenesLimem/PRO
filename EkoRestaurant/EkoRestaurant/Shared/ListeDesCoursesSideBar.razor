@@ -1,0 +1,42 @@
+@using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+
+<div class="data-grid-categories-chip" style="background-color: @bgColor">
+   @if (Selected)
+   {
+       <MudIcon Icon="@Icons.Material.Filled.Label" Size="Size.Small" Style="margin-right: 12px"></MudIcon>
+   }
+   else
+   {
+       <MudIcon Icon="@Icons.Material.Filled.LabelOutline" Size="Size.Small" Style="margin-right:12px "></MudIcon>
+   }
+<div class="data-grid-categories-name">@ListeDesCourses.Id </div>
+<div style="width: 40px; margin-left: auto"> @ListeDesCourses.IsCompleted.BooleanToFrench()</div>
+</div>
+@code {
+
+    [Parameter]
+    public ListeDesCourses ListeDesCourses { get; set; }
+
+    [Parameter]
+    public bool Selected
+    {
+        get => _selected;
+        set
+        {
+            _selected = value;
+            if (Selected)
+            {
+                bgColor = "#DCF7E3";
+            }
+            else
+            {
+                bgColor = "";
+
+            }
+        }
+    }
+
+    private string bgColor { get; set; } = "";
+    private bool _selected;
+}
