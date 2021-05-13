@@ -16,14 +16,16 @@
             <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right: 12px" ></MudIcon> Listes des courses
         </div>
         <div class="flex-column">
+            
             @if (ListeDesListes.Any())
             {
-              @foreach (ListeDesCourses ldc in ListeDesListes)
-              {
-                  <div @onclick="()=> SelectListeInSideBar(ldc)">
+                @foreach (ListeDesCourses ldc in ListeDesListes)
+                {
+                    <div @onclick="() => SelectListeInSideBar(ldc)">
                       <ListeDesCoursesSideBar ListeDesCourses="@ldc" Selected="@(ldc == selectedList)"></ListeDesCoursesSideBar>
-                  </div>
-              }   
+                       
+                    </div>
+                }
             }
         </div>
     </MudItem>

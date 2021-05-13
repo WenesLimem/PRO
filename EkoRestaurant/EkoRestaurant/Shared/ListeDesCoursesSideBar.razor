@@ -1,6 +1,9 @@
 @using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
 
+
+
+
 <div class="data-grid-categories-chip" style="background-color: @bgColor">
    @if (Selected)
    {
@@ -10,8 +13,10 @@
    {
        <MudIcon Icon="@Icons.Material.Filled.LabelOutline" Size="Size.Small" Style="margin-right:12px "></MudIcon>
    }
-<div class="data-grid-categories-name">@ListeDesCourses.Id </div>
-<div style="width: 40px; margin-left: auto"> @ListeDesCourses.IsCompleted.BooleanToFrench()</div>
+   
+   <div class="data-grid-categories-name">@ListeDesCourses.Id </div>
+   <div style="width: 20px; margin-left: auto"> @ListeDesCourses.CreationDateTime.HoursMinutes()</div>
+   <div style="width: 20px; margin-left: auto ;margin-right:auto"> @ListeDesCourses.CompletionDateTime.HoursMinutes()</div>
 </div>
 @code {
 
