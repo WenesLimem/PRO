@@ -13,7 +13,7 @@
     </MudItem>
     <MudItem xs="4">
         <div class="data-grid-categories-title">
-            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right: 12px"></MudIcon>
+            <MudIcon Icon="@Icons.Material.Filled.StarRate" Style="margin-right: 12px" ></MudIcon> Listes des courses
         </div>
         <div class="flex-column">
             @if (ListeDesListes.Any())
@@ -78,8 +78,15 @@
         ListeDesCoursesServices.MarkActiveAsCompleted();
     }
 
-    private void SelectListeInSideBar(ListeDesCourses ldc)
+    private async Task SelectListeInSideBar(ListeDesCourses ldc)
     {
         selectedList = selectedList == ldc ? null : ldc;
+        await GetListDesCoursesData();
+    }
+
+    private async Task GetListDesCoursesData()
+    {
+        Ldce = selectedList == null ? ListeDesCoursesElementService.Filter().ToList(): selectedList.ListeDesCoursesElements;
+        
     }
 }
