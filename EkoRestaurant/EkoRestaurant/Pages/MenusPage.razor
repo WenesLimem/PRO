@@ -1,0 +1,79 @@
+﻿@page "/menu"
+@using EkoRestaurant.Services
+@using EkoRestaurant.Data
+@using EkoRestaurant.Extensions
+@inject RecipesService _RecipesService
+@inject RecipeCategoriesService _RecipeCategoriesService
+@inject ISnackbar _Snackbar
+@inject IDialogService _DialogService
+@inject NavigationManager _NavigationManager
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Menu</div>
+    </MudItem>
+    <MudItem xs="12">
+        <MudTabs Elevation="2" Position="Position.Top" Centered="true" Rounded="true" 
+                 PanelClass="pa-6" Outlined="true" Border="true" ApplyEffectsToContainer="true">
+            @foreach (var category in RecipeCategories)
+            {
+                if (category.Recipes.Count > 0)
+                {
+                    <MudTabPanel Text="@category.Name">
+                        <MudTable T="Recipe" Items="@category.Recipes">
+                            <HeaderContent>
+                                <MudTh>
+                                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Name)">Nom</MudTableSortLabel>
+                                </MudTh>
+                                <MudTh>
+                                    <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Price)">Prix</MudTableSortLabel>
+                                </MudTh>
+                            </HeaderContent>
+                            <RowTemplate>
+                                <MudTd DataLabel="Name">@context.Name</MudTd>
+                                <MudTd DataLabel="Price">@context.Price CHF</MudTd>
+                            </RowTemplate>
+                        </MudTable>
+                    </MudTabPanel>
+                }
+            }
+            @if (RecipesOther.Count > 0)
+            {
+                <MudTabPanel Text="Autres">
+                    <MudTable T="Recipe" Items="RecipesOther">
+                        <HeaderContent>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Name)">Nom</MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Price)">Prix</MudTableSortLabel>
+                            </MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Name">@context.Name</MudTd>
+                            <MudTd DataLabel="Price">@context.Price CHF</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </MudTabPanel>
+            }
+        </MudTabs>
+    </MudItem>
+</MudGrid>
+
+@code {
+    public List<RecipeCategory> RecipeCategories { get; set; } = new();
+
+    public List<Recipe> RecipesOther { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        RecipeCategories = _RecipeCategoriesService.Filter().ToList();
+        await GetRecipesData();
+        _Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+    }
+
+    private async Task GetRecipesData()
+    {
+        RecipesOther = _RecipesService.Filter().Where(x => x.CategoryId == null).ToList();
+    }
+}
