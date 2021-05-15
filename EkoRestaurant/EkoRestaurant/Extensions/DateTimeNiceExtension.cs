@@ -19,5 +19,15 @@ namespace EkoRestaurant.Extensions
             return res;
         }
 
+        public static string HoursMinutes(this DateTime? date)
+        {
+            if (!date.HasValue)
+                return "";
+            var res = date.GetValueOrDefault().Hour + ":";
+            res += date.GetValueOrDefault().Minute;
+
+            return res;
+        }
+
     }
 }

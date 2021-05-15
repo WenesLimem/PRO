@@ -52,10 +52,15 @@ namespace EkoRestaurant
             services.AddTransient<IngredientsService>();
             services.AddTransient<RecipeCategoriesService>();
             services.AddTransient<RecipesService>();
+
+            services.AddTransient<ListeDesCoursesServices>();
+            services.AddTransient<ListeDesCoursesElementService>();
+
             services.AddTransient<RecipeIngredientQuantitiesService>();
 
             // identity related service
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
+
 
         }
 

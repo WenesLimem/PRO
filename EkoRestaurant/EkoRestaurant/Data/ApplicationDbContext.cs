@@ -33,5 +33,7 @@ namespace EkoRestaurant.Data
         public DbSet<IngredientCategory> IngredientCategories { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeCategory> RecipeCategories { get; set; }
+        public DbSet <ListeDesCourses> ListeDesCourses { get; set; }
+        public DbSet<ListeDesCoursesElement> ListeDesCoursesElements { get; set; }
     }
 }

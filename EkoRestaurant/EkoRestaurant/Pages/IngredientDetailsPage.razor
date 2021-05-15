@@ -7,7 +7,8 @@
 @inject ISnackbar Snackbar
 @inject IDialogService Dialogservice
 @inject NavigationManager nm
-
+@inject ListeDesCoursesServices ListeDesCoursesServices
+@inject ListeDesCoursesElementService ListeDesCoursesElementService
 
 <MudGrid>
     <MudItem xs="12">
@@ -107,7 +108,7 @@
     [Parameter]
     public int Id { get; set; }
 
-    public List<Ingredient> listeDesCourse = new();
+    public ListeDesCoursesElement ListeDesCoursesElement { get; set; } = new ListeDesCoursesElement();
 
     public Ingredient currentIngredient { get; set; }
 
@@ -131,11 +132,46 @@
             currentIngredient.Category = IngCatService.GetById((int) currentIngredient.CategoryId);
         }
     }
+    private  void AddElement(Ingredient ingredient, int qty)
+    {
 
+        var element = new ListeDesCoursesElement()
+        {
+            Quantity = qty, Ingredient = ingredient, ListeDesCourses = ListeDesCoursesServices.GetActiveListeDesCourses()
+        };
+        var created = ListeDesCoursesElementService.Create(element);
+        ListeDesCoursesElementService.SaveChanges();
+        ListeDesCoursesServices.AddIngredientToCurrent(created);
+
+    }
     private void AddIngredientToList()
     {
-        listeDesCourse.Add(currentIngredient);
-        Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success);
+        try
+        {   
+            AddElement(currentIngredient,currentIngredient.UnitAtStart);
+            Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success,
+                config =>  
+                {
+                    config.Action = "Afficher la liste des courses";
+                    config.ActionColor = Color.Surface;
+                    config.Onclick = async snackbar =>
+                    {
+                       ViewListe();
+                    };
+
+                });
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Une erreur est survenue lors de l'ajout du produit à la liste des courses.", severity: Severity.Error);
+
+        }
+       
+    }
+
+    private void ViewListe()
+    {
+        nm.NavigateTo("/listedescourses");
     }
 
     private async void OpenModifiyIngredientDialog()
