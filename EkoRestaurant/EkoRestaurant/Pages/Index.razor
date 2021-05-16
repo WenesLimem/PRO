@@ -22,11 +22,12 @@
     </MudItem>
     @{ Initialize();
                  }
-           <MudItem>
+           <MudItem xs = "4">
                <MudCard Elevation="4">
                    <MudCardHeader>
                        <CardHeaderContent>
-                           <MudText Typo="Typo.h6">Commandes</MudText>
+                           <MudText Typo="Typo.h6">Commandes <MudIcon Icon="@Icons.Material.Filled.Restaurant" Style="float: right"></MudIcon> </MudText>
+                           
                        </CardHeaderContent>
                    </MudCardHeader>
                    <MudCardContent>
@@ -37,13 +38,13 @@
                </MudCard>
            </MudItem>
            
-           <MudItem>
+           <MudItem xs="4">
                <MudCard Elevation="4">
 
 
                    <MudCardHeader>
                        <CardHeaderContent>
-                           <MudText Typo="Typo.h6">En Cours</MudText>
+                           <MudText Typo="Typo.h6">En Cours <MudIcon Icon="@Icons.Material.Filled.Pending" Style="float: right"></MudIcon></MudText>
                        </CardHeaderContent>
                    </MudCardHeader>
                    <MudCardContent>
@@ -55,17 +56,19 @@
                    </MudCardContent>
                </MudCard>
            </MudItem>
-           <MudItem>
+           <MudItem xs="4">
                <MudCard Elevation="4">
                    <MudCardHeader>
                        <CardHeaderContent>
-                           <MudText Typo="Typo.h6">Prêtes</MudText>
+                           
+                           <MudText Typo="Typo.h6">Prêtes <MudIcon Icon="@Icons.Material.Filled.Done" Style="float: right"></MudIcon></MudText>
+                          
                        </CardHeaderContent>
                        
                    </MudCardHeader>
                    <MudCardContent>
                        <Dropzone Items="Ready" >
-                           <div style="margin-bottom: 4px">@context</div>
+                           <div  style="margin-bottom: 4px">@context</div>
                        </Dropzone>
                    </MudCardContent>
                </MudCard>
