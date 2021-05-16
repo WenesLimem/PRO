@@ -3,6 +3,7 @@
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
+@using Plk.Blazor.DragDrop
 @inject DailyMenusService DailyMenusService
 
 <MudGrid Spacing="5" Justify="Justify.Center">
@@ -19,20 +20,81 @@
             </MudButton>
         </MudPaper>
     </MudItem>
+    @{ Initialize();
+                 }
+           <MudItem>
+               <MudCard Elevation="4">
+                   <MudCardHeader>
+                       <CardHeaderContent>
+                           <MudText Typo="Typo.h6">Commandes</MudText>
+                       </CardHeaderContent>
+                   </MudCardHeader>
+                   <MudCardContent>
+                       <Dropzone Items="Orders2">
+                           <div style="margin-bottom: 4px">@context</div>
+                       </Dropzone>
+                   </MudCardContent>
+               </MudCard>
+           </MudItem>
+           
+           <MudItem>
+               <MudCard Elevation="4">
 
-    <MealInfo />
-    <MealInfo />
-    <MealInfo />
-    <!--
-        <MealInfo CurrentRecipe="CurrentDailyMenu.Starter" />
-        <MealInfo CurrentRecipe="CurrentDailyMenu.MainDish"/>
-        <MealInfo CurrentRecipe="CurrentDailyMenu.Dessert"/>
-    -->
+
+                   <MudCardHeader>
+                       <CardHeaderContent>
+                           <MudText Typo="Typo.h6">En Cours</MudText>
+                       </CardHeaderContent>
+                   </MudCardHeader>
+                   <MudCardContent>
+
+                       <Dropzone Items="Tasks">
+                           <div style="margin-bottom: 4px">@context</div>
+                       </Dropzone>
+
+                   </MudCardContent>
+               </MudCard>
+           </MudItem>
+           <MudItem>
+               <MudCard Elevation="4">
+                   <MudCardHeader>
+                       <CardHeaderContent>
+                           <MudText Typo="Typo.h6">Prêtes</MudText>
+                       </CardHeaderContent>
+                       
+                   </MudCardHeader>
+                   <MudCardContent>
+                       <Dropzone Items="Ready" >
+                           <div style="margin-bottom: 4px">@context</div>
+                       </Dropzone>
+                   </MudCardContent>
+               </MudCard>
+              
+           </MudItem>
+           
 </MudGrid>
 
 @code {
     // Faire la récupération des données depuis la DB
     // public DailyMenu CurrentDailyMenu { get; set; }
+    
+    public List<String> Tasks = new List<string>();
+    public List<String> Orders2 = new List<string>();
+    public List<String> Ready = new List<string>();
+    
+    
+    
+    public void Initialize()
+    {
+        Tasks.Add("Item 2");
+        Tasks.Add("Item 3");
+        Orders2.Add("Item 1");
+        Orders2.Add("Item 5");
+        Ready.Add("Item 4");
+        Ready.Add("Item 6");
+    }
+
+
 }
 
 
