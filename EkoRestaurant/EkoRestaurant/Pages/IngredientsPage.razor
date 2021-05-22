@@ -133,10 +133,6 @@
                 IngredientsService.Create(res);
                 IngredientsService.SaveChanges();
                 Snackbar.Add("Ingrédient " + res.Name + " ajouté avec succès", Severity.Success);
-                if (res.Category == SelectedCategory || SelectedCategory == null)
-                {
-                    Ingredients.Add(res);
-                }
                 var currentCat = SelectedCategory;
                 SelectedCategory = new();
                 SelectedCategory = currentCat;
