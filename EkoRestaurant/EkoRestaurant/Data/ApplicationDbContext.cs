@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using EkoRestaurant.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace EkoRestaurant.Data
@@ -31,9 +32,12 @@ namespace EkoRestaurant.Data
         public DbSet<DailyMenu> DailyMenus { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<IngredientCategory> IngredientCategories { get; set; }
-        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Recipe> Recipes { get; set; } 
         public DbSet<RecipeCategory> RecipeCategories { get; set; }
         public DbSet <ListeDesCourses> ListeDesCourses { get; set; }
         public DbSet<ListeDesCoursesElement> ListeDesCoursesElements { get; set; }
+
+        public DbSet<ClientCommandElement> ClientCommandElements { get; set; }
+        public DbSet<ClientCommand> ClientCommands { get; set; }
     }
 }

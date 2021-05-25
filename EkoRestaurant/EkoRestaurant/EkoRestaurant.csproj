@@ -29,8 +29,4 @@
     <PackageReference Include="Syncfusion.Blazor" Version="19.1.0.63" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Migrations" />
-  </ItemGroup>
-
 </Project>

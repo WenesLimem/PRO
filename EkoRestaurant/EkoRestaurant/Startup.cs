@@ -62,8 +62,6 @@ namespace EkoRestaurant
 
             // identity related service
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
