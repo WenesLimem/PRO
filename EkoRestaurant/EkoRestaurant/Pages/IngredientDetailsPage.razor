@@ -43,7 +43,7 @@
         <MudCard Elevation="4">
             <MudCardContent>
                 <MudText>Date de péremption</MudText>
-                <MudText Class="details-grid-content" Color="Color.Info">@currentIngredient.ExpirationDate </MudText>
+                <MudText Class="details-grid-content" Color="Color.Info">@currentIngredient.ExpirationDate.Nice() </MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -69,7 +69,7 @@
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
-                <MudText >Vegan</MudText>
+                <MudText >Vegan friendly</MudText>
                 <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
             </MudCardContent>
         </MudCard>
@@ -78,7 +78,7 @@
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
-                <MudText >Contient des Arachides</MudText>
+                <MudText >Arachides free</MudText>
                 <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
             </MudCardContent>
         </MudCard>
@@ -87,7 +87,7 @@
     <MudItem xs="3">
         <MudCard Elevation="4">
             <MudCardContent>
-                <MudText>Contient des Lactoses</MudText>
+                <MudText>Lactoses free</MudText>
                 <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
             </MudCardContent>
         </MudCard>

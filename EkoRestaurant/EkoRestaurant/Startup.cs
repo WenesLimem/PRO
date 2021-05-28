@@ -57,6 +57,8 @@ namespace EkoRestaurant
 
             services.AddTransient<ListeDesCoursesServices>();
             services.AddTransient<ListeDesCoursesElementService>();
+            services.AddTransient<ClientCommandService>();
+
 
             services.AddTransient<RecipeIngredientQuantitiesService>();
 
