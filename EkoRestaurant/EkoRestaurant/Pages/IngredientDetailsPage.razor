@@ -16,31 +16,30 @@
         <div class="h2-quicksand dark-color">@currentIngredient.Name</div>
     </MudItem>
     <MudItem xs="12">
-
         <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@AddIngredientToList" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
-        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Editer</MudButton>
-        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit" OnClick="@DeleteIngredient"></MudIconButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenModifiyIngredientDialog" Variant="Variant.Filled"><img src="Images/EditGradient.svg" style="margin-right: 5px">Editer</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@DeleteIngredient" Variant="Variant.Filled"><img src="Images/gradient-bin.svg" style="margin-right: 5px">Supprimer</MudButton>
     </MudItem>
 
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
-                <MudText >Prix</MudText>
+                <MudText >Prix unitaire</MudText>
                 <MudText Class="details-grid-content dark-color">@currentIngredient.UnitPrice CHF</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText >Restant</MudText>
-                <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.UnitInStock pce</MudText>
+                <MudText Class="details-grid-content" Color="Color.Info">@currentIngredient.UnitInStock @currentIngredient.UnitSuffix</MudText>
             </MudCardContent>
         </MudCard>
 
     </MudItem>
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText>Date de péremption</MudText>
                 <MudText Class="details-grid-content" Color="Color.Info">@currentIngredient.ExpirationDate.Nice() </MudText>
@@ -48,7 +47,7 @@
         </MudCard>
     </MudItem>
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4"  Class="rounded-card">
             <MudCardContent>
                 <MudText >Fournisseur</MudText>
                 <MudText Class="details-grid-content dark-color">@currentIngredient.GetProducerName() </MudText>
@@ -57,7 +56,7 @@
     </MudItem>
 
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
 
             <MudCardContent>
                 <MudText >Catégorie</MudText>
@@ -67,7 +66,7 @@
     </MudItem>
 
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText >Vegan friendly</MudText>
                 <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
@@ -76,7 +75,7 @@
     </MudItem>
 
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText >Arachides free</MudText>
                 <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
@@ -85,7 +84,7 @@
     </MudItem>
 
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText>Lactoses free</MudText>
                 <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
@@ -94,7 +93,7 @@
     </MudItem>
 
     <MudItem xs="12">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350px"></MudChart>
             </MudCardContent>
@@ -199,7 +198,7 @@
 
     private void DeleteIngredient()
     {
-        IngredientsService.Delete(currentIngredient);
+        IngredientsService.Delete(currentIngredient.Id);
         IngredientsService.SaveChanges();
         Snackbar.Add("Suppression effectuée avec succès ", Severity.Success);
         nm.NavigateTo("/ingredients");

@@ -14,12 +14,12 @@
             </MudSelect>
             <MudTextField @bind-Value="CurrentIngredient.Name" Label="Nom" Variant="Variant.Text"></MudTextField>
             <MudDatePicker Label="Date d'expiration" @bind-Date="CurrentIngredient.ExpirationDate" />
-            <MudTextField @bind-Value="@CurrentIngredient.Producer" Label="Producteur"/>
+            <MudTextField @bind-Value="@CurrentIngredient.Producer" Label="Producteur" />
 
-            <MudTextField @bind-Value="@CurrentIngredient.UnitPrice" T="double" Label="Prix unitaire"/>
-            <MudTextField @bind-Value="@CurrentIngredient.UnitInStock" T="int" Label="Nbr d'unités"/>
-            <MudTextField @bind-Value="@CurrentIngredient.UnitSuffix" Label="Unitée de mesure"/>
-            
+            <MudTextField @bind-Value="@CurrentIngredient.UnitPrice" T="double" Label="Prix unitaire" />
+            <MudTextField @bind-Value="@CurrentIngredient.UnitInStock" T="int" Label="Nbr d'unités" />
+            <MudTextField @bind-Value="@CurrentIngredient.UnitSuffix" Label="Unitée de mesure" />
+
             <MudSwitch @bind-Checked="@CurrentIngredient.IsVegan" Color="Color.Success">Vegan friendly</MudSwitch>
             <MudSwitch @bind-Checked="@CurrentIngredient.ContainsArachides" Color="Color.Info">Arachides Free</MudSwitch>
             <MudSwitch @bind-Checked="@CurrentIngredient.ContainsLactose" Color="Color.Info">Lactose Free</MudSwitch>
@@ -34,12 +34,14 @@
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    
+
     [Parameter]
     public Ingredient CurrentIngredient { get; set; }
 
+    public bool isCreateMode { get; set; } = false;
+
     public List<IngredientCategory> CategoriesAvailable { get; set; } = new();
-    
+
 
     protected override Task OnInitializedAsync()
     {
@@ -47,6 +49,7 @@
         if (CurrentIngredient == null)
         {
             CurrentIngredient = new Ingredient();
+            isCreateMode = true;
         }
 
         return base.OnInitializedAsync();
@@ -56,7 +59,10 @@
 
     void Submit()
     {
-        CurrentIngredient.UnitAtStart = CurrentIngredient.UnitInStock;
+        if (isCreateMode)
+        {
+            CurrentIngredient.UnitAtStart = CurrentIngredient.UnitInStock;
+        }
         MudDialog.Close(DialogResult.Ok(CurrentIngredient));
     }
 }

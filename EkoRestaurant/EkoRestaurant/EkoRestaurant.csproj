@@ -36,4 +36,9 @@
     <Watch Include="..\**\*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Watch Remove="Migrations\20210528202547_AddSoftDelete.cs" />
+    <Watch Remove="Migrations\20210528202547_AddSoftDelete.Designer.cs" />
+  </ItemGroup>
+
 </Project>

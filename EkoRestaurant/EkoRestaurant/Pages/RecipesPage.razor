@@ -124,11 +124,7 @@
             {
                 RecipesService.Create(res);
                 RecipesService.SaveChanges();
-                Snackbar.Add("Recette " + res.Name + "ajouté avec succès", Severity.Success);
-                if (res.Category == SelectedCategory || SelectedCategory == null)
-                {
-                    Recipes.Add(res);
-                }
+                Snackbar.Add("Recette " + res.Name + " ajouté avec succès", Severity.Success);
                 var currentCat = SelectedCategory;
                 SelectedCategory = new();
                 SelectedCategory = currentCat;

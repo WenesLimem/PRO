@@ -85,6 +85,17 @@ html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
     height: 44px !important;
 }
 
+.linea-border-wrapper {
+    padding: 1rem;
+    position: relative;
+    background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%);
+}
+
+.colored-border {
+    border-style: solid;
+    border-color: #FDA085 !important;
+}
+
 .btn-mud-gradiant-bg-rounded {
     color: white !important;
     background: linear-gradient(90deg, #F6D365 0%, #FDA085 100%) !important;
@@ -92,7 +103,27 @@ html, body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
     height: 44px !important;
 }
 
-.clickable { cursor: pointer }
+.chip-category-recipe {
+    float: left;
+    height: 40px !important;
+    margin-right: 20px;
+    width: 100px;
+    font-family: Roboto !important;
+    font-style: normal !important;
+    font-size: 20px !important;
+    line-height: 28px !important;
+    color: #5E6366;
+}
+
+.clickable {
+    cursor: pointer
+}
+
+
+.rounded-card {
+    border-radius: 20px !important;
+}
+
 /*Vertical lines*/
 .vl {
     border-left: 1px solid grey;

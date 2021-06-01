@@ -16,6 +16,12 @@
         <div class="h2-quicksand dark-color">@CurrentRecipe.Name</div>
     </MudItem>
     <MudItem xs="12">
+        <MudChip Color="Color.Primary" Variant="Variant.Outlined" Class="chip-category-recipe">@CurrentRecipe.Category.Name</MudChip>
+        <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Editer</MudButton>
+        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit"></MudIconButton>
+    </MudItem>
+    <MudItem xs="12">
         <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit" OnClick="@DeleteRecipe"></MudIconButton>
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Style="float: right;" OnClick="@EditRecipe"></MudIconButton>
     </MudItem>
@@ -27,7 +33,7 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudText Class="details-grid-content dark-color">@CurrentRecipe.Price</MudText>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.Price CHF</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -35,23 +41,11 @@
         <MudCard Elevation="4">
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText>Temps de préparation (minutes)</MudText>
+                    <MudText>Temps de préparation</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudText Class="details-grid-content dark-color">@CurrentRecipe.PreparationTimeMinutes</MudText>
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="4">
-        <MudCard Elevation="4">
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText>Catégorie</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudText Class="details-grid-content dark-color">@CurrentRecipe.GetCategoryName()</MudText>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.PreparationTimeMinutes minutes</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>

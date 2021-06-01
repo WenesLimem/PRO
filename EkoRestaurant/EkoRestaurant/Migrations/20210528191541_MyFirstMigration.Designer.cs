@@ -4,14 +4,16 @@ using EkoRestaurant.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EkoRestaurant.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210528191541_MyFirstMigration")]
+    partial class MyFirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,9 +102,6 @@ namespace EkoRestaurant.Migrations
                     b.Property<int?>("DessertId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("MainDishId")
                         .HasColumnType("int");
 
@@ -142,9 +141,6 @@ namespace EkoRestaurant.Migrations
                     b.Property<DateTime>("DateTimeStartCooking")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int>("State")
                         .HasColumnType("int");
 
@@ -162,9 +158,6 @@ namespace EkoRestaurant.Migrations
 
                     b.Property<int?>("ClientCommandId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -199,9 +192,6 @@ namespace EkoRestaurant.Migrations
 
                     b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsVegan")
                         .HasColumnType("bit");
@@ -238,9 +228,6 @@ namespace EkoRestaurant.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -265,9 +252,6 @@ namespace EkoRestaurant.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.ToTable("ListeDesCourses");
@@ -282,9 +266,6 @@ namespace EkoRestaurant.Migrations
 
                     b.Property<int?>("IngredientId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("ListeDesCoursesId")
                         .HasColumnType("int");
@@ -314,9 +295,6 @@ namespace EkoRestaurant.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -340,9 +318,6 @@ namespace EkoRestaurant.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -360,9 +335,6 @@ namespace EkoRestaurant.Migrations
 
                     b.Property<int?>("IngredientId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");

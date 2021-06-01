@@ -25,7 +25,7 @@
                     <MudTextField T="string" @bind-Value="@CurrentRecipe.Name" Label="Nom"
                                   Required="true" RequiredError="@recNameError" Variant="Variant.Outlined" />
                     <MudTextField T="string" @bind-Value="@CurrentRecipe.Description" Label="Description"
-                                  Required="true" RequiredError="@recDescError" Variant="Variant.Outlined" />
+                                  Required="true" RequiredError="@recDescError" Variant="Variant.Outlined" Lines="3"/>
                     <MudTextField T="double" @bind-Value="@CurrentRecipe.PreparationTimeMinutes" Label="Temps de préparation (minutes)"
                                   Required="true" RequiredError="@recTimePrepError" Variant="Variant.Outlined"
                                   Adornment="Adornment.End" AdornmentText="minutes" />
