@@ -1,56 +1,41 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+  
+# Docs for the Azure Web Apps Deploy action: https://go.microsoft.com/fwlink/?linkid=2134798
+# More GitHub Actions for Azure: https://go.microsoft.com/fwlink/?linkid=2135048
 
-name: Build and deploy ASP.Net Core app to Azure Web App - ekoRest
+name: Azure App Service - eko-restaurant(Production), Build and deploy DotnetCore app
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - azure_current
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    # checkout the repo
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@azure_current
+
 
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.301'
+        dotnet-version: '5.0.x'
 
     - name: Build with dotnet
+      working-directory: ./EkoRestaurant
       run: dotnet build --configuration Release
 
     - name: dotnet publish
+      working-directory: ./EkoRestaurant
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-        name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: .net-app
-
-    - name: Deploy to Azure Web App
-      id: deploy-to-webapp
+    - name: Run Azure webapp deploy action using publish profile credentials
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'ekoRest'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_d7a41e73c4984a4d9bb99a51c367d3f1 }}
-        package: .
+        app-name: ekoRest
+        slot-name: Production
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6BB02C2C73F94A389CD698584BC60F31 }}
+        package: ${{env.DOTNET_ROOT}}/myapp
