@@ -37,5 +37,5 @@ jobs:
       with:
         app-name: ekoRest
         slot-name: Production
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6BB02C2C73F94A389CD698584BC60F31 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_d7a41e73c4984a4d9bb99a51c367d3f1 }}
         package: ${{env.DOTNET_ROOT}}/myapp
