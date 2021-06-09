@@ -175,7 +175,7 @@
 
         if (CurrentRecipe.CategoryId != 0 && CurrentRecipe.Category == null && CurrentRecipe.CategoryId != null)
         {
-            CurrentRecipe.Category = RecipeCategoriesService.GetById((int)CurrentRecipe.CategoryId);
+            CurrentRecipe.Category = RecipeCategoriesService.GetById((int) CurrentRecipe.CategoryId);
         }
     }
 
@@ -201,6 +201,5 @@
     {
         NavigationManager.NavigateTo($"/ingredients/{clickEvent.Item.Ingredient.Id}");
     }
-}
 
 }
