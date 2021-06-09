@@ -2,8 +2,6 @@
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
-@using Humanizer
-@using System.Runtime.CompilerServices
 @inject ListeDesCoursesServices ListeDesCoursesServices
 @inject ListeDesCoursesElementService ListeDesCoursesElementService
 @inject IngredientsService IngredientsService
@@ -70,8 +68,6 @@
 
         Ldce = ListeDesCoursesServices.GetActiveListeDesCourses().ListeDesCoursesElements;
         ListeDesListes = ListeDesCoursesServices.FilterWithIngredients();
-
-
     }
 
 
