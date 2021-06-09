@@ -38,6 +38,13 @@ namespace EkoRestaurant.Extensions
             return true;
         }
 
+        public static double GetPriceNice(this Recipe recipe)
+        {
+            var d = recipe.Price;
+            var value = Math.Round(d, 2);
+            return value;
+        }
+
         public static bool IsVeganFriendly(this Recipe recipe)
         {
             foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
