@@ -149,11 +149,13 @@
                         <MudTh>Ingrédient</MudTh>
                         <MudTh>Quantité</MudTh>
                         <MudTh>Stock</MudTh>
+                        <MudTh>Prix</MudTh>
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Ingrédient">@context.Ingredient.Name</MudTd>
                         <MudTd DataLabel="Quantité">@context.Quantity @context.Ingredient.UnitSuffix</MudTd>
                         <MudTd DataLabel="Stock">@context.Ingredient.UnitInStock @context.Ingredient.UnitSuffix</MudTd>
+                        <MudTd DataLabel="Prix">@(context.Ingredient.UnitPrice * context.Quantity) CHF</MudTd>
                     </RowTemplate>
                 </MudTable>
             </MudCardContent>
