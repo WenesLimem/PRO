@@ -23,7 +23,7 @@
         <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@DeleteRecipe" Variant="Variant.Filled"><img src="Images/gradient-bin.svg" style="margin-right: 5px">Supprimer</MudButton>
     </MudItem>
     <MudItem xs="4">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText>Prix</MudText>
@@ -35,7 +35,7 @@
         </MudCard>
     </MudItem>
     <MudItem xs="4">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText>Temps de préparation</MudText>
@@ -47,7 +47,7 @@
         </MudCard>
     </MudItem>
     <MudItem xs="6">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText>Description</MudText>
@@ -59,13 +59,13 @@
         </MudCard>
     </MudItem>
     <MudItem xs="6">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText>Liste d'ingrédient</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
-            <MudCardContent>
+            <MudCardContent >
                 <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true">
                     <HeaderContent>
                         <MudTh>Ingrédient</MudTh>
