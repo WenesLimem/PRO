@@ -7,12 +7,12 @@
 @inject ClientCommandService ClientCommandService
 @inject RecipeCategoriesService RecipeCategoriesService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 
 <MudGrid>
     <MudItem xs="12">
-        <div class="page-title dark-color">Stocks</div>
-        <div class="h2-quicksand dark-color">currentIngredient.Name</div>
+        <div class="page-title dark-color">Nouvelle Commande</div>
     </MudItem>
     <MudItem xs="12">
         <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@LaunchValidationOfCommande" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Valider la commande</MudButton>
@@ -53,16 +53,16 @@
 
 @code {
 
-    ClientCommand ClientCommand { get; set; } = new();
+    ClientCommand Commmande { get; set; } = new();
     List<RecipeCategory> RecipeCategoriesAvailable { get; set; } = new();
-    List<Recipe> RecipesAvailable { get; set; } = new();
     public string Name { get; set; } = "";
     public string Phone { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
-        ClientCommand.DateTimeOrder = DateTime.Now;
-        ClientCommand.State = OrderState.ORDERED;
+        Commmande.DateTimeOrder = DateTime.Now;
+        Commmande.State = OrderState.ORDERED;
+        RecipeCategoriesAvailable = RecipeCategoriesService.Filter().ToList();
     }
 
     List<Recipe> GetRecipeOfCategory(RecipeCategory recipeCategory)
@@ -80,13 +80,13 @@
             Quantity = 1,
             Remark = "",
         };
-        ClientCommand.Elements.Add(element);
+        Commmande.Elements.Add(element);
     }
 
     private void LaunchValidationOfCommande()
     {
-        ClientCommand commandToCreate = ClientCommand;
-        ClientCommand = new();
+        ClientCommand commandToCreate = Commmande;
+        Commmande = new();
         // verify that we have the ingredients, make a list with (ingredientId, quantity) for the complete command
         Dictionary<int, int> countByIngredientId = new Dictionary<int, int>();
         foreach (var element in commandToCreate.Elements)
@@ -106,7 +106,7 @@
                 if (IngredientsService.GetById(ingId).UnitInStock < countByIngredientId[ingId])
                 {
                     // TODO; alert cannot verify because missing ingredients
-                    ClientCommand = commandToCreate;
+                    Commmande = commandToCreate;
                     return;
                 }
             }
@@ -117,13 +117,25 @@
         commandToCreate.ClientPhone = Phone;
         ClientCommandService.Create(commandToCreate);
         ClientCommandService.SaveChanges();
+
+        // change stock level
+        foreach (KeyValuePair<int, int> keyValuePair in countByIngredientId)
+        {
+            var ingredient = IngredientsService.GetById(keyValuePair.Key);
+            ingredient.UnitInStock -= keyValuePair.Value;
+        }
+        IngredientsService.SaveChanges();
+
+        Commmande = new ClientCommand();
+        Phone = "";
+        Name = "";
         NavigationManager.NavigateTo("commandes");
     }
 
     private int GetNombreOrdered(Recipe context)
     {
         var count = 0;
-        var elements = ClientCommand.Elements.Where((x) => x.Recipe.Id == context.Id);
+        var elements = Commmande.Elements.Where((x) => x.Recipe.Id == context.Id);
         foreach (ClientCommandElement clientCommandElement in elements)
         {
             count += clientCommandElement.Quantity;
@@ -134,7 +146,7 @@
 
     private void RemoveElement(Recipe context)
     {
-        ClientCommand.Elements.RemoveAll((x) => x.Recipe.Id == context.Id);
+        Commmande.Elements.RemoveAll((x) => x.Recipe.Id == context.Id);
     }
 
 }

@@ -9,6 +9,7 @@
 @inject NavigationManager nm
 @inject ListeDesCoursesServices ListeDesCoursesServices
 @inject ListeDesCoursesElementService ListeDesCoursesElementService
+@attribute [Authorize]
 
 <MudGrid>
     <MudItem xs="12">
@@ -24,7 +25,7 @@
     <MudItem xs="3">
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
-                <MudText >Prix unitaire</MudText>
+                <MudText>Prix unitaire</MudText>
                 <MudText Class="details-grid-content dark-color">@currentIngredient.UnitPrice CHF</MudText>
             </MudCardContent>
         </MudCard>
@@ -32,7 +33,7 @@
     <MudItem xs="3">
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
-                <MudText >Restant</MudText>
+                <MudText>Restant</MudText>
                 <MudText Class="details-grid-content" Color="Color.Info">@currentIngredient.UnitInStock @currentIngredient.UnitSuffix</MudText>
             </MudCardContent>
         </MudCard>
@@ -47,9 +48,9 @@
         </MudCard>
     </MudItem>
     <MudItem xs="3">
-        <MudCard Elevation="4"  Class="rounded-card">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
-                <MudText >Fournisseur</MudText>
+                <MudText>Fournisseur</MudText>
                 <MudText Class="details-grid-content dark-color">@currentIngredient.GetProducerName() </MudText>
             </MudCardContent>
         </MudCard>
@@ -59,7 +60,7 @@
         <MudCard Elevation="4" Class="rounded-card">
 
             <MudCardContent>
-                <MudText >Catégorie</MudText>
+                <MudText>Catégorie</MudText>
                 <MudText Class="details-grid-content dark-color"> @currentIngredient.GetCategoryName()</MudText>
             </MudCardContent>
         </MudCard>
@@ -68,8 +69,15 @@
     <MudItem xs="3">
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
-                <MudText >Vegan friendly</MudText>
-                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
+                <MudText>Vegan friendly</MudText>
+                @if (currentIngredient.IsVegan)
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -77,8 +85,15 @@
     <MudItem xs="3">
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
-                <MudText >Arachides free</MudText>
-                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
+                <MudText>Arachides free</MudText>
+                @if (currentIngredient.ContainsArachides)
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -87,7 +102,14 @@
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText>Lactoses free</MudText>
-                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
+                @if (currentIngredient.ContainsLactose)
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -112,11 +134,11 @@
     public Ingredient currentIngredient { get; set; }
 
     public List<ChartSeries> Series = new List<ChartSeries>()
-    {
+{
         new ChartSeries() {Name = "Suivi de consommation", Data = new double[] {90, 79, 72, 69, 62, 62, 55, 65, 70}}
     };
 
-    public string[] XAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"};
+    public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -128,15 +150,17 @@
         currentIngredient = IngredientsService.GetById(Id);
         if (currentIngredient.CategoryId != 0 && currentIngredient.Category == null && currentIngredient.CategoryId != null)
         {
-            currentIngredient.Category = IngCatService.GetById((int) currentIngredient.CategoryId);
+            currentIngredient.Category = IngCatService.GetById((int)currentIngredient.CategoryId);
         }
     }
-    private  void AddElement(Ingredient ingredient, int qty)
+    private void AddElement(Ingredient ingredient, int qty)
     {
 
         var element = new ListeDesCoursesElement()
         {
-            Quantity = qty, Ingredient = ingredient, ListeDesCourses = ListeDesCoursesServices.GetActiveListeDesCourses()
+            Quantity = qty,
+            Ingredient = ingredient,
+            ListeDesCourses = ListeDesCoursesServices.GetActiveListeDesCourses()
         };
         var created = ListeDesCoursesElementService.Create(element);
         ListeDesCoursesElementService.SaveChanges();
@@ -146,16 +170,16 @@
     private void AddIngredientToList()
     {
         try
-        {   
-            AddElement(currentIngredient,currentIngredient.UnitAtStart);
+        {
+            AddElement(currentIngredient, currentIngredient.UnitAtStart);
             Snackbar.Add(currentIngredient.Name + " ajouté à la liste des courses", severity: Severity.Success,
-                config =>  
+                config =>
                 {
                     config.Action = "Afficher la liste des courses";
                     config.ActionColor = Color.Surface;
                     config.Onclick = async snackbar =>
                     {
-                       ViewListe();
+                        ViewListe();
                     };
 
                 });
@@ -165,7 +189,7 @@
             Snackbar.Add("Une erreur est survenue lors de l'ajout du produit à la liste des courses.", severity: Severity.Error);
 
         }
-       
+
     }
 
     private void ViewListe()
@@ -181,7 +205,7 @@
         var res = await dialog.Result;
         if (!res.Cancelled)
         {
-            var result = (Ingredient) res.Data;
+            var result = (Ingredient)res.Data;
             try
             {
                 var editRes = IngredientsService.Edit(result);

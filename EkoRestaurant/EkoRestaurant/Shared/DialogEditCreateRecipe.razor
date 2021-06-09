@@ -24,10 +24,10 @@
 </MudDialog>
 
 @code {
-        [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-        [Parameter]
-        public Recipe CurrentRecipe { get; set; }
+    [Parameter]
+    public Recipe CurrentRecipe { get; set; }
 
     public List<RecipeCategory> CategoriesAvailable { get; set; } = new();
 

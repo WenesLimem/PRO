@@ -8,7 +8,8 @@
 @inject IngredientsService IngredientsService
 @inject ISnackbar Snackbar
 @inject IDialogService Dialogservice
-@inject NavigationManager nm
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <MudGrid>
     <MudItem xs="12">
@@ -17,16 +18,11 @@
     </MudItem>
     <MudItem xs="12">
         <MudChip Color="Color.Primary" Variant="Variant.Outlined" Class="chip-category-recipe">@CurrentRecipe.Category.Name</MudChip>
-        <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
-        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Editer</MudButton>
-        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit"></MudIconButton>
-    </MudItem>
-    <MudItem xs="12">
-        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit" OnClick="@DeleteRecipe"></MudIconButton>
-        <MudIconButton Icon="@Icons.Material.Filled.Edit" Style="float: right;" OnClick="@EditRecipe"></MudIconButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@EditRecipe" Variant="Variant.Filled"><img src="Images/EditGradient.svg" style="margin-right: 5px">Editer</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@DeleteRecipe" Variant="Variant.Filled"><img src="Images/gradient-bin.svg" style="margin-right: 5px">Supprimer</MudButton>
     </MudItem>
     <MudItem xs="4">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText>Prix</MudText>
@@ -38,7 +34,7 @@
         </MudCard>
     </MudItem>
     <MudItem xs="4">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText>Temps de préparation</MudText>
@@ -49,8 +45,40 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
-    <MudItem xs="6">
-        <MudCard Elevation="4">
+    <MudItem xs="4">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Coûts des ingrédients</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.GetIngredientPrice() CHF</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="4">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Assez d'ingrédients en stock</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+            @if (CurrentRecipe.CanBeProduced())
+            {
+
+                <MudText Class="details-grid-content dark-color" Color="Color.Success">@CurrentRecipe.CanBeProduced().BooleanToFrench()</MudText>
+            }
+            else
+            {
+                <MudText Class="details-grid-content dark-color" Color="Color.Error">@CurrentRecipe.CanBeProduced().BooleanToFrench()</MudText>
+            }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="8">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText>Description</MudText>
@@ -61,22 +89,71 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
-    <MudItem xs="6">
-        <MudCard Elevation="4">
+    <MudItem xs="3">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardContent>
+                <MudText>Vegan friendly</MudText>
+                @if (CurrentRecipe.IsVeganFriendly())
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@CurrentRecipe.IsVeganFriendly().BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@CurrentRecipe.IsVeganFriendly().BooleanToFrench()</MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardContent>
+                <MudText>Arachides free</MudText>
+                @if (CurrentRecipe.IsArachidesFree())
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@CurrentRecipe.IsArachidesFree().BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@CurrentRecipe.IsArachidesFree().BooleanToFrench()</MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardContent>
+                <MudText>Lactoses free</MudText>
+                @if (CurrentRecipe.IsLactoseFree())
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@CurrentRecipe.IsLactoseFree().BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@CurrentRecipe.IsLactoseFree().BooleanToFrench()</MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12">
+        <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText>Liste d'ingrédient</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true">
+                <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true" OnRowClick="@ClickedRow">
                     <HeaderContent>
                         <MudTh>Ingrédient</MudTh>
                         <MudTh>Quantité</MudTh>
+                        <MudTh>Stock</MudTh>
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Ingrédient">@context.Ingredient.Name</MudTd>
-                        <MudTd DataLabel="Quantité">@context.Quantity</MudTd>
+                        <MudTd DataLabel="Quantité">@context.Quantity @context.Ingredient.UnitSuffix</MudTd>
+                        <MudTd DataLabel="Stock">@context.Ingredient.UnitInStock @context.Ingredient.UnitSuffix</MudTd>
                     </RowTemplate>
                 </MudTable>
             </MudCardContent>
@@ -105,13 +182,13 @@
 
         if (CurrentRecipe.CategoryId != 0 && CurrentRecipe.Category == null && CurrentRecipe.CategoryId != null)
         {
-            CurrentRecipe.Category = RecipeCategoriesService.GetById((int)CurrentRecipe.CategoryId);
+            CurrentRecipe.Category = RecipeCategoriesService.GetById((int) CurrentRecipe.CategoryId);
         }
     }
 
     private void EditRecipe()
     {
-        nm.NavigateTo($"/recipes/edit/{CurrentRecipe.Id}");
+        NavigationManager.NavigateTo($"/recipes/edit/{CurrentRecipe.Id}");
     }
 
     private void DeleteRecipe()
@@ -124,6 +201,12 @@
         RecipesService.Delete(CurrentRecipe);
         RecipesService.SaveChanges();
         Snackbar.Add("Supression effectuée avec succès", Severity.Success);
-        nm.NavigateTo("/recipes");
+        NavigationManager.NavigateTo("/recipes");
     }
+
+    public void ClickedRow(TableRowClickEventArgs<RecipeIngredientQuantity> clickEvent)
+    {
+        NavigationManager.NavigateTo($"/ingredients/{clickEvent.Item.Ingredient.Id}");
+    }
+
 }

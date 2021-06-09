@@ -5,7 +5,7 @@
 <MudSnackbarProvider/>
 
 <MudLayout>
-    <MudAppBar Color="Color.Transparent" Dense="true" Elevation="1">
+    <MudAppBar Color="Color.Tertiary" Dense="true" Elevation="1">
         @if (open == false)
         {
             <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="@ToggleDrawer"><img src="Images/Logo Ecommerce.svg" style="height: 35px"/></MudButton>
@@ -19,16 +19,18 @@
         </MudDrawerHeader>
         <MudNavMenu>
             <MudNavLink Class="mt-2" Href="/index" Icon="@Icons.Filled.Home">Dashboard</MudNavLink>
-            <MudNavLink Href="/ingredients" Icon="@Icons.Filled.ShoppingBasket">Stocks</MudNavLink>
 
-            <MudNavLink Href="/recipes" Icon="@Icons.Custom.FileFormats.FileDocument">Recettes</MudNavLink>
-
-     
-            <MudNavLink Href="/listedescourses" Icon="@Icons.Material.Filled.ShoppingCart"> Liste des courses</MudNavLink>
-
-            <MudNavLink Href="/commandes" Icon="@Icons.Filled.FormatListNumbered">Commandes</MudNavLink>
-
+            <AuthorizeView>
+                <MudNavLink Href="/ingredients" Icon="@Icons.Filled.ShoppingBasket">Stocks</MudNavLink>
+                <MudNavLink Href="/recipes" Icon="@Icons.Custom.FileFormats.FileDocument">Recettes</MudNavLink>
+                <MudNavLink Href="/listedescourses" Icon="@Icons.Material.Filled.ShoppingCart"> Liste des courses</MudNavLink>
+                <MudNavLink Href="/commandes" Icon="@Icons.Filled.FormatListNumbered">Commandes</MudNavLink>
+            </AuthorizeView>
             <MudNavLink Href="/menu" Icon="@Icons.Filled.RestaurantMenu">Menu</MudNavLink>
+            <AuthorizeView Roles="Administrator">
+                <MudNavLink Href="/users-management" Icon="@Icons.Filled.AdminPanelSettings">Gestion d'utilisateurs'</MudNavLink>
+            </AuthorizeView>
+
 
         </MudNavMenu>
     </MudDrawer>
@@ -50,7 +52,8 @@
         Palette = new Palette()
         {
             Primary = "#F3AA18",
-            Secondary = "#86878a"
+            Secondary = "#86878a",
+            Tertiary = "#FFFFFF"
         }
     };
 

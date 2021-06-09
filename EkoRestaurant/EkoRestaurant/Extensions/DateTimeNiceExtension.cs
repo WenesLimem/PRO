@@ -23,7 +23,12 @@ namespace EkoRestaurant.Extensions
         {
             if (!date.HasValue)
                 return "";
-            var res = date.GetValueOrDefault().Hour + ":";
+            var res = date.GetValueOrDefault().Hour + "h";
+            var minutes = date.GetValueOrDefault().Minute;
+            if (minutes < 10)
+            {
+                res += "0";
+            }
             res += date.GetValueOrDefault().Minute;
 
             return res;
@@ -32,6 +37,10 @@ namespace EkoRestaurant.Extensions
         public static string HoursMinutes(this DateTime date)
         {
             var res = date.Hour + "h";
+            if (date.Minute < 10)
+            {
+                res += "0";
+            }
             res += date.Minute;
 
             return res;
