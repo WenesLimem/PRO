@@ -7,6 +7,7 @@
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <MudGrid>
     <MudItem xs="12">
@@ -34,12 +35,12 @@
                 @foreach (IngredientCategory category in IngredientCategories)
                 {
                     <div @onclick="() => SelectCategoryInSideBar(category)">
-                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)"/>
+                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)" />
                     </div>
                 }
             }
-            <div class="small-separator"/>
-            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
+            <div class="small-separator" />
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg" />Nouvelle catégorie</MudButton>
         </div>
 
     </MudItem>
@@ -106,7 +107,7 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (IngredientCategory) result.Data;
+            var res = (IngredientCategory)result.Data;
             try
             {
                 IngredientCategoriesService.Create(res);
@@ -130,7 +131,7 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (Ingredient) result.Data;
+            var res = (Ingredient)result.Data;
             try
             {
                 IngredientsService.Create(res);

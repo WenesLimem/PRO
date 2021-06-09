@@ -8,6 +8,7 @@
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <MudGrid>
     <MudItem xs="12">
@@ -15,7 +16,7 @@
     </MudItem>
 
     <MudItem xs="12">
-        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddRecipeDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg"/>Ajouter</MudButton>
+        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddRecipeDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg" />Ajouter</MudButton>
         @if (SelectedCategory != null)
         {
             <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
@@ -36,8 +37,8 @@
                     </div>
                 }
             }
-            <div class="small-separator"/>
-            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenRecipeCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
+            <div class="small-separator" />
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenRecipeCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg" />Nouvelle catégorie</MudButton>
         </div>
     </MudItem>
     <MudItem xs="8">

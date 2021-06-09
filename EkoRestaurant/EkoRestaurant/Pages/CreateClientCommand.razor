@@ -7,6 +7,7 @@
 @inject ClientCommandService ClientCommandService
 @inject RecipeCategoriesService RecipeCategoriesService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 
 <MudGrid>
@@ -19,8 +20,8 @@
     </MudItem>
 
     <MudItem xs="12">
-        <MudTextField @bind-Value="@Name" Immediate="true" Label="Nom du client"/>
-        <MudTextField @bind-Value="@Phone" Immediate="true" Label="Numéro de téléphone du client"/>
+        <MudTextField @bind-Value="@Name" Immediate="true" Label="Nom du client" />
+        <MudTextField @bind-Value="@Phone" Immediate="true" Label="Numéro de téléphone du client" />
     </MudItem>
 
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" Style="width: 100%;">
@@ -38,8 +39,8 @@
                         <MudTd DataLabel="Nr">@context.Id</MudTd>
                         <MudTd DataLabel="Name">@context.Name</MudTd>
                         <MudTd DataLabel="ajouter">
-                            <MudFab OnClick=@(() => AddElement(context)) Color="Color.Primary" Icon="@Icons.Material.Filled.ShoppingCart" Size="Size.Small" IconSize="Size.Small" Label="Ajouter" Class="ma-2"/>
-                            <MudFab OnClick=@(() => RemoveElement(context)) Color="Color.Error" Icon="@Icons.Material.Filled.ShoppingCart" Size="Size.Small" IconSize="Size.Small" Label="Enlever" Class="ma-2"/>
+                            <MudFab OnClick=@(() => AddElement(context)) Color="Color.Primary" Icon="@Icons.Material.Filled.ShoppingCart" Size="Size.Small" IconSize="Size.Small" Label="Ajouter" Class="ma-2" />
+                            <MudFab OnClick=@(() => RemoveElement(context)) Color="Color.Error" Icon="@Icons.Material.Filled.ShoppingCart" Size="Size.Small" IconSize="Size.Small" Label="Enlever" Class="ma-2" />
                         </MudTd>
                         <MudTh>
                             @GetNombreOrdered(context)
@@ -87,11 +88,11 @@
     {
         ClientCommand commandToCreate = Commmande;
         Commmande = new();
-    // verify that we have the ingredients, make a list with (ingredientId, quantity) for the complete command
+        // verify that we have the ingredients, make a list with (ingredientId, quantity) for the complete command
         Dictionary<int, int> countByIngredientId = new Dictionary<int, int>();
         foreach (var element in commandToCreate.Elements)
         {
-    // recipe level
+            // recipe level
             foreach (var ingredientQuantity in element.Recipe.IngredientQuantities)
             {
                 var ingId = ingredientQuantity.Ingredient.Id;
@@ -105,13 +106,13 @@
                 }
                 if (IngredientsService.GetById(ingId).UnitInStock < countByIngredientId[ingId])
                 {
-    // TODO; alert cannot verify because missing ingredients
+                    // TODO; alert cannot verify because missing ingredients
                     Commmande = commandToCreate;
                     return;
                 }
             }
         }
-    // TODO snackbar
+        // TODO snackbar
         commandToCreate.DateTimeOrder = DateTime.Now;
         commandToCreate.ClientName = Name;
         commandToCreate.ClientPhone = Phone;
