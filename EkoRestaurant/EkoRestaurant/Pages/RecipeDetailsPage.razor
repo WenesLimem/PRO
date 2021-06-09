@@ -17,7 +17,7 @@
         <div class="h2-quicksand dark-color">@CurrentRecipe.Name</div>
     </MudItem>
     <MudItem xs="12">
-        <MudChip Color="Color.Primary" Variant="Variant.Outlined" Class="chip-category-recipe">@CurrentRecipe.Category.Name</MudChip>
+        <MudChip Style="width: max-content;" Color="Color.Primary" Variant="Variant.Outlined" Class="chip-category-recipe">@CurrentRecipe.Category.Name</MudChip>
         <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@EditRecipe" Variant="Variant.Filled"><img src="Images/EditGradient.svg" style="margin-right: 5px">Editer</MudButton>
         <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@DeleteRecipe" Variant="Variant.Filled"><img src="Images/gradient-bin.svg" style="margin-right: 5px">Supprimer</MudButton>
     </MudItem>
