@@ -15,14 +15,13 @@
         <MudButton Style="float: right; width: 400px;" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled" OnClick="@(() => OpenNewCommand())">
             <img src="Images/white-add-plus.svg" />Nouvelle commande
         </MudButton>    </MudItem>
-    @*<MudPaper Class="pa-2 ma-2" Style="min-height: 100vh; width: 350px;">*@
 
     <MudItem xs="4">
         <div class="flex-column">
             <div class="h2-quicksand dark-color" style="margin-bottom: 8px">Commandé</div>
             @foreach (var commande in ClientCommandsOrdered)
             {
-                <MudCard Style="margin-top: 4px">
+                <MudCard Style="margin-top: 4px" Class="rounded-card">
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText Typo="Typo.h6">#@(commande.Id) - @commande.ClientName</MudText>
@@ -47,7 +46,7 @@
             <div class="h2-quicksand dark-color" style="margin-bottom: 8px">En Cours</div>
             @foreach (var commande in ClientCommandsCooking)
             {
-                <MudCard Style="margin-top: 4px">
+                <MudCard Style="margin-top: 4px" Class="rounded-card">
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText Typo="Typo.h6">#@(commande.Id) - @commande.ClientName</MudText>
@@ -73,7 +72,7 @@
             <div class="h2-quicksand dark-color" style="margin-bottom: 8px">A Payer</div>
             @foreach (var commande in ClientCommandsFinished)
             {
-                <MudCard Style="margin-top: 4px">
+                <MudCard Style="margin-top: 4px" Class="rounded-card">
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText Typo="Typo.h6">#@(commande.Id) - @commande.ClientName</MudText>
