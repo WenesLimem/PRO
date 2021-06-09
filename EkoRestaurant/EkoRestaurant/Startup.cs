@@ -12,6 +12,8 @@ using EkoRestaurant.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MudBlazor.Services;
+using Plk.Blazor.DragDrop;
+using Syncfusion.Blazor;
 
 namespace EkoRestaurant
 {
@@ -39,7 +41,7 @@ namespace EkoRestaurant
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            
+            services.AddBlazorDragDrop();
             services.AddSingleton<WeatherForecastService>();
 
             // librairies services
@@ -55,13 +57,13 @@ namespace EkoRestaurant
 
             services.AddTransient<ListeDesCoursesServices>();
             services.AddTransient<ListeDesCoursesElementService>();
+            services.AddTransient<ClientCommandService>();
+
 
             services.AddTransient<RecipeIngredientQuantitiesService>();
 
             // identity related service
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

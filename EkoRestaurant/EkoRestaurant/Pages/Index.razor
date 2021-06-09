@@ -3,6 +3,7 @@
 @using EkoRestaurant.Services
 @using EkoRestaurant.Data
 @using EkoRestaurant.Extensions
+@using Plk.Blazor.DragDrop
 @inject DailyMenusService DailyMenusService
 
 <MudGrid Spacing="5" Justify="Justify.Center">
@@ -10,29 +11,106 @@
         <MudPaper Class="d-flex align-center justify-space-between pa-2 my-1 mx-2 mt-6" Outlined="false" Elevation="0">
             <MudText Typo="Typo.h2">
                 <AuthorizeView>
-                     Bienvenue @context.User.Identity.Name! !
+                    Bienvenue @context.User.Identity.Name! !
                 </AuthorizeView>
 
-</MudText>
+            </MudText>
             <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled">
-                <img src="Images/white-add-plus.svg" />Nouvelle commande
+                <img src="Images/white-add-plus.svg"/>Nouvelle commande
             </MudButton>
         </MudPaper>
     </MudItem>
+    @{ Initialize(); }
+    <MudItem xs="4">
+        <MudCard Elevation="4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Commandes <MudIcon Icon="@Icons.Material.Filled.Restaurant" Style="float: right"></MudIcon> </MudText>
 
-    <MealInfo />
-    <MealInfo />
-    <MealInfo />
-    <!--
-        <MealInfo CurrentRecipe="CurrentDailyMenu.Starter" />
-        <MealInfo CurrentRecipe="CurrentDailyMenu.MainDish"/>
-        <MealInfo CurrentRecipe="CurrentDailyMenu.Dessert"/>
-    -->
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudList Clickable="true">
+                    <Dropzone Items="Orders2">
+                        <MudListItem>
+                            <div style="margin-bottom: 4px">@context</div>
+                        </MudListItem>
+                        <MudDivider/>
+                    </Dropzone>
+                </MudList>
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudCard Elevation="4">
+
+
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">En Cours <MudIcon Icon="@Icons.Material.Filled.Pending" Style="float: right"></MudIcon></MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudList Clickable="true">
+                    <Dropzone Items="Tasks" >
+                        <MudListItem>
+                            <div style="margin-bottom: 4px">@context</div>
+                        </MudListItem>
+                        <MudDivider/>
+                    </Dropzone>
+                </MudList>
+
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="4">
+        <MudCard Elevation="4">
+            <MudCardHeader>
+                <CardHeaderContent>
+
+                    <MudText Typo="Typo.h6">Prêtes <MudIcon Icon="@Icons.Material.Filled.Done" Style="float: right"></MudIcon></MudText>
+
+                </CardHeaderContent>
+
+            </MudCardHeader>
+            <MudCardContent>
+                <MudList Clickable="true">
+                    <Dropzone Items="Ready" >
+                        <MudListItem>
+                            <div style="margin-bottom: 4px">@context</div>
+                        </MudListItem>
+                        <MudDivider/>
+                    </Dropzone>
+                </MudList>
+
+            </MudCardContent>
+        </MudCard>
+
+    </MudItem>
+
 </MudGrid>
 
 @code {
     // Faire la récupération des données depuis la DB
     // public DailyMenu CurrentDailyMenu { get; set; }
+    
+    public List<String> Tasks = new List<string>() {"Item 8"};
+    public List<String> Orders2 = new List<string>() {"Item 7"};
+    public List<String> Ready = new List<string>() {"Item 0"};
+
+
+    public void Initialize()
+    {
+        Tasks.Add("Item 2");
+        Tasks.Add("Item 3");
+        Orders2.Add("Item 1");
+        Orders2.Add("Item 5");
+        Ready.Add("Item 4");
+        Ready.Add("Item 6");
+    }
+
+
 }
-
-

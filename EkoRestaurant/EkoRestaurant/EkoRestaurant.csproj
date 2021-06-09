@@ -11,9 +11,11 @@
     <Content Remove="Data\Migrations\**" />
     <EmbeddedResource Remove="Data\Migrations\**" />
     <None Remove="Data\Migrations\**" />
+    <Content Remove="Pages\NewClientCommandPage.razor" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="blazor-dragdrop" Version="2.3.0" />
     <PackageReference Include="BlazorTable" Version="1.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
@@ -25,10 +27,18 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="MudBlazor" Version="5.0.7" />
+    <PackageReference Include="Syncfusion.Blazor" Version="19.1.0.63" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Migrations" />
+    <Watch Include="..\**\*.razor" />
+    <Watch Include="..\**\*.scss" />
+    <Watch Include="..\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Watch Remove="Migrations\20210528202547_AddSoftDelete.cs" />
+    <Watch Remove="Migrations\20210528202547_AddSoftDelete.Designer.cs" />
   </ItemGroup>
 
 </Project>

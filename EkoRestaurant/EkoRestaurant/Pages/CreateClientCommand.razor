@@ -1,0 +1,26 @@
+﻿@page "/create-command"
+@using EkoRestaurant.Data.Entities
+
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Stocks</div>
+        <div class="h2-quicksand dark-color">currentIngredient.Name</div>
+    </MudItem>
+    <MudItem xs="12">
+        <MudTextField @bind-Value="ClientCommand.ClientName" Immediate="true" Label="Nom du client" />
+        <MudTextField @bind-Value="ClientCommand.ClientPhone" Immediate="true" Label="Numéro de téléphone du client" />
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    ClientCommand ClientCommand { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ClientCommand.DateTimeOrder = DateTime.Now;
+        ClientCommand.State = OrderState.ORDERED;
+    }
+}
+ 
