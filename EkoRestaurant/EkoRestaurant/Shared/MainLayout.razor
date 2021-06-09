@@ -5,7 +5,7 @@
 <MudSnackbarProvider/>
 
 <MudLayout>
-    <MudAppBar Color="Color.Transparent" Dense="true" Elevation="1">
+    <MudAppBar Color="Color.Tertiary" Dense="true" Elevation="1">
         @if (open == false)
         {
             <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="@ToggleDrawer"><img src="Images/Logo Ecommerce.svg" style="height: 35px"/></MudButton>
@@ -52,7 +52,8 @@
         Palette = new Palette()
         {
             Primary = "#F3AA18",
-            Secondary = "#86878a"
+            Secondary = "#86878a",
+            Tertiary = "#FFFFFF"
         }
     };
 
