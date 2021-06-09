@@ -68,7 +68,7 @@
                 <MudTd DataLabel="Nom">@context.Name</MudTd>
                 <MudTd DataLabel="Producteur">@context.GetProducerName()</MudTd>
                 <MudTd DataLabel="Date d'expiration">@context.ExpirationDate.Nice()</MudTd>
-                <MudTd DataLabel="Qte en stock">@context.UnitInStock@context.UnitSuffix</MudTd>
+                <MudTd DataLabel="Qte en stock">@context.UnitInStock @context.UnitSuffix</MudTd>
                 <MudTd DataLabel="Prix">@context.UnitPrice</MudTd>
             </RowTemplate>
         </MudTable>
