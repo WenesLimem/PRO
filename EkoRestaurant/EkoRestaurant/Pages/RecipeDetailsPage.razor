@@ -94,10 +94,12 @@
                     <HeaderContent>
                         <MudTh>Ingrédient</MudTh>
                         <MudTh>Quantité</MudTh>
+                        <MudTh>Stock</MudTh>
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Ingrédient">@context.Ingredient.Name</MudTd>
                         <MudTd DataLabel="Quantité">@context.Quantity</MudTd>
+                        <MudTd DataLabel="Stock">@context.Ingredient.UnitInStock</MudTd>
                     </RowTemplate>
                 </MudTable>
             </MudCardContent>
