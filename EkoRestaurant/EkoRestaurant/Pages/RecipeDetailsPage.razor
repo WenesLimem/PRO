@@ -65,7 +65,15 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudText Class="details-grid-content dark-color">@CurrentRecipe.CanBeProduced().BooleanToFrench()</MudText>
+            @if (CurrentRecipe.CanBeProduced())
+            {
+
+                <MudText Class="details-grid-content dark-color" Color="Color.Success">@CurrentRecipe.CanBeProduced().BooleanToFrench()</MudText>
+            }
+            else
+            {
+                <MudText Class="details-grid-content dark-color" Color="Color.Error">@CurrentRecipe.CanBeProduced().BooleanToFrench()</MudText>
+            }
             </MudCardContent>
         </MudCard>
     </MudItem>

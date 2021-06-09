@@ -117,6 +117,15 @@
         commandToCreate.ClientPhone = Phone;
         ClientCommandService.Create(commandToCreate);
         ClientCommandService.SaveChanges();
+
+        // change stock level
+        foreach (KeyValuePair<int, int> keyValuePair in countByIngredientId)
+        {
+            var ingredient = IngredientsService.GetById(keyValuePair.Key);
+            ingredient.UnitInStock -= keyValuePair.Value;
+        }
+        IngredientsService.SaveChanges();
+
         Commmande = new ClientCommand();
         Phone = "";
         Name = "";
