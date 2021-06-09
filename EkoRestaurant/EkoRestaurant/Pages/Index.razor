@@ -5,18 +5,19 @@
 @using EkoRestaurant.Extensions
 @using Plk.Blazor.DragDrop
 @inject DailyMenusService DailyMenusService
+@inject NavigationManager NavigationManager
 
 <MudGrid Spacing="5" Justify="Justify.Center">
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-space-between pa-2 my-1 mx-2 mt-6" Outlined="false" Elevation="0">
             <MudText Typo="Typo.h2">
                 <AuthorizeView>
-                    Bienvenue @context.User.Identity.Name!
+                    <div class="page-title dark-color">Bienvenue @context.User.Identity.Name!</div>
                 </AuthorizeView>
 
             </MudText>
-            <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled">
-                <img src="Images/white-add-plus.svg"/>Nouvelle commande
+            <MudButton Style="float: right; width: 400px;" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled" OnClick="@(() => OpenNewCommand())">
+                <img src="Images/white-add-plus.svg" />Nouvelle commande
             </MudButton>
         </MudPaper>
     </MudItem>
@@ -35,7 +36,7 @@
                         <MudListItem>
                             <div style="margin-bottom: 4px">@context</div>
                         </MudListItem>
-                        <MudDivider/>
+                        <MudDivider />
                     </Dropzone>
                 </MudList>
 
@@ -54,11 +55,11 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudList Clickable="true">
-                    <Dropzone Items="Tasks" >
+                    <Dropzone Items="Tasks">
                         <MudListItem>
                             <div style="margin-bottom: 4px">@context</div>
                         </MudListItem>
-                        <MudDivider/>
+                        <MudDivider />
                     </Dropzone>
                 </MudList>
 
@@ -76,11 +77,11 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudList Clickable="true">
-                    <Dropzone Items="Ready" >
+                    <Dropzone Items="Ready">
                         <MudListItem>
                             <div style="margin-bottom: 4px">@context</div>
                         </MudListItem>
-                        <MudDivider/>
+                        <MudDivider />
                     </Dropzone>
                 </MudList>
 
@@ -94,10 +95,10 @@
 @code {
     // Faire la récupération des données depuis la DB
     // public DailyMenu CurrentDailyMenu { get; set; }
-    
-    public List<String> Tasks = new List<string>() {"Item 8"};
-    public List<String> Orders2 = new List<string>() {"Item 7"};
-    public List<String> Ready = new List<string>() {"Item 0"};
+
+    public List<String> Tasks = new List<string>() { "Item 8" };
+    public List<String> Orders2 = new List<string>() { "Item 7" };
+    public List<String> Ready = new List<string>() { "Item 0" };
 
 
     public void Initialize()
@@ -110,5 +111,10 @@
         Ready.Add("Item 6");
     }
 
+
+    private void OpenNewCommand()
+    {
+        NavigationManager.NavigateTo("create-command");
+    }
 
 }
