@@ -13,6 +13,5 @@ namespace EkoRestaurant.Services
         public IngredientsService(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
-
     }
 }

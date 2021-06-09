@@ -1,0 +1,67 @@
+﻿@using EkoRestaurant.Data.Entities
+@using EkoRestaurant.Extensions
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            Commande #@CommandToDisplay.Id
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <div class="flex-column">
+            <MudTextField ReadOnly="true" @bind-Value="@CommandToDisplay.ClientName" Label="Nom du client" Variant="Variant.Text"></MudTextField>
+            <MudTextField ReadOnly="true" @bind-Value="@CommandToDisplay.ClientPhone" Label="Numéro de téléphone" Variant="Variant.Text"></MudTextField>
+            <MudTextField ReadOnly="true" @bind-Value="@Price" Label="Prix total" Variant="Variant.Text"  Adornment="Adornment.End" AdornmentText="CHF"></MudTextField>
+        
+            <MudTable Items="@CommandeElements" Hover="true" Breakpoint="Breakpoint.Sm">
+                <HeaderContent>
+                    <MudTh>Recette</MudTh>
+                    <MudTh>Quantitée</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Recette">@context.Key</MudTd>
+                    <MudTd DataLabel="Quantitée">@context.Value</MudTd>
+                </RowTemplate>
+            </MudTable>
+        
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ClientCommand CommandToDisplay { get; set; }
+
+    public List<KeyValuePair<string, int>> CommandeElements = new();
+    public double Price { get; set; }
+
+
+    protected override Task OnInitializedAsync()
+    {
+        Price = CommandToDisplay.GetTotalPrice();
+        Dictionary<string, int> RecipesQuantities = new Dictionary<string, int>();
+        foreach (ClientCommandElement element in CommandToDisplay.Elements)
+        {
+            if (!RecipesQuantities.ContainsKey(element.Recipe.Name))
+            {
+                RecipesQuantities.Add(element.Recipe.Name, element.Quantity);
+            }
+            else
+            {
+                RecipesQuantities[element.Recipe.Name] += element.Quantity;
+            }
+        }
+
+        CommandeElements = RecipesQuantities.ToList();
+        return base.OnInitializedAsync();
+    }
+
+    void Cancel() => MudDialog.Cancel();
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+}

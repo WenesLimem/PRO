@@ -1,0 +1,155 @@
+﻿@page "/commandes"
+@using EkoRestaurant.Data.Entities
+@using EkoRestaurant.Extensions
+@using EkoRestaurant.Services
+@inject ClientCommandService ClientCommandService
+@inject IDialogService DialogService
+
+<MudGrid>
+    <MudItem xs="12">
+        <div class="page-title dark-color">Commandes</div>
+    </MudItem>
+    <MudItem xs="12">
+        <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/EditGradient.svg" style="margin-right: 5px">Editer</MudButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/gradient-bin.svg" style="margin-right: 5px">Supprimer</MudButton>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudPaper Class="pa-2 ma-2" Style="min-height: 100vh; width: 350px;">
+            <div class="flex-column">
+                <div class="h2-quicksand dark-color" style="margin-bottom: 8px">Commandé</div>
+                @foreach (var commande in ClientCommandsOrdered)
+                {
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">#@(commande.Id) - @commande.ClientName</MudText>
+                            </CardHeaderContent>
+                            <CardHeaderActions>
+                                <MudIconButton Icon="@Icons.Material.Filled.ArrowForward" Color="Color.Default" OnClick="@(() => PassToCookingState(commande))" />
+                            </CardHeaderActions>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText>Prix total: @commande.GetTotalPrice()CHF</MudText>
+                            <MudText>Commandé à: @(commande.DateTimeOrder.HoursMinutes()) </MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => OpenViewCommandDialog(commande))">Voir</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                }
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="4">
+        <MudPaper Class="pa-2 ma-2" Style="min-height: 100vh; width: 350px;;">
+            <div class="flex-column">
+                <div class="h2-quicksand dark-color" style="margin-bottom: 8px">En Cours</div>
+                @foreach (var commande in ClientCommandsCooking)
+                {
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">#@(commande.Id) - @commande.ClientName</MudText>
+                            </CardHeaderContent>
+                            <CardHeaderActions>
+                                <MudIconButton Icon="@Icons.Material.Filled.ArrowForward" Color="Color.Default" OnClick="@(() => PassToFinishedState(commande))" />
+                            </CardHeaderActions>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText>Prix total: @commande.GetTotalPrice()CHF</MudText>
+                            <MudText>Commandé à: @(commande.DateTimeOrder.HoursMinutes()) </MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => OpenViewCommandDialog(commande))">Voir</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                }
+            </div>
+        </MudPaper>
+
+    </MudItem>
+    <MudItem xs="4">
+        <MudPaper Class="pa-2 ma-2" Style="min-height: 100vh; width: 350px;">
+            <div class="flex-column">
+                <div class="h2-quicksand dark-color" style="margin-bottom: 8px">A payer</div>
+                @foreach (var commande in ClientCommandsFinished)
+                {
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">#@(commande.Id) - @commande.ClientName</MudText>
+                            </CardHeaderContent>
+                            <CardHeaderActions>
+                                <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Default" OnClick="@(() => PassToPayedState(commande))" />
+                            </CardHeaderActions>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText>Prix total: @commande.GetTotalPrice()CHF</MudText>
+                            <MudText>Commandé à: @(commande.DateTimeOrder.HoursMinutes()) </MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => OpenViewCommandDialog(commande))">Voir</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                }
+            </div>
+        </MudPaper>
+
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    List<ClientCommand> ClientCommandsOrdered { get; set; } = new();
+    List<ClientCommand> ClientCommandsCooking { get; set; } = new();
+    List<ClientCommand> ClientCommandsFinished { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetData();
+    }
+
+    private void GetData()
+    {
+        ClientCommandsOrdered = ClientCommandService.FilterWithRecipes((x) => x.State == OrderState.ORDERED).ToList();
+        ClientCommandsCooking = ClientCommandService.FilterWithRecipes((x) => x.State == OrderState.COOKING).ToList();
+        ClientCommandsFinished = ClientCommandService.FilterWithRecipes((x) => x.State == OrderState.FINISHED).ToList();
+    }
+
+    private void PassToCookingState(ClientCommand commande)
+    {
+        commande.State = OrderState.COOKING;
+        commande.DateTimeStartCooking = DateTime.Now;
+        ClientCommandService.Edit(commande);
+        ClientCommandService.SaveChanges();
+        GetData();
+    }
+
+    private void PassToFinishedState(ClientCommand command)
+    {
+        command.State = OrderState.FINISHED;
+        command.DateTimeFinished = DateTime.Now;
+        ClientCommandService.Edit(command);
+        ClientCommandService.SaveChanges();
+        GetData();
+    }
+
+    private void PassToPayedState(ClientCommand command)
+    {
+        command.State = OrderState.PAYED;
+        ClientCommandService.Edit(command);
+        ClientCommandService.SaveChanges();
+        GetData();
+    }
+
+    private void OpenViewCommandDialog(ClientCommand command)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("CommandToDisplay", command);
+
+        DialogService.Show<DialogViewCommand>("Commande", parameters);
+    }
+
+}

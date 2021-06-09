@@ -9,8 +9,12 @@ namespace EkoRestaurant.Data.Entities
     public class ClientCommand : BaseEntity
     {
 
-        public string ClientName { get; set; }
-        public string ClientPhone { get; set; }
+        /// <summary>
+        /// Name used for the
+        /// </summary>
+        public string ClientName { get; set; } = "";
+
+        public string ClientPhone { get; set; } = "";
 
         public DateTime DateTimeOrder { get; set; }
         public DateTime DateTimeStartCooking { get; set; }
