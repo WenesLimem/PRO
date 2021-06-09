@@ -18,7 +18,8 @@ namespace EkoRestaurant.Extensions
             double costs = 0;
             foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
             {
-                costs += ingredientQuantity.Quantity * ingredientQuantity.Ingredient.UnitPrice;
+                if (ingredientQuantity.Ingredient != null)
+                    costs += ingredientQuantity.Quantity * ingredientQuantity.Ingredient.UnitPrice;
             }
 
             return costs;
@@ -28,7 +29,7 @@ namespace EkoRestaurant.Extensions
         {
             foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
             {
-                if (ingredientQuantity.Quantity > ingredientQuantity.Ingredient.UnitInStock)
+                if (ingredientQuantity.Ingredient != null && ingredientQuantity.Quantity > ingredientQuantity.Ingredient.UnitInStock)
                 {
                     return false;
                 }
@@ -41,7 +42,7 @@ namespace EkoRestaurant.Extensions
         {
             foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
             {
-                if (ingredientQuantity.Ingredient.IsVegan == false)
+                if (ingredientQuantity.Ingredient != null && ingredientQuantity.Ingredient.IsVegan == false)
                 {
                     return false;
                 }
@@ -54,7 +55,7 @@ namespace EkoRestaurant.Extensions
         {
             foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
             {
-                if (ingredientQuantity.Ingredient.ContainsArachides == false)
+                if (ingredientQuantity.Ingredient != null && ingredientQuantity.Ingredient.ContainsArachides == false)
                 {
                     return false;
                 }
@@ -67,7 +68,7 @@ namespace EkoRestaurant.Extensions
         {
             foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
             {
-                if (ingredientQuantity.Ingredient.ContainsLactose == false)
+                if (ingredientQuantity.Ingredient != null && ingredientQuantity.Ingredient.ContainsLactose == false)
                 {
                     return false;
                 }
