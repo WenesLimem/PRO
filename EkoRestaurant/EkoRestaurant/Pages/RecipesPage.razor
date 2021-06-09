@@ -44,7 +44,7 @@
     <MudItem xs="8">
         <MudTable T="Recipe" Items="@Recipes" Hover="true" OnRowClick="@ClickedRow">
             <HeaderContent>
-                <MudTh>Id</MudTh>
+                <MudTh>Nr</MudTh>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<Recipe, object>(x => x.Name)">Nom</MudTableSortLabel>
                 </MudTh>
@@ -56,7 +56,7 @@
                 </MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Nr">@context.Id</MudTd>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd DataLabel="PreparationTimeMinutes">@context.PreparationTimeMinutes</MudTd>
                 <MudTd DataLabel="Price">@context.Price</MudTd>

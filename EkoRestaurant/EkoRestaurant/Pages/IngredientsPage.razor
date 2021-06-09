@@ -48,7 +48,7 @@
         @* TODO: sortable columns *@
         <MudTable T="Ingredient" Items="@Ingredients" Hover="true" OnRowClick="@ClickedRow">
             <HeaderContent>
-                <MudTh>Id</MudTh>
+                <MudTh>Nr</MudTh>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.Name)">Nom</MudTableSortLabel>
                 </MudTh>
@@ -64,7 +64,7 @@
                 </MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Nr">@context.Id</MudTd>
                 <MudTd DataLabel="Nom">@context.Name</MudTd>
                 <MudTd DataLabel="Producteur">@context.GetProducerName()</MudTd>
                 <MudTd DataLabel="Date d'expiration">@context.ExpirationDate.Nice()</MudTd>

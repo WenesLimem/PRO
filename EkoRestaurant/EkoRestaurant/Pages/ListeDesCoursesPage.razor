@@ -32,24 +32,22 @@
         </div>
     </MudItem>
     <MudItem xs="8" Style="float: right">
-        <MudTable T="ListeDesCoursesElement" Items="Ldce" Hover="true" CommitEditTooltip="Sauvegardé la modifcation">
+        <MudTable T="ListeDesCoursesElement" Items="Ldce" Hover="true" CommitEditTooltip="Sauvegarder la modification">
             <HeaderContent>
-                <MudTh>Numero Liste des courses </MudTh>
-                <MudTh>Ingredient</MudTh>
+                <MudTh>Nr</MudTh>
+                <MudTh>Ingrédient</MudTh>
                 <MudTh>Quantité Commmandée</MudTh>
 
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Id Liste des courses">@context.ListeDesCourses.Id</MudTd>
-                <MudTd DataLabel="Ingredient name">@context.Ingredient.Name</MudTd>
-                <MudTd DataLabel="Qunatity">@context.Quantity</MudTd>
-
-
+                <MudTd DataLabel="Nr">@context.ListeDesCourses.Id</MudTd>
+                <MudTd DataLabel="Ingrédient">@context.Ingredient.Name</MudTd>
+                <MudTd DataLabel="Quantité Commmandée">@context.Quantity</MudTd>
             </RowTemplate>
             <RowEditingTemplate>
                 <MudTd></MudTd>
                 <MudTd></MudTd>
-                <MudTd DataLabel="Qte commandée ">
+                <MudTd DataLabel="Quantité Commmandée">
                     <MudTextField int @bind-Value="@context.Quantity"></MudTextField>
                 </MudTd>
             </RowEditingTemplate>
