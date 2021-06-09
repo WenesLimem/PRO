@@ -19,11 +19,7 @@
         <MudChip Color="Color.Primary" Variant="Variant.Outlined" Class="chip-category-recipe">@CurrentRecipe.Category.Name</MudChip>
         <MudButton Style="float: left" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Ajouter à la liste des course</MudButton>
         <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" Variant="Variant.Filled"><img src="Images/gradiant-add-negative.svg" style="margin-right: 5px">Editer</MudButton>
-        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit"></MudIconButton>
-    </MudItem>
-    <MudItem xs="12">
-        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Style="float: right;" ButtonType="ButtonType.Submit" OnClick="@DeleteRecipe"></MudIconButton>
-        <MudIconButton Icon="@Icons.Material.Filled.Edit" Style="float: right;" OnClick="@EditRecipe"></MudIconButton>
+        <MudButton Style="float: left; margin-left: 10px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@DeleteRecipe" Variant="Variant.Filled"><img src="Images/gradient-bin.svg" style="margin-right: 5px">Supprimer</MudButton>
     </MudItem>
     <MudItem xs="4">
         <MudCard Elevation="4">
