@@ -16,9 +16,11 @@
                 </AuthorizeView>
 
             </MudText>
-            <MudButton Style="float: right; width: 400px;" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled" OnClick="@(() => OpenNewCommand())">
-                <img src="Images/white-add-plus.svg" />Nouvelle commande
-            </MudButton>
+            <AuthorizeView>
+                <MudButton Style="float: right; width: 400px;" Class="btn-mud-gradiant-bg-rounded h6-quicksand" Variant="Variant.Filled" OnClick="@(() => OpenNewCommand())">
+                    <img src="Images/white-add-plus.svg"/>Nouvelle commande
+                </MudButton>
+            </AuthorizeView>
         </MudPaper>
     </MudItem>
     @{ Initialize(); }
@@ -36,7 +38,7 @@
                         <MudListItem>
                             <div style="margin-bottom: 4px">@context</div>
                         </MudListItem>
-                        <MudDivider />
+                        <MudDivider/>
                     </Dropzone>
                 </MudList>
 
@@ -59,7 +61,7 @@
                         <MudListItem>
                             <div style="margin-bottom: 4px">@context</div>
                         </MudListItem>
-                        <MudDivider />
+                        <MudDivider/>
                     </Dropzone>
                 </MudList>
 
@@ -81,7 +83,7 @@
                         <MudListItem>
                             <div style="margin-bottom: 4px">@context</div>
                         </MudListItem>
-                        <MudDivider />
+                        <MudDivider/>
                     </Dropzone>
                 </MudList>
 
@@ -96,9 +98,9 @@
     // Faire la récupération des données depuis la DB
     // public DailyMenu CurrentDailyMenu { get; set; }
 
-    public List<String> Tasks = new List<string>() { "Item 8" };
-    public List<String> Orders2 = new List<string>() { "Item 7" };
-    public List<String> Ready = new List<string>() { "Item 0" };
+    public List<String> Tasks = new List<string>() {"Item 8"};
+    public List<String> Orders2 = new List<string>() {"Item 7"};
+    public List<String> Ready = new List<string>() {"Item 0"};
 
 
     public void Initialize()
