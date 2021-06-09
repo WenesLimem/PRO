@@ -8,7 +8,7 @@
 @inject IngredientsService IngredientsService
 @inject ISnackbar Snackbar
 @inject IDialogService Dialogservice
-@inject NavigationManager nm
+@inject NavigationManager NavigationManager
 @attribute [Authorize]
 
 <MudGrid>
@@ -82,6 +82,53 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
+    <MudItem xs="3">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardContent>
+                <MudText>Vegan friendly</MudText>
+                @if (CurrentRecipe.IsVeganFriendly())
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@CurrentRecipe.IsVeganFriendly().BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@CurrentRecipe.IsVeganFriendly().BooleanToFrench()</MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardContent>
+                <MudText>Arachides free</MudText>
+                @if (CurrentRecipe.IsArachidesFree())
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@CurrentRecipe.IsArachidesFree().BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@CurrentRecipe.IsArachidesFree().BooleanToFrench()</MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardContent>
+                <MudText>Lactoses free</MudText>
+                @if (CurrentRecipe.IsLactoseFree())
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@CurrentRecipe.IsLactoseFree().BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@CurrentRecipe.IsLactoseFree().BooleanToFrench()</MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
     <MudItem xs="12">
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
@@ -90,7 +137,7 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true">
+                <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true" OnRowClick="@ClickedRow">
                     <HeaderContent>
                         <MudTh>Ingrédient</MudTh>
                         <MudTh>Quantité</MudTh>
@@ -134,7 +181,7 @@
 
     private void EditRecipe()
     {
-        nm.NavigateTo($"/recipes/edit/{CurrentRecipe.Id}");
+        NavigationManager.NavigateTo($"/recipes/edit/{CurrentRecipe.Id}");
     }
 
     private void DeleteRecipe()
@@ -147,6 +194,13 @@
         RecipesService.Delete(CurrentRecipe);
         RecipesService.SaveChanges();
         Snackbar.Add("Supression effectuée avec succès", Severity.Success);
-        nm.NavigateTo("/recipes");
+        NavigationManager.NavigateTo("/recipes");
     }
+
+    public void ClickedRow(TableRowClickEventArgs<RecipeIngredientQuantity> clickEvent)
+    {
+        NavigationManager.NavigateTo($"/ingredients/{clickEvent.Item.Ingredient.Id}");
+    }
+}
+
 }

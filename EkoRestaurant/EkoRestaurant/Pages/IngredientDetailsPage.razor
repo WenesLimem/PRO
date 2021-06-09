@@ -70,7 +70,14 @@
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText>Vegan friendly</MudText>
-                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
+                @if (currentIngredient.IsVegan)
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.IsVegan.BooleanToFrench()</MudText>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -79,7 +86,14 @@
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText>Arachides free</MudText>
-                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
+                @if (currentIngredient.ContainsArachides)
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.ContainsArachides.BooleanToFrench()</MudText>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -88,7 +102,14 @@
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardContent>
                 <MudText>Lactoses free</MudText>
-                <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
+                @if (currentIngredient.ContainsLactose)
+                {
+                    <MudText Class="details-grid-content" Color="Color.Success">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
+                }
+                else
+                {
+                    <MudText Class="details-grid-content" Color="Color.Error">@currentIngredient.ContainsLactose.BooleanToFrench()</MudText>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>

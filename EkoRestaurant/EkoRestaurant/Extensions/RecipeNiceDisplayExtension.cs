@@ -36,5 +36,44 @@ namespace EkoRestaurant.Extensions
 
             return true;
         }
+
+        public static bool IsVeganFriendly(this Recipe recipe)
+        {
+            foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
+            {
+                if (ingredientQuantity.Ingredient.IsVegan == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool IsArachidesFree(this Recipe recipe)
+        {
+            foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
+            {
+                if (ingredientQuantity.Ingredient.ContainsArachides == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool IsLactoseFree(this Recipe recipe)
+        {
+            foreach (RecipeIngredientQuantity ingredientQuantity in recipe.IngredientQuantities)
+            {
+                if (ingredientQuantity.Ingredient.ContainsLactose == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
