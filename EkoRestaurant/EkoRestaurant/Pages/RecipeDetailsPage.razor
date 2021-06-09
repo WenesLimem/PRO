@@ -46,6 +46,30 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
+    <MudItem xs="4">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Coûts des ingrédients</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.GetIngredientPrice() CHF</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="4">
+        <MudCard Elevation="4" Class="rounded-card">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Assez d'ingrédients en stock</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Class="details-grid-content dark-color">@CurrentRecipe.CanBeProduced().BooleanToFrench()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
     <MudItem xs="6">
         <MudCard Elevation="4" Class="rounded-card">
             <MudCardHeader>
@@ -65,7 +89,7 @@
                     <MudText>Liste d'ingrédient</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
-            <MudCardContent >
+            <MudCardContent>
                 <MudTable T="RecipeIngredientQuantity" Items="@CurrentRecipe.IngredientQuantities" Hover="true">
                     <HeaderContent>
                         <MudTh>Ingrédient</MudTh>
