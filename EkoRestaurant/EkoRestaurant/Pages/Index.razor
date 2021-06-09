@@ -23,95 +23,11 @@
             </AuthorizeView>
         </MudPaper>
     </MudItem>
-    @{ Initialize(); }
-    <MudItem xs="4">
-        <MudCard Elevation="4">
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Commandes <MudIcon Icon="@Icons.Material.Filled.Restaurant" Style="float: right"></MudIcon> </MudText>
-
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudList Clickable="true">
-                    <Dropzone Items="Orders2">
-                        <MudListItem>
-                            <div style="margin-bottom: 4px">@context</div>
-                        </MudListItem>
-                        <MudDivider/>
-                    </Dropzone>
-                </MudList>
-
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-
-    <MudItem xs="4">
-        <MudCard Elevation="4">
-
-
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h6">En Cours <MudIcon Icon="@Icons.Material.Filled.Pending" Style="float: right"></MudIcon></MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudList Clickable="true">
-                    <Dropzone Items="Tasks">
-                        <MudListItem>
-                            <div style="margin-bottom: 4px">@context</div>
-                        </MudListItem>
-                        <MudDivider/>
-                    </Dropzone>
-                </MudList>
-
-
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="4">
-        <MudCard Elevation="4">
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Prêtes <MudIcon Icon="@Icons.Material.Filled.Done" Style="float: right"></MudIcon></MudText>
-                </CardHeaderContent>
-
-            </MudCardHeader>
-            <MudCardContent>
-                <MudList Clickable="true">
-                    <Dropzone Items="Ready">
-                        <MudListItem>
-                            <div style="margin-bottom: 4px">@context</div>
-                        </MudListItem>
-                        <MudDivider/>
-                    </Dropzone>
-                </MudList>
-
-            </MudCardContent>
-        </MudCard>
-
-    </MudItem>
+   
 
 </MudGrid>
 
 @code {
-    // Faire la récupération des données depuis la DB
-    // public DailyMenu CurrentDailyMenu { get; set; }
-
-    public List<String> Tasks = new List<string>() {"Item 8"};
-    public List<String> Orders2 = new List<string>() {"Item 7"};
-    public List<String> Ready = new List<string>() {"Item 0"};
-
-
-    public void Initialize()
-    {
-        Tasks.Add("Item 2");
-        Tasks.Add("Item 3");
-        Orders2.Add("Item 1");
-        Orders2.Add("Item 5");
-        Ready.Add("Item 4");
-        Ready.Add("Item 6");
-    }
 
 
     private void OpenNewCommand()
