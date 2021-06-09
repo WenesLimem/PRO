@@ -3,12 +3,13 @@
 <MudDialog>
     <DialogContent>
         <MudForm>
-            <MudTextField @bind-Value="@DialogData.User.FirstName" Label="Prénom"/>
-            <MudTextField @bind-Value="@DialogData.User.LastName" Label="Nom de Famille"/>
-            <MudTextField @bind-Value="@DialogData.User.UserName" Label="Nom d'utilisateur"/>
-            <MudTextField @bind-Value="@DialogData.Password" Label="Mot de passe"/>
+            <MudTextField @bind-Value="@DialogData.User.FirstName" Label="Prénom" />
+            <MudTextField @bind-Value="@DialogData.User.LastName" Label="Nom de Famille" />
+            <MudTextField @bind-Value="@DialogData.User.UserName" Label="Nom d'utilisateur" />
+            <MudTextField @bind-Value="@DialogData.Password" Label="Mot de passe" />
             <MudSelect T="string" Label="Role" @bind-Value="DialogData.Role">
-                @foreach (var role in RolesAvailable) {
+                @foreach (var role in RolesAvailable)
+                {
                     <MudSelectItem T="string" Value="@role">@role</MudSelectItem>
                 }
             </MudSelect>
@@ -31,7 +32,7 @@
     [Parameter]
     public DialogEditCreateUserData DialogData { get; set; }
 
-    private readonly List<string> RolesAvailable = new List<string>() {"Employee", "Administrator"};
+    private readonly List<string> RolesAvailable = new List<string>() { "Employee", "Administrator" };
     private string valueRole { get; set; } = "Employee";
 
     private Boolean IsCreateMode { get; set; }
