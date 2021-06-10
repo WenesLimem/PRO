@@ -1,4 +1,4 @@
-@page "/users-management"
+ @page "/users-management"
 @using EkoRestaurant.Data
 @using System.Security.Claims
 @inject UserManager<ApplicationUser> _UserManager
@@ -6,7 +6,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IDialogService DialogService
 @inject ApplicationDbContext _DbContext
-
+@attribute [Authorize(Roles = "Administrator")]
 
 <div class="page-title dark-color">Gestion des utilisateurs</div>
 

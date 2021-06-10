@@ -4,6 +4,7 @@
 @using EkoRestaurant.Shared
 @inject WeatherForecastService ForecastService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <AuthorizeView>
     <Authorized>

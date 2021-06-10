@@ -19,11 +19,9 @@
     public RecipeCategory Category { get; set; }
 
     [Parameter]
-    public bool Selected
-    {
+    public bool Selected {
         get => _selected;
-        set
-        {
+        set {
             _selected = value;
             if (Selected)
             {

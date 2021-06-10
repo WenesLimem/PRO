@@ -7,17 +7,21 @@
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <MudGrid>
     <MudItem xs="12">
         <div class="page-title dark-color">Stocks</div>
     </MudItem>
     <MudItem xs="12">
-    
-        <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg"/>Ajouter</MudButton>
+
+        @if (IngredientCategories.Count > 0)
+        {
+            <MudButton Style="float: right" Class="btn-mud-gradiant-bg-rounded h6-quicksand" OnClick="@OpenAddIngredientDialog" Variant="Variant.Filled"><img src="Images/white-add-plus.svg" />Ajouter</MudButton>
+        }
         @if (SelectedCategory != null)
         {
-            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg"/>Supprimer la catégorie</MudButton>
+            <MudButton Style="float: right; margin-right: 12px" Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenAddDeleteCategoryDialog" Variant="Variant.Filled"><img src="Images/gradiant-delete-negative.svg" />Supprimer la catégorie</MudButton>
         }
     </MudItem>
     <MudItem xs="4">
@@ -31,12 +35,12 @@
                 @foreach (IngredientCategory category in IngredientCategories)
                 {
                     <div @onclick="() => SelectCategoryInSideBar(category)">
-                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)"/>
+                        <IngredientCategorySideBar Category="@category" Selected="@(category == SelectedCategory)" />
                     </div>
                 }
             }
-            <div class="small-separator"/>
-            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg"/>Nouvelle catégorie</MudButton>
+            <div class="small-separator" />
+            <MudButton Class="btn-mud-white-bg-rounded h6-quicksand" OnClick="@OpenIngredientCategoryDialog" Variant="Variant.Filled" FullWidth="true"><img src="Images/gradiant-add-plus.svg" />Nouvelle catégorie</MudButton>
         </div>
 
     </MudItem>
@@ -44,7 +48,7 @@
         @* TODO: sortable columns *@
         <MudTable T="Ingredient" Items="@Ingredients" Hover="true" OnRowClick="@ClickedRow">
             <HeaderContent>
-                <MudTh>Id</MudTh>
+                <MudTh>Nr</MudTh>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<Ingredient, object>(x => x.Name)">Nom</MudTableSortLabel>
                 </MudTh>
@@ -60,11 +64,11 @@
                 </MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Nr">@context.Id</MudTd>
                 <MudTd DataLabel="Nom">@context.Name</MudTd>
                 <MudTd DataLabel="Producteur">@context.GetProducerName()</MudTd>
                 <MudTd DataLabel="Date d'expiration">@context.ExpirationDate.Nice()</MudTd>
-                <MudTd DataLabel="Qte en stock">@context.UnitInStock</MudTd>
+                <MudTd DataLabel="Qte en stock">@context.UnitInStock @context.UnitSuffix</MudTd>
                 <MudTd DataLabel="Prix">@context.UnitPrice</MudTd>
             </RowTemplate>
         </MudTable>
@@ -103,7 +107,7 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (IngredientCategory) result.Data;
+            var res = (IngredientCategory)result.Data;
             try
             {
                 IngredientCategoriesService.Create(res);
@@ -127,16 +131,12 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var res = (Ingredient) result.Data;
+            var res = (Ingredient)result.Data;
             try
             {
                 IngredientsService.Create(res);
                 IngredientsService.SaveChanges();
                 Snackbar.Add("Ingrédient " + res.Name + " ajouté avec succès", Severity.Success);
-                if (res.Category == SelectedCategory || SelectedCategory == null)
-                {
-                    Ingredients.Add(res);
-                }
                 var currentCat = SelectedCategory;
                 SelectedCategory = new();
                 SelectedCategory = currentCat;

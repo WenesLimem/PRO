@@ -14,6 +14,8 @@ namespace EkoRestaurant.Data.Abstractions
         /// <summary>
         /// Primary key
         /// </summary>
-        public int Id { get; set; } 
+        public int Id { get; set; }
+
+        public bool IsSoftDeleted { get; set; } = false;
     }
 }

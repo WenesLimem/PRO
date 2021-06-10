@@ -12,10 +12,16 @@ namespace EkoRestaurant.Services.Abstractions
         TEntity Create(TEntity entity);
         void Delete(TEntity entity);
         void Delete(int id);
+
+        void SoftDeleteAndSaveChanges(int id);
+
         TEntity Edit(TEntity entity);
 
         TEntity GetById(int id);
         IEnumerable<TEntity> Filter();
+        IEnumerable<TEntity> FilterWithSoftDeleted();
+
+
         IEnumerable<TEntity> Filter(Func<TEntity, bool> predicate);
         void SaveChanges();
     }

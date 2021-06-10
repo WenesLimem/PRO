@@ -25,9 +25,21 @@ namespace EkoRestaurant.Services.Abstractions
             return addedEntityEntry.Entity;
         }
 
+
         public void Delete(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
+        }
+
+        public void SoftDeleteAndSaveChanges(int id)
+        {
+            var entityToSoftDelete = _dbContext.Set<TEntity>().FirstOrDefault(e => e.Id == id);
+            if (entityToSoftDelete != null)
+            {
+                entityToSoftDelete.IsSoftDeleted = true;
+                Edit(entityToSoftDelete);
+                SaveChanges();
+            }
         }
 
         public void Delete(int id)
@@ -53,8 +65,14 @@ namespace EkoRestaurant.Services.Abstractions
 
         public IEnumerable<TEntity> Filter()
         {
+            return _dbContext.Set<TEntity>().Where((e) => e.IsSoftDeleted == false);
+        }
+
+        public IEnumerable<TEntity> FilterWithSoftDeleted()
+        {
             return _dbContext.Set<TEntity>();
         }
+
 
         public IEnumerable<TEntity> Filter(Func<TEntity, bool> predicate)
         {

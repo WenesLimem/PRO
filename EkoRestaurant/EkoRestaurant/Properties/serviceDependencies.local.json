@@ -3,6 +3,15 @@
     "mssql1": {
       "type": "mssql.local",
       "connectionId": "DefaultConnection"
+    },
+    "secrets1": {
+      "type": "secrets.user"
+    },
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/ekorestaurantdbserver/databases/EkoRestaurant_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:DefaultConnection",
+      "secretStore": "LocalSecretsFile"
     }
   }
 }

@@ -14,14 +14,15 @@
             </MudSelect>
             <MudTextField @bind-Value="CurrentIngredient.Name" Label="Nom" Variant="Variant.Text"></MudTextField>
             <MudDatePicker Label="Date d'expiration" @bind-Date="CurrentIngredient.ExpirationDate" />
-            <MudTextField @bind-Value="@CurrentIngredient.UnitPrice" T="double" Label="Prix unitaire"/>
-            <MudTextField @bind-Value="@CurrentIngredient.Producer" Label="Producteur"/>
-            <MudTextField @bind-Value="@CurrentIngredient.UnitInStock" T="int" Label="Nbr d'unités en stock"/>
-            <MudTextField @bind-Value="@CurrentIngredient.UnitAtStart" T="int" Label="Nbr d'unités commandées initialement"/>
-            
-            <MudSwitch @bind-Checked="@CurrentIngredient.IsVegan" Color="Color.Success">Vegan</MudSwitch>
-            <MudSwitch @bind-Checked="@CurrentIngredient.ContainsArachides" Color="Color.Info">Arachides</MudSwitch>
-            <MudSwitch @bind-Checked="@CurrentIngredient.ContainsLactose" Color="Color.Info">Lactose</MudSwitch>
+            <MudTextField @bind-Value="@CurrentIngredient.Producer" Label="Producteur" />
+
+            <MudTextField @bind-Value="@CurrentIngredient.UnitPrice" T="double" Label="Prix unitaire" />
+            <MudTextField @bind-Value="@CurrentIngredient.UnitInStock" T="int" Label="Nbr d'unités" />
+            <MudTextField @bind-Value="@CurrentIngredient.UnitSuffix" Label="Unitée de mesure" />
+
+            <MudSwitch @bind-Checked="@CurrentIngredient.IsVegan" Color="Color.Success">Vegan friendly</MudSwitch>
+            <MudSwitch @bind-Checked="@CurrentIngredient.ContainsArachides" Color="Color.Info">Arachides Free</MudSwitch>
+            <MudSwitch @bind-Checked="@CurrentIngredient.ContainsLactose" Color="Color.Info">Lactose Free</MudSwitch>
 
         </MudForm>
     </DialogContent>
@@ -33,12 +34,14 @@
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    
+
     [Parameter]
     public Ingredient CurrentIngredient { get; set; }
 
+    public bool isCreateMode { get; set; } = false;
+
     public List<IngredientCategory> CategoriesAvailable { get; set; } = new();
-    
+
 
     protected override Task OnInitializedAsync()
     {
@@ -46,6 +49,7 @@
         if (CurrentIngredient == null)
         {
             CurrentIngredient = new Ingredient();
+            isCreateMode = true;
         }
 
         return base.OnInitializedAsync();
@@ -55,6 +59,10 @@
 
     void Submit()
     {
+        if (isCreateMode)
+        {
+            CurrentIngredient.UnitAtStart = CurrentIngredient.UnitInStock;
+        }
         MudDialog.Close(DialogResult.Ok(CurrentIngredient));
     }
 }
