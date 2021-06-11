@@ -26,6 +26,7 @@ le compte d'utilisateur de démonstration est
 | ----------------- | ------------ |
 | Employee          | Employee+1   |
 
+Si vous avez des soucis, vous êtes invité à nous contacter via l'onglet "discussion" de ce wiki
 
 
 ## Processus de développement / déploiement & guides
