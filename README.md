@@ -23,7 +23,7 @@ Si vous avez des soucis, vous êtes invité à nous contacter via l'onglet "disc
 
 ## Processus de développement / déploiement & guides
 
-Toute la documentation ce trouve dans le wiki de ce repository [Lien sur le wiki](https://github.com/WenesLimem/PRO/wiki)
+Toute la documentation se trouve dans le wiki de ce repository [Lien sur le wiki](https://github.com/WenesLimem/PRO/wiki)
 
 
 ## Languages & Frameworks  👨‍🏭
