@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MudBlazor.Services;
 using Plk.Blazor.DragDrop;
-using Syncfusion.Blazor;
 
 namespace EkoRestaurant
 {
@@ -42,7 +41,6 @@ namespace EkoRestaurant
             services.AddServerSideBlazor();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddBlazorDragDrop();
-            services.AddSingleton<WeatherForecastService>();
 
             // librairies services
             services.AddMudServices();
