@@ -16,9 +16,7 @@ Notre super équipe 👨‍💻
 
 [Vidéo de démonstration sur youtube](https://www.youtube.com/watch?v=laarGdhPFMo)
 
-## Comment tester notre application en live
-
-[Lien sur la version déployée](https://ekorestaurant20210609134306.azurewebsites.net)
+## Contact en cas de problème/question
 
 Si vous avez des soucis, vous êtes invité à nous contacter via l'onglet "discussion" de ce wiki
 
