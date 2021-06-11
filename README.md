@@ -20,12 +20,6 @@ Notre super équipe 👨‍💻
 
 [Lien sur la version déployée](https://ekorestaurant20210609134306.azurewebsites.net)
 
-le compte d'utilisateur de démonstration est
-
-| Nom d'utilisateur | Mot de passe |
-| ----------------- | ------------ |
-| Employee          | Employee+1   |
-
 Si vous avez des soucis, vous êtes invité à nous contacter via l'onglet "discussion" de ce wiki
 
 
