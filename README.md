@@ -18,7 +18,7 @@ Notre super équipe 👨‍💻
 
 ## Contact en cas de problème/question
 
-Si vous avez des soucis, vous êtes invité à nous contacter via l'onglet "discussion" de ce wiki
+Si vous avez des soucis, vous êtes invité à nous contacter via l'onglet "discussion" de ce repository
 
 
 ## Processus de développement / déploiement & guides
