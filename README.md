@@ -1,6 +1,7 @@
 # Digitalisation du millieux de la restauration
 
 [![dotnet](https://github.com/WenesLimem/PRO/actions/workflows/dotnet.yml/badge.svg)](https://github.com/WenesLimem/PRO/actions/workflows/dotnet.yml)
+[![Build and deploy .NET Core app to Windows WebApp EkoRestaurant20210609134306](https://github.com/WenesLimem/PRO/actions/workflows/EkoRestaurant20210609134306.yml/badge.svg)](https://github.com/WenesLimem/PRO/actions/workflows/EkoRestaurant20210609134306.yml)
 
 ## Team : A-10 
 Notre super équipe 👨‍💻
